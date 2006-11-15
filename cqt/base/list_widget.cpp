@@ -1,7 +1,7 @@
 #include "list_widget.h"
 
-ListWidget::ListWidget(QWidget *parent)
-    : QListWidget(parent)
+ListWidget::ListWidget(QObject *parent)
+    : QListWidget((QWidget*)parent)
 {
 }
 

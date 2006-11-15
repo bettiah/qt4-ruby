@@ -8,7 +8,7 @@ class DockWidget : public QDockWidget
     Q_OBJECT
 
 public:
-    DockWidget(QWidget *parent = 0);
+    DockWidget(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

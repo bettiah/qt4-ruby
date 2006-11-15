@@ -1,6 +1,6 @@
 #include "dialog.h"
 
-Dialog::Dialog(QWidget *parent)
-    : QDialog(parent)
+Dialog::Dialog(QObject *parent)
+    : QDialog((QWidget*)parent)
 {
 }

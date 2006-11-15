@@ -1,6 +1,6 @@
 #include "push_button.h"
 
-PushButton::PushButton(QWidget *parent)
-    : QPushButton(parent)
+PushButton::PushButton(QObject *parent)
+    : QPushButton((QWidget*)parent)
 {
 }

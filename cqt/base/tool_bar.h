@@ -8,7 +8,7 @@ class ToolBar : public QToolBar
     Q_OBJECT
 
 public:
-    ToolBar(QWidget *parent = 0);
+    ToolBar(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

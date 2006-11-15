@@ -1,6 +1,6 @@
 #include "focus_frame.h"
 
-FocusFrame::FocusFrame(QWidget *parent)
-    : QFocusFrame(parent)
+FocusFrame::FocusFrame(QObject *parent)
+    : QFocusFrame((QWidget*)parent)
 {
 }

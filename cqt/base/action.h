@@ -10,7 +10,7 @@ class Action : public QAction
     Q_PROPERTY( QString iconFile READ getIconFile WRITE setIconFile )
 
 public:
-    Action(QWidget *parent = 0);
+    Action(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

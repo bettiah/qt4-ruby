@@ -3,8 +3,8 @@
 #include <QHeaderView>
 #include <QApplication>
 
-TreeWidget::TreeWidget(QWidget *parent)
-    : QTreeWidget(parent), latest(0)
+TreeWidget::TreeWidget(QObject *parent)
+    : QTreeWidget((QWidget*)parent), latest(0)
 {
 }
 
@@ -39,7 +39,7 @@ void TreeWidget::addItems(int depth, const QStringList &l)
     }
 }
 
-void TreeWidget::setIcon(int depth, const QString &file)
+void TreeWidget::setIconFile(int depth, const QString &file)
 {
     if(latest) {
 	if(!icons.contains(file))
@@ -60,6 +60,6 @@ void TreeWidget::setAllExpanded(bool expand)
     for(int i = 0; i < topLevelItemCount(); ++i)
 	expandChildren(topLevelItem(i), expand);
     qApp->processEvents();
-    header()->resizeSections(QHeaderView::Custom);
+    header()->resizeSections(QHeaderView::ResizeToContents);
 }
 

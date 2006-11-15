@@ -1,6 +1,6 @@
 #include "menu.h"
 
-Menu::Menu(QWidget *parent)
-    : QMenu(parent)
+Menu::Menu(QObject *parent)
+    : QMenu((QWidget*)parent)
 {
 }

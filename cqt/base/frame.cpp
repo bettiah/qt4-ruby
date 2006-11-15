@@ -1,6 +1,6 @@
 #include "frame.h"
 
-Frame::Frame(QWidget *parent)
-    : QFrame(parent)
+Frame::Frame(QObject *parent)
+    : QFrame((QWidget*)parent)
 {
 }

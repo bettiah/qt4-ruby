@@ -8,7 +8,7 @@ class ListWidget : public QListWidget
     Q_OBJECT
 	
 public:
-    ListWidget(QWidget *parent = 0);
+    ListWidget(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

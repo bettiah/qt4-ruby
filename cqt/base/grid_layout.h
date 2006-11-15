@@ -8,7 +8,7 @@ class GridLayout : public QGridLayout
     Q_OBJECT
 
 public:
-    GridLayout(QWidget *parent = 0);
+    GridLayout(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

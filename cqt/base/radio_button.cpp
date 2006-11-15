@@ -1,6 +1,6 @@
 #include "radio_button.h"
 
-RadioButton::RadioButton(QWidget *parent)
-    : QRadioButton(parent)
+RadioButton::RadioButton(QObject *parent)
+    : QRadioButton((QWidget*)parent)
 {
 }

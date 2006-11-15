@@ -11,7 +11,7 @@ class Label : public QLabel
     Q_PROPERTY( QString pixmapFile READ getPixmapFile WRITE setPixmapFile )
 
 public:
-    Label(QWidget *parent = 0);
+    Label(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

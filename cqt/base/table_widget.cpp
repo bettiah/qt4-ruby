@@ -3,10 +3,17 @@
 #include <QHeaderView>
 #include <QMetaProperty>
 
-TableWidget::TableWidget(QWidget *parent)
-    : QTableWidget(parent)
+TableWidget::TableWidget(QObject *parent)
+    : QTableWidget((QWidget*)parent)
 {
     connect(this, SIGNAL(itemChanged(QTableWidgetItem *)), SLOT(changed(QTableWidgetItem *)));
+}
+
+void TableWidget::_setFont(int r, int c, const QFont &f)
+{
+    QTableWidgetItem *it = item(r, c);
+    if(it)
+	it->setFont(f);
 }
 
 void TableWidget::setText(int r, int c, const QString &s)
@@ -18,7 +25,7 @@ void TableWidget::setText(int r, int c, const QString &s)
 	setItem(r, c, new QTableWidgetItem(s));
 }
 
-void TableWidget::setIcon(int r, int c, const QString &file)
+void TableWidget::setIconFile(int r, int c, const QString &file)
 {
     QTableWidgetItem *it = item(r, c);
     if(!it) {

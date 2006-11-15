@@ -1,6 +1,6 @@
 #include "progress_bar.h"
 
-ProgressBar::ProgressBar(QWidget *parent)
-    : QProgressBar(parent)
+ProgressBar::ProgressBar(QObject *parent)
+    : QProgressBar((QWidget*)parent)
 {
 }

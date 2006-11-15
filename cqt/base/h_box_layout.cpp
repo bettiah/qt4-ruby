@@ -1,6 +1,6 @@
 #include "h_box_layout.h"
 
-HBoxLayout::HBoxLayout(QWidget *parent)
-    : QHBoxLayout(parent)
+HBoxLayout::HBoxLayout(QObject *parent)
+    : QHBoxLayout((QWidget*)parent)
 {
 }

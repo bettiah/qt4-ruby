@@ -8,7 +8,7 @@ class FocusFrame : public QFocusFrame
     Q_OBJECT
 
 public:
-    FocusFrame(QWidget *parent = 0);
+    FocusFrame(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

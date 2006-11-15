@@ -8,7 +8,7 @@ class LineEdit : public QLineEdit
     Q_OBJECT
 
 public:
-    LineEdit(QWidget *parent = 0);
+    LineEdit(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

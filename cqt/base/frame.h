@@ -8,7 +8,7 @@ class Frame : public QFrame
     Q_OBJECT
 
 public:
-    Frame(QWidget *parent = 0);
+    Frame(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

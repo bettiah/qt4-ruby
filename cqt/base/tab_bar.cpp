@@ -1,6 +1,6 @@
 #include "tab_bar.h"
 
-TabBar::TabBar(QWidget *parent)
-    : QTabBar(parent)
+TabBar::TabBar(QObject *parent)
+    : QTabBar((QWidget*)parent)
 {
 }

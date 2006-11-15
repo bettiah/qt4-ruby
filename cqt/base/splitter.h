@@ -8,7 +8,7 @@ class Splitter : public QSplitter
     Q_OBJECT
 
 public:
-    Splitter(QWidget *parent = 0);
+    Splitter(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

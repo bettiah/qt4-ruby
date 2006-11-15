@@ -8,7 +8,7 @@ class RadioButton : public QRadioButton
     Q_OBJECT
 
 public:
-    RadioButton(QWidget *parent = 0);
+    RadioButton(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

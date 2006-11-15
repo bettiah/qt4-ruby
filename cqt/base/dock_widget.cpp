@@ -1,6 +1,6 @@
 #include "dock_widget.h"
 
-DockWidget::DockWidget(QWidget *parent)
-    : QDockWidget(parent)
+DockWidget::DockWidget(QObject *parent)
+    : QDockWidget((QWidget*)parent)
 {
 }

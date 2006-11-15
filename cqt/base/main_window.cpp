@@ -1,8 +1,8 @@
 #include "main_window.h"
 #include <QMetaEnum>
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+MainWindow::MainWindow(QObject *parent)
+    : QMainWindow((QWidget*)parent)
 {
 }
 
