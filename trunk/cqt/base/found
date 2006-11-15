@@ -1,0 +1,10 @@
+action.h:    Q_PROPERTY( QString iconFile READ getIconFile WRITE setIconFile )
+action.h:    void setIconFile(const QString &f) { file = f; setIcon(QIcon(file)); }
+table_widget.cpp:void TableWidget::setIcon(int r, int c, const QString &file)
+table_widget.cpp:    it->setIcon(icons.value(file));
+table_widget.h:    void setIconFile(int, int, const QString &);
+tool_button.h:    Q_PROPERTY( QString iconFile READ getIconFile WRITE setIconFile )
+tool_button.h:    void setIconFile(const QString &f) { file = f; setIcon(QIcon(file)); }
+tree_widget.cpp:void TreeWidget::setIcon(int depth, const QString &file)
+tree_widget.cpp:	latest->setIcon(depth, icons.value(file));
+tree_widget.h:    void setIcon(int, const QString &);

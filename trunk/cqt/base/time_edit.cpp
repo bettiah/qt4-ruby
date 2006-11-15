@@ -1,6 +1,6 @@
 #include "time_edit.h"
 
-TimeEdit::TimeEdit(QWidget *parent)
-    : QTimeEdit(parent)
+TimeEdit::TimeEdit(QObject *parent)
+    : QTimeEdit((QWidget*)parent)
 {
 }

@@ -8,7 +8,7 @@ class DateEdit : public QDateEdit
     Q_OBJECT
 
 public:
-    DateEdit(QWidget *parent = 0);
+    DateEdit(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

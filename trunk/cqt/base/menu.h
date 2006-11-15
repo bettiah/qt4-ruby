@@ -8,7 +8,7 @@ class Menu : public QMenu
     Q_OBJECT
 
 public:
-    Menu(QWidget *parent = 0);
+    Menu(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

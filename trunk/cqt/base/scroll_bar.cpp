@@ -1,6 +1,6 @@
 #include "scroll_bar.h"
 
-ScrollBar::ScrollBar(QWidget *parent)
-    : QScrollBar(parent)
+ScrollBar::ScrollBar(QObject *parent)
+    : QScrollBar((QWidget*)parent)
 {
 }

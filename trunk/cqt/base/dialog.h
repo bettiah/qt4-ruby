@@ -8,7 +8,7 @@ class Dialog : public QDialog
     Q_OBJECT
 
 public:
-    Dialog(QWidget *parent = 0);
+    Dialog(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

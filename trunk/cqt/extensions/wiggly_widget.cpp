@@ -25,8 +25,8 @@
 
 #include "wiggly_widget.h"
 
-WigglyWidget::WigglyWidget(QWidget *parent)
-    : QWidget(parent)
+WigglyWidget::WigglyWidget(QObject *parent)
+    : QWidget((QWidget*)parent)
 {
     setBackgroundRole(QPalette::Midlight);
 

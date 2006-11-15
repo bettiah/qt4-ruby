@@ -8,14 +8,14 @@ class TreeWidget : public QTreeWidget
     Q_OBJECT
 
 public:
-    TreeWidget(QWidget *parent = 0);
+    TreeWidget(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")
     void _setHeaderLabels(const QStringList &l) { setHeaderLabels(l); }
     void addItem(int, const QString &);
     void addItems(int, const QStringList &);
-    void setIcon(int, const QString &);
+    void setIconFile(int, const QString &);
     void expandAll() { setAllExpanded(true); }
     void collapseAll() { setAllExpanded(false); }
 

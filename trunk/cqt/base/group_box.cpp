@@ -1,6 +1,6 @@
 #include "group_box.h"
 
-GroupBox::GroupBox(QWidget *parent)
-    : QGroupBox(parent)
+GroupBox::GroupBox(QObject *parent)
+    : QGroupBox((QWidget*)parent)
 {
 }

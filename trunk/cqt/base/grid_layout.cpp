@@ -1,7 +1,7 @@
 #include "grid_layout.h"
 
-GridLayout::GridLayout(QWidget *parent)
-    : QGridLayout(parent)
+GridLayout::GridLayout(QObject *parent)
+    : QGridLayout((QWidget*)parent)
 {
 }
 

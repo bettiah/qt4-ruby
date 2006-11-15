@@ -1,6 +1,6 @@
 #include "status_bar.h"
 
-StatusBar::StatusBar(QWidget *parent)
-    : QStatusBar(parent)
+StatusBar::StatusBar(QObject *parent)
+    : QStatusBar((QWidget*)parent)
 {
 }

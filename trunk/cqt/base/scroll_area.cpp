@@ -1,6 +1,6 @@
 #include "scroll_area.h"
 
-ScrollArea::ScrollArea(QWidget *parent)
-    : QScrollArea(parent)
+ScrollArea::ScrollArea(QObject *parent)
+    : QScrollArea((QWidget*)parent)
 {
 }

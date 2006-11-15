@@ -1,6 +1,6 @@
 #include "tool_bar.h"
 
-ToolBar::ToolBar(QWidget *parent)
-    : QToolBar(parent)
+ToolBar::ToolBar(QObject *parent)
+    : QToolBar((QWidget*)parent)
 {
 }

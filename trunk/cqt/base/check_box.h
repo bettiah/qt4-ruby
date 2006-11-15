@@ -8,7 +8,7 @@ class CheckBox : public QCheckBox
     Q_OBJECT
 
 public:
-    CheckBox(QWidget *parent = 0);
+    CheckBox(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

@@ -8,7 +8,7 @@ class MenuBar : public QMenuBar
     Q_OBJECT
 
 public:
-    MenuBar(QWidget *parent = 0);
+    MenuBar(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

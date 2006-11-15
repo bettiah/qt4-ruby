@@ -8,7 +8,7 @@ class TableWidget : public QTableWidget
     Q_OBJECT
 
 public:
-    TableWidget(QWidget *parent = 0);
+    TableWidget(QObject *parent = 0);
 
 signals:
     void itemValueChanged(int, int, const QString &);
@@ -17,8 +17,9 @@ public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")
     void _setHorizontalHeaderLabels(const QStringList &l) { setHorizontalHeaderLabels(l); }
     void _setVerticalHeaderLabels(const QStringList &l) { setVerticalHeaderLabels(l); }
+    void _setFont(int, int, const QFont &);
     void setText(int, int, const QString &);
-    void setIcon(int, int, const QString &);
+    void setIconFile(int, int, const QString &);
     void setTextAlignment(int, int, const char *);
     void setTextColor(int, int, const QString &);
     void setBackgroundColor(int, int, const QString &);

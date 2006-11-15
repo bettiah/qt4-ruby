@@ -8,7 +8,7 @@ class ErrorMessage : public QErrorMessage
     Q_OBJECT
 
 public:
-    ErrorMessage(QWidget *parent = 0);
+    ErrorMessage(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

@@ -10,7 +10,7 @@ class ToolButton : public QToolButton
     Q_PROPERTY( QString iconFile READ getIconFile WRITE setIconFile )
 
 public:
-    ToolButton(QWidget *parent = 0);
+    ToolButton(QObject *parent = 0);
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")

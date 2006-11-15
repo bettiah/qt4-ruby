@@ -1,6 +1,6 @@
 #include "dial.h"
 
-Dial::Dial(QWidget *parent)
-    : QDial(parent)
+Dial::Dial(QObject *parent)
+    : QDial((QWidget*)parent)
 {
 }

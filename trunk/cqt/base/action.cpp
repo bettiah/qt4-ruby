@@ -1,6 +1,6 @@
 #include "action.h"
 
-Action::Action(QWidget *parent)
+Action::Action(QObject *parent)
     : QAction(parent)
 {
 }

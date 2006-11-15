@@ -21,7 +21,7 @@ LispHighlighter::LispHighlighter(QObject *parent)
 
     QTextCharFormat kwSymbols;
     kwSymbols.setForeground(QColor("#d671d6"));
-    mappings["\\s:[a-z+-]*\\b"] = kwSymbols;
+    mappings[":[a-z0-9+-]*\\b"] = kwSymbols;
 
     funcMac.setForeground(Qt::blue);
     blockComment.setForeground(clComment);

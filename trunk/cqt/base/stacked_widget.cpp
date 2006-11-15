@@ -1,6 +1,6 @@
 #include "stacked_widget.h"
 
-StackedWidget::StackedWidget(QWidget *parent)
-    : QStackedWidget(parent)
+StackedWidget::StackedWidget(QObject *parent)
+    : QStackedWidget((QWidget*)parent)
 {
 }
