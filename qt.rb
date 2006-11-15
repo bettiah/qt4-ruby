@@ -1,9 +1,26 @@
-require 'native'
-
 module Qt4
 
+require "Native"
+include Native
+
+
 #Initialization
-Native.ini
+def Init
+	Native.ini
+end
+
+
+class NoMainWidgetError < RuntimeError
+end
+
+class BadSlotNameError < RuntimeError
+end
+
+class BadWidgetNameError < RuntimeError
+end
+
+class CouldNotConnectError < RuntimeError
+end
 
 def add_methods_to(obj)
     class << obj
@@ -12,8 +29,14 @@ def add_methods_to(obj)
         Native.destroy_(self)
     end
 
-    def show(milliSecond=0)
-        Native.show_delayed(self, milliSecond, 0)
+    def show(milliSecond=0, mode=0)
+        Native.show_delayed(self, milliSecond, 
+							case mode
+							when :minimized then 1
+							when :maximized then 2
+							when :'full-screen' then 3
+							else 0
+							end)
     end
      
     def to_string(slot=nil)
@@ -27,27 +50,39 @@ def add_methods_to(obj)
 
 #Property
     def setp(args)
-        args.each { |name,value|
-            set_prop(name, value)
+        args.each { |name, val|
+            case get_property_type self, name.to_s
+            when 1 then set_property_bool case val 
+                                            when TrueClass then 1
+                                            when FalseClass then 0
+                                            end
+            when 2 then 
+                case val
+                    when Fixnum then set_property_int val
+                    when Symbol then set_property_enum val.to_s
+                    end
+            when 10, 76 then set_property_string val
+            when 14 then set_property_date val
+            when 15 then set_property_time val
+            when 16 then set_property_date_time val
+            when 17 then set_property_url val
+            when 19 then set_property_rect val
+            when 20 then set_property_rect_f val
+            when 21, 25 then set_property_point_or_size val.to_s
+            when 26 then set_property_point_f val
+            when 32 then set_property_line val
+            when 24 then set_property_line_f val
+            when 64 then set_property_font val.to_s
+            when 66 then set_property_brush val
+            when 67 then set_property_color val
+            when 71 then set_property_polygon val
+            when 74, 75 then set_property_enum val.to_s
+            when 77 then set_property_pen val
+            end
         }
+		self
     end
     
-    def set_prop(name, val)
-        case "#{val.class}"
-            when "String" then Native.set_property_string(self, name.to_s, val)
-            when "Fixnum" then Native.set_property_int(self, name.to_s, val)
-            when "Symbol" then Native.set_property_enum(self, name.to_s, val.to_s)
-            when "Array"
-                case val.length 
-                    when 2 then Native.set_property_point_or_size(self, name.to_s, val.join(' '))
-                    when 4 then Native.set_property_rect(self, name.to_s, val.join(' '))
-                    end
-            when "TrueClass" then Native.set_property_bool(self, name.to_s, 1)
-            when "FalseClass" then Native.set_property_bool(self, name.to_s, 0)
-            else p "#{val.class}: #{name.to_s} did not match"
-            end
-    end
-
     def getp(name)
         case Native.get_property_type self, name.to_s
             when 1 then (Native.get_property_bool == 1) ? true : false
@@ -58,26 +93,13 @@ def add_methods_to(obj)
             when 16 then Native.get_property_date_time
             when 19 then Native.get_property_rect
             when 21, 25 then Native.get_property_point_or_size
+            when 23 then get_property_line
+            when 24 then get_property_line_f
+            when 26 then get_property_point_f
             when 64 then Native.get_property_font
             when 67 then Native.get_property_color
             else "#{:native.class}: #{name.to_s} did not match"
             end
-    end
-
-    def set_font(size, family="", bold=0, italic=0, underline=0, strikeout=0)
-        Native.set_font_(self, family, size, bold, italic, underline, strikeout)
-    end
-    
-    def set_color(role, name)
-        Native.set_color_(self, (case role
-            when :window then 10
-            when :'window-text' then 0
-            when :base then 9
-            when :'alternate-base' then 16
-            when :text then 6
-            when :button then 1
-            when :'button-text' then 8 
-            end), name)
     end
 
     def access_list(type)
@@ -96,106 +118,117 @@ def add_methods_to(obj)
          Native.enum_list_(self, (to_string name))
     end
 
-    MAX_SIZE=32767
-    def allow_expanding()
-        setp :'maximum-width'=>MAX_SIZE, :'maximum-height'=>MAX_SIZE
+#Connections
+    def connect(signal, *callbacks, &block)
+        cb = nil
+        args = nil
+        callbacks << block if block_given?
+#            args = argument_types_(self, signal.to_s)
+#            raise BadSlotNameError, "Could not find signal #{signal} in Object" unless args
+ 		callbacks.each {|callback|
+			cb = connect_(self, signal.to_s)
+            raise CouldNotConnectError, "Could not connect to signal" unless cb
+			case callback
+			when Symbol
+				set_callback cb, method(callback)
+			when Proc, Method
+				set_callback cb, callback
+			end
+		}
     end
 
-#Signal Slots
-    def connect(signal, &aproc)
-        Native.connect_(self, signal.to_s=>aproc) if block_given?; return
-    end
+	def callback__(signal, *args)
+		callbacks_for(signal).each do |callback|
+          result = case callback
+            when Symbol
+              self.send(callback, *args)
+            when String
+              eval(callback, binding)
+            when Proc, Method
+              callback.call(self, *args)
+            else
+              if callback.respond_to?(signal)
+                callback.send(signal, self)
+              else
+                raise CallbackError, "Callbacks must be a symbol denoting the method to call, a string to be evaluated, a block to be invoked, or an object responding to the callback method."
+              end
+          end
+          return false if result == false
+        end
 
-    def eval_callbacks
-        
-        @caller = nil; @callbacks = nil
-    end
+        result = send(signal) if respond_to_without_attributes?(signal)
+	end
+
+	def callbacks_for(signal)
+        self.class.read_inheritable_attribute(signal.to_sym) or []
+	end
 
     def disconnect()
     end
 
+#Slot calls
     def method_missing(method_symbol, *parameters)#:nodoc:
         slotcall method_symbol.id2name, *parameters
     end
       
     def slotcall(name, *args)
-        name = name.to_s
-        case args.length
-        when 0
-            p "slotcall #{name}"
-            Native.slotcall_void self ,name
-        when 1
-            p "slotcall #{name} #{args[0].class}"
-            case "#{args[0].class}"
-            when "Fixnum"
-                Native.slotcall_int self, name, args[0]
-            when "String"
-                Native.slotcall_string self, name, args[0]
-            when "Array"
-                Native.slotcall_string_list self, name, args[0]
-            when "SWIG::TYPE_p_void"
-                Native.slotcall_object self, name, args[0]
-            end
-        when 2
-            p "slotcall #{name} #{args[0].class} #{args[1].class}"
-            case "#{args[0].class}"
-            when "Fixnum"
-                case "#{args[1].class}"
-                when "Fixnum"
-                    Native.slotcall_int_int self, name, args[0], args[1]
-                when "String"
-                    Native.slotcall_int_string self, name, args[0], args[1]
-                when "Array"
-                    Native.slotcall_int_string_list self, name, args[0], args[1]
-                end
-            when "Symbol"
-                Native.slotcall_enum_object self ,name, args[0], args[1]
-            when "SWIG::TYPE_p_void"
-                Native.slotcall_object_string self, name, args[0], args[1]
-            end
-        when 3
-            p "slotcall #{name} #{args[0].class} #{args[1].class} #{args[2].class}"
-            case "#{args[2].class}"
-            when "Fixnum"
-                Native.slotcall_int_int_int self ,name, args[0], args[1], args[2]
-            when "Symbol"
-                Native.slotcall_int_int_enum self, name, args[0], args[1], args[2]
-            when "String"
-                Native.slotcall_int_int_string self ,name, args[0], args[1], args[2]
-            end
+        case call_type self, name.to_s
+        when 1 then call_void
+        when 2 then call_bool args[0]
+        when 3 then call_int args[0]
+        when 4 then call_float args[0].to_f
+        when 5 then call_enum args[0]
+        when 6 then call_string args[0]
+        when 7 then call_string_list args[0]
+        when 8 then call_url args[0]
+        when 9, 10, 11, 12, 13 then call_vector arg[0]
+        when 14 then call_color args[0]
+        when 15 then call_font args[0]
+        when 16 then call_pen args[0]
+        when 17 then call_brush args[0]
+        when 18 then call_object args[0]
+        when 19 then call_int_int args[0], args[1]
+        when 20 then call_int_string args[0], args[1]
+        when 21 then call_int_string_list args[0], args[1]
+        when 22 then call_float_float args[0].to_f, args[1].to_f
+        when 23 then call_float_color args[0].to_f, args[1]
+        when 24 then call_string_int args[0], args[1]
+        when 25 then call_vector_string args[0], args[1]
+        when 26 then call_vector_brush args[0], args[1]
+        when 27 then call_enum_object args[0], args[1]
+        when 28 then call_object_int args[0], args[1]
+        when 29 then call_object_enum args[0], args[1]
+        when 30 then call_object_string args[0], args[1]
+        when 31 then call_int_int_int args[0], args[1], args[2]
+        when 32 then call_int_int_enum args[0], args[1], args[2]
+        when 33 then call_int_int_string args[0], args[1], args[2]
+        when 35 then call_int_int_font args[0], args[1], args[2]
+        when 36 then call_vector_string_vector args[0], args[1], args[2]
+        when 37 then call_vector_int_int args[0], args[1], args[2]
+        when 38 then call_object_string_string args[0], args[1], args[2]
+        when 39 then call_int_object_string_string args[0], args[1], args[2], args[3]
         end
     end
     end # Metaclass
+end #add_methods_to
+
+def stop_gui()
+    Native.stop_event_loop
 end
 
-#MainLoop
-def with_qt()
-    Native.make_gui
-    if block_given?
-        yield
-        Native.start_event_loop
-        end
-    Native.destroy_gui
+def to_widget_name(sym)
+	sym.to_s.gsub('_', '-')
 end
 
-def Widget(name, parent=nil, *syms)
-    p "creating #{name.to_s} with parent #{parent.class}"
-
-    if syms.empty?
-        obj = Native.object_(name.to_s, parent) 
-        add_methods_to obj
-        return obj
-    end
-    syms.each { |sym| 
-        eval "@#{sym} = Widget(name.to_s, parent)"
-    }
+def Widget(name, parent=nil)
+   	p "creating #{name.to_s} with parent #{parent}"
+    w = Native.object_(name.to_s, parent) 
+	raise BadWidgetNameError unless w
+   	add_methods_to w
+	w
 end # widget
 
 #QObject
-    def connect(from, signal, aproc)
-        Native.connect_(from, signal.to_s=>aproc) if block_given?; return 
-    end
-
     def sender
         obj = Native.sender
         add_methods_to obj
@@ -231,16 +264,13 @@ end # widget
             Native.input_dialog_text caption, label, value
         end
     end
-
 #InputDialog
     def file_dialog(type, dir="", title="File Dialog", filter="")
-        p type
         file = case type
                 when :dir then Native.file_dialog_existing_directory title, dir
                 when :"open-file" then Native.file_dialog_ title, dir, filter, 0
                 when :"save-file" then Native.file_dialog_ title, dir, filter, 1
                 end
-        p file
         file
     end
 
@@ -280,7 +310,7 @@ end # widget
     end
 
 #Layout   
-    def box(layout1, type, add)
+    def add_box(layout1, type, add)
         case type
             when :layout then Native.box_add_layout(layout1, add)
             when :spacing then Native.box_add_spacing(layout1, add)
