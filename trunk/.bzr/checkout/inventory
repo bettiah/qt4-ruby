@@ -1,0 +1,158 @@
+<inventory format="5">
+<file file_id="bzrignore-20060801215407-d8bc9eae81df03b7" name=".bzrignore" text_sha1="162c9016b110091a44a9eef11c0da956a4471257" />
+<file file_id="1helloworld.rb-20060801215407-8738315b0c1c1848" name="1-hello-world.rb" text_sha1="24422d15f5077fa8027d3c3d8ae3cb2d4430e877" />
+<file file_id="3calculator.rb-20060801215407-364e11838d99ed91" name="2-calculator.rb" text_sha1="93eff0da2331ebd686bfe52cd73e751c9ba2bec3" />
+<file file_id="3dialogsandobjects.rb-20061111234824-fe6acaa7463066cd" name="3-dialogs-and-objects.rb" text_sha1="f67e24d665199a795e80c0220ea563989aa104a1" />
+<file file_id="bt.rb-20060815154657-12679611e6912bd9" name="bt.rb" text_sha1="a73664cc07919372705a79cbd79bd1e1e07ae382" />
+<directory file_id="cqt-20060801215408-d4d28d4fc5ff8f19" name="cqt" />
+<file file_id="FindRuby.cmake-20061115151402-d9d5f346ad5028f2" name="FindRuby.cmake" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" text_sha1="837174ef6fe4ae1d8c569e3d180e1ed31182eb62" />
+<directory file_id="base-20060801215408-d4425b01f037c748" name="base" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" />
+<file file_id="action.cpp-20060801215408-cfa9f9931862e58a" name="action.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="265c5375da94f307017000c996a637a1416c3381" />
+<file file_id="action.h-20060801215408-ea144e4be42cf6a5" name="action.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="40e8cd544c8b1db9e29956b0716f561833f7144d" />
+<file file_id="button_group.cpp-20060801215408-16f26822e5d54b49" name="button_group.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="972026ab7720405f5aa336ca81afd8d3d065f243" />
+<file file_id="button_group.h-20060801215408-632f8119a9475d66" name="button_group.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="f412fc395a7ce23673d1bbccc34389513686627e" />
+<file file_id="calendar_widget.cpp-20061115154628-da0a2690d4a2bd19" name="calendar_widget.cpp" parent_id="base-20060801215408-d4425b01f037c748" />
+<file file_id="calendar_widget.h-20061115154628-953b33207dfee800" name="calendar_widget.h" parent_id="base-20060801215408-d4425b01f037c748" />
+<file file_id="check_box.cpp-20060801215408-0ec034d47e8c855a" name="check_box.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="ba8eeaede429881d789823df176ef466b5bf1bb0" />
+<file file_id="check_box.h-20060801215408-c5662424c7ab9c52" name="check_box.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="a5d399ea5a2f0952ea188f501306e990e3f52257" />
+<file file_id="combo_box.cpp-20060801215408-f9b1dfa96785c92e" name="combo_box.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="41b548b69a6975457033c169df3ca51a70c3458b" />
+<file file_id="combo_box.h-20060801215408-7672a4538c263dcc" name="combo_box.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="844950d9b66a892b183c091d63baa85cdaed6de4" />
+<file file_id="date_edit.cpp-20060801215408-dcc24ada9f9e255a" name="date_edit.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="dc1b1bcbe5003916a8376e0e1ee3f7357e6b5c61" />
+<file file_id="date_edit.h-20060801215408-4ad2875db8bdcf6c" name="date_edit.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="920d50f7fd41092f478758a98688a19b24b1825b" />
+<file file_id="date_time_edit.cpp-20060801215408-bafbf8acdad8a4d3" name="date_time_edit.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="f5212cea48cd09018ef613bf7185a175687978b9" />
+<file file_id="date_time_edit.h-20060801215408-c19da07e79cf431a" name="date_time_edit.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="6be0324ac85546e1181b7e60b400f8242c8ad03f" />
+<file file_id="dial.cpp-20060801215408-00e2ef8ccda78341" name="dial.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="0bdfb6c20223529da0af8a20784fa5c7b281d7b0" />
+<file file_id="dial.h-20060801215408-cc2aeab53d76fb4e" name="dial.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="f83aaf1c6df4cb75556efeaacb9799aa91fc0ede" />
+<file file_id="dialog.cpp-20060801215408-155aec8b8c886e2e" name="dialog.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="ddc8d38bcc3516d28ec4021e396c9314bc4835c6" />
+<file file_id="dialog.h-20060801215408-2146abf3f38438ae" name="dialog.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="3c9aae802b8293be1642361f24191be5bd870cdf" />
+<file file_id="dir_model.cpp-20061115154628-ca89256390d20dbd" name="dir_model.cpp" parent_id="base-20060801215408-d4425b01f037c748" />
+<file file_id="dir_model.h-20061115154628-088d26c85b5290d1" name="dir_model.h" parent_id="base-20060801215408-d4425b01f037c748" />
+<file file_id="dock_widget.cpp-20060801215408-2bbd87dae0386d23" name="dock_widget.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="7984dafed738398f9b61a07533872f667623c666" />
+<file file_id="dock_widget.h-20060801215408-542e6c53ba3a8db1" name="dock_widget.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="781d29f6e14b651e1fe621e6975be069d42c598a" />
+<file file_id="double_spin_box.cpp-20060801215408-b045bf05e1402159" name="double_spin_box.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="4da0866b8d196d019caacb40505ecc5e72e41fe4" />
+<file file_id="double_spin_box.h-20060801215408-472d122187e35dc6" name="double_spin_box.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="cdc0c690ff9256b606a928bb7b6c77e9edbaed6d" />
+<file file_id="error_message.cpp-20060801215408-a75b48adb22b5a78" name="error_message.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="e10a00cb5ac80cb13a8d87d996162c6deaf424fc" />
+<file file_id="error_message.h-20060801215408-bc4e59e081a3f739" name="error_message.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="90e370522a89f2e4b9bfc3088cbe338f12042f89" />
+<file file_id="focus_frame.cpp-20060801215408-2a400158524deea4" name="focus_frame.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="671baf7b546fefeed5029d3d2258347d00e060b2" />
+<file file_id="focus_frame.h-20060801215408-068161f8141ccb97" name="focus_frame.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="ee7303c7064ab030172529d0d2bb964d28c4cd66" />
+<file file_id="font_combo_box.cpp-20061115154628-db7e615730c31299" name="font_combo_box.cpp" parent_id="base-20060801215408-d4425b01f037c748" />
+<file file_id="font_combo_box.h-20061115154628-5acdd6b66b57429e" name="font_combo_box.h" parent_id="base-20060801215408-d4425b01f037c748" />
+<file file_id="found-20061115154628-3debb143fa674fd2" name="found" parent_id="base-20060801215408-d4425b01f037c748" />
+<file file_id="frame.cpp-20060801215408-b10503fdb566994d" name="frame.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="c87525a31744c95218cb8ed19e62312e54d9d4ae" />
+<file file_id="frame.h-20060801215408-ebd0dc20aadbcb1a" name="frame.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="f93fd41755239970136449f7ac821baa650ba207" />
+<file file_id="graphics_view.cpp-20061115154628-32831e4064f869cb" name="graphics_view.cpp" parent_id="base-20060801215408-d4425b01f037c748" />
+<file file_id="graphics_view.h-20061115154628-ef79d9c023f4b0c5" name="graphics_view.h" parent_id="base-20060801215408-d4425b01f037c748" />
+<file file_id="grid_layout.cpp-20060801215408-2c8e91527d0364e9" name="grid_layout.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="7c648fc653e13e2ef20db8b436fd1cc94cb1d839" />
+<file file_id="grid_layout.h-20060801215408-75606bd542b3af58" name="grid_layout.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="c8fc5de427760de09009063ec5913299d0c8dddc" />
+<file file_id="group_box.cpp-20060801215408-2b83cfaf36e29b21" name="group_box.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="06d228363ff0d30011c8e75541be88b8d1c99129" />
+<file file_id="group_box.h-20060801215408-1ff28ceb07fc2465" name="group_box.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="f81b55cdbebb0057ffa8ae4dc595ad2557de5257" />
+<file file_id="h_box_layout.cpp-20060801215408-97f771c64fcc17e1" name="h_box_layout.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="782f80b0c616f3133c5b2e4c414eb04b9d82243f" />
+<file file_id="h_box_layout.h-20060801215408-3461b07611f2eaeb" name="h_box_layout.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="591e40730180ef777e8518a57715f8c607e85e6c" />
+<file file_id="l_c_d_number.cpp-20060801215408-d2ab72991038e9b3" name="l_c_d_number.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="57107a056ac4c8cd07906cbb0ef6bfae63c6c383" />
+<file file_id="l_c_d_number.h-20060801215408-e29ecf261039fc60" name="l_c_d_number.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="efaee4e4843e50e967a339d2242c946ffafd949f" />
+<file file_id="label.cpp-20060801215408-c2396038aae4225a" name="label.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="b045d8af8c6e8da44abc957a250bb722c566ab05" />
+<file file_id="label.h-20060801215408-1daa76f259420dbd" name="label.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="53b060086e00a3fb1de653e94f361330989e2e19" />
+<file file_id="line_edit.cpp-20060801215408-92ae11a02bd453b4" name="line_edit.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="068dec8f25458d9146a846b104a7edf006d0455d" />
+<file file_id="line_edit.h-20060801215408-79cc4ab8fb4186b9" name="line_edit.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="0301a53c45cd6a52ee6447d1f082441d06b13348" />
+<file file_id="list_widget.cpp-20060801215408-93f8dcee089c7408" name="list_widget.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="689e24c3148303de3e15672575a4db5ab78c01de" />
+<file file_id="list_widget.h-20060801215408-02f978283162c441" name="list_widget.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="5897177103d20a42977196e44b23e63eca56b92c" />
+<file file_id="main_window.cpp-20060801215408-e0970ef861bc06bb" name="main_window.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="89838b17db49931962788139428a56a1e024b063" />
+<file file_id="main_window.h-20060801215408-e3c6807440f96af1" name="main_window.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="bd26e393bc86e660b52cf4c7c9f2dfd1a6aa045c" />
+<file file_id="menu.cpp-20060801215408-82d8931754e5916d" name="menu.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="7bf2b3494f5fa703cde81a2d17700e406ca7683d" />
+<file file_id="menu.h-20060801215408-6ceb9974a79443b2" name="menu.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="010a941bb7a0ea8b34f1fd61648af6470b7c3101" />
+<file file_id="menu_bar.cpp-20060801215408-6daf47c04fd7668a" name="menu_bar.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="605dc6f896e337d4c9c25ae41d33bcefc296eb17" />
+<file file_id="menu_bar.h-20060801215408-91aa987401a0ccff" name="menu_bar.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="7d398fec047d07699f04ace3be9c55bcf37a8ddb" />
+<file file_id="progress_bar.cpp-20060801215408-f38d8b95f4c6e855" name="progress_bar.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="d0cd79c6288b766d96e76e856444ff9b5a8e027e" />
+<file file_id="progress_bar.h-20060801215408-0d71aa410d4ad5d2" name="progress_bar.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="02d289f2b8988e35bf6daf6657bfe9812b705e43" />
+<file file_id="progress_dialog.cpp-20060801215408-09e194265922e0c3" name="progress_dialog.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="72103f1d479d2783f44aa1ef2e61f4573c300343" />
+<file file_id="progress_dialog.h-20060801215408-07eaf59342480e09" name="progress_dialog.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="92d13ebae407b1e29ca2b01bb0fa14b2519e227c" />
+<file file_id="push_button.cpp-20060801215408-48e3f4d4bab46b86" name="push_button.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="1f3c81c9aa853d6ef64ba4497f3d2e135b32e3b6" />
+<file file_id="push_button.h-20060801215408-08e81f4378fa4f13" name="push_button.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="5464692ce05cbf1bbfaae2699687740a128aaf7e" />
+<file file_id="radio_button.cpp-20060801215408-0dea2fe8157f843b" name="radio_button.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="03e3aab08cee6e255b393d5a47cacb4a3a9e7de1" />
+<file file_id="radio_button.h-20060801215408-f70cc516c0faae8f" name="radio_button.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="e7ad7b68b2829a4badb47154fc24457e936c3c6c" />
+<file file_id="scroll_area.cpp-20060801215408-c4ed0f6dd55ff5cc" name="scroll_area.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="66a233a59d02c05d68c8758fa20bb0bdb1ea2ba0" />
+<file file_id="scroll_area.h-20060801215408-b5ff916df959dd0e" name="scroll_area.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="9d60f94ce856658c74d04413e629928678e60bbc" />
+<file file_id="scroll_bar.cpp-20060801215408-7e70bab73c9ae9fc" name="scroll_bar.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="e31989a69a4ef76db654f43ca416d303fdaec8eb" />
+<file file_id="scroll_bar.h-20060801215408-6a6bb782d5335ffc" name="scroll_bar.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="87e70c5d3455cc8e059fae7badffae3c40dc9f58" />
+<file file_id="size_grip.cpp-20060801215408-746f12d585f6f08f" name="size_grip.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="bf21fa0172d160d0c4d5cca624b2ed6cd99bcaa1" />
+<file file_id="size_grip.h-20060801215408-96d8629b0316a1c9" name="size_grip.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="c80e3dd3f6f8e68ee8ba42bd61c37d2f94543d54" />
+<file file_id="slider.cpp-20060801215408-7dda93b5e85827d7" name="slider.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="6f1637162bf03be98b7e00b909ed71d2e48c4d32" />
+<file file_id="slider.h-20060801215408-073b7339273a1d78" name="slider.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="fffb25e1c39fe98d7bccb4370f51b9f2314f5757" />
+<file file_id="spin_box.cpp-20060801215408-a339131bb6535748" name="spin_box.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="7392192afa35279a6c1727d5fc75aebf7e592a31" />
+<file file_id="spin_box.h-20060801215408-658c4fd6bbc10b27" name="spin_box.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="fb933c3b66e43dad0cfef0f7705a326de9c7b75c" />
+<file file_id="splitter.cpp-20060801215408-c4059e37c4ea5cfd" name="splitter.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="8033a5932eefcda09be4f758560fb4af9d92ca6d" />
+<file file_id="splitter.h-20060801215408-d91fedf524cd86aa" name="splitter.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="89e2617a58c0d1bb1c60db72c4316be7c6c8657f" />
+<file file_id="stacked_widget.cpp-20060801215408-a3f253d4c2da144d" name="stacked_widget.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="a681754c1320f7fa90db0c49b5115320a90f9ee7" />
+<file file_id="stacked_widget.h-20060801215408-3a7e1b25710342b7" name="stacked_widget.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="36efb93afbed8e3e7e988ab777034f2200ddecb4" />
+<file file_id="status_bar.cpp-20060801215408-2d7b7db299e527f8" name="status_bar.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="74da90e0573dda00825b2158b64fcaa1a6f1457c" />
+<file file_id="status_bar.h-20060801215408-7531a0d9e235c000" name="status_bar.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="90905fee665acb66303a54b34a0949d604632d7a" />
+<file file_id="tab_bar.cpp-20060801215408-6606816a7661e112" name="tab_bar.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="84729c966dc5692bd856cd5aa5d61c4c4659817d" />
+<file file_id="tab_bar.h-20060801215408-410a5a983e85781d" name="tab_bar.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="f27fb548a93b5189af1c72a344e9c2f9f772a731" />
+<file file_id="tab_widget.cpp-20060801215408-56d28753c60b7587" name="tab_widget.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="88e61dca8e0186dd9f2a068fb58572ba5e1a6195" />
+<file file_id="tab_widget.h-20060801215408-529ae5cb1201915d" name="tab_widget.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="40145c3cd18a1bfb674b9ba786e35829bfd159ab" />
+<file file_id="table_widget.cpp-20060801215408-b47f2bbd72337cc5" name="table_widget.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="a15db7cb5baa2e6bf91936f0b1481da99c912744" />
+<file file_id="table_widget.h-20060801215408-ef469d7b0512a3b8" name="table_widget.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="ed90f3e0c0c6db8981baaa7383aaaef52cd8079b" />
+<file file_id="text_browser.cpp-20060801215408-0f716430659b578f" name="text_browser.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="80ef4ede55a63d0a5e8850ca8ff2a1632ee94a69" />
+<file file_id="text_browser.h-20060801215408-97edc33148a572ff" name="text_browser.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="5b8cffe7ca1cff0c9f2e968bf11fd0d2c3d8844d" />
+<file file_id="text_edit.cpp-20060801215408-14c90b94e24f1940" name="text_edit.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="677090f5b6bfddf03d05a840efef87443de25d26" />
+<file file_id="text_edit.h-20060801215408-4bd598fabd278ea9" name="text_edit.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="424d6a873a01687068b8b918fe6188e09d50ffaf" />
+<file file_id="time_edit.cpp-20060801215408-61e91c08fd8c4865" name="time_edit.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="67fded600941939b287e35ff026c226076b2c53f" />
+<file file_id="time_edit.h-20060801215408-c9ecfebaf55d73e3" name="time_edit.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="b726dde5f7b3da4a8954296f9dc300ad6dd31dc8" />
+<file file_id="tool_bar.cpp-20060801215408-753f2a315cd85609" name="tool_bar.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="9317d3e07306bd77804ba025a295d2ca998c666d" />
+<file file_id="tool_bar.h-20060801215408-dab25df1ce364cb4" name="tool_bar.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="e89bab72730323c7d6b6bbab1997e2354f1b178c" />
+<file file_id="tool_box.cpp-20060801215408-ede47c0d5f0fffa4" name="tool_box.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="f620fe8f96784a9a63fa621795c831f8ffd786b5" />
+<file file_id="tool_box.h-20060801215408-1ea4705229fdd893" name="tool_box.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="92f621dcdafa1477cce5ce48d533557bcd20a13c" />
+<file file_id="tool_button.cpp-20060801215408-fe89de4c835cb62b" name="tool_button.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="3076d9ec9419cb4ffa4146dbcd704dd5c152b10b" />
+<file file_id="tool_button.h-20060801215408-ac873a1c1b4da9eb" name="tool_button.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="8e9d697e08bedddb3e383bd1517b51625f755923" />
+<file file_id="tree_view.cpp-20061115154628-a167dba42a41a4b7" name="tree_view.cpp" parent_id="base-20060801215408-d4425b01f037c748" />
+<file file_id="tree_view.h-20061115154628-ed5c16598fb3a635" name="tree_view.h" parent_id="base-20060801215408-d4425b01f037c748" />
+<file file_id="tree_widget.cpp-20060801215408-fbeec8b75443152c" name="tree_widget.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="34f1b6cfe190a3f27f9835ec8f2c7b92f97ad040" />
+<file file_id="tree_widget.h-20060801215408-e7502f657c7038d4" name="tree_widget.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="74131b53299bb75b678ed6be16cb3fb65f0d319b" />
+<file file_id="v_box_layout.cpp-20060801215408-6887e0c54998f891" name="v_box_layout.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="a0743101729301ceecb8d89edd1be5aece7c1af1" />
+<file file_id="v_box_layout.h-20060801215408-f304f80cdc5403c5" name="v_box_layout.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="4c42ffa4f18d51e6cdee3db94393234d2bd549b2" />
+<file file_id="widget.cpp-20060801215408-d1ae85ab4b6b2129" name="widget.cpp" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="66f9bcd40e94cd9b7b45c017add57fff0a9fb693" />
+<file file_id="widget.h-20060801215408-6fc81dbbc0b36f75" name="widget.h" parent_id="base-20060801215408-d4425b01f037c748" text_sha1="65c45916f75871d7ed0874700e178f20b1f9a56c" />
+<file file_id="cmakelists.txt-20061115151402-eeb19c8bcefdb3d0" name="cmakelists.txt" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" text_sha1="3d5f89b43604b204ed6c5520c712a2deb637541d" />
+<file file_id="cqt.cpp-20060801215408-42497058c1cc3502" name="cqt.cpp" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" text_sha1="7f1af931e0757ee6e9963541186b2c995722f88c" />
+<file file_id="cqt.h-20060801215408-5bee37d2dd8c585f" name="cqt.h" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" text_sha1="194ecc7a54e314941e214dce26c0072d4f83d80a" />
+<file file_id="cqt.pro-20060801215408-9b3d962ab1d4f236" name="cqt.pro" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" text_sha1="15703039a46a94c8e9d2833f0ea1bfdbcc75c1a3" />
+<file file_id="cqt_api.h-20060801215408-810e3f53262de618" name="cqt_api.h" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" text_sha1="543c98f5c4be4a0b9f8797e84eb72a53da3a3132" />
+<file file_id="cqt_call.cpp-20061115151402-c9dc3566e6cb58bd" name="cqt_call.cpp" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" text_sha1="9e73afce8edfb29b7e431b6809559c98d1e2abbb" />
+<directory file_id="extensions-20060801215408-563706b4bff647a4" name="extensions" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" />
+<directory file_id="include-20060801215408-cae6aaef0d0af590" name="include" parent_id="extensions-20060801215408-563706b4bff647a4" />
+<file file_id="keywords.h-20060801215408-70c6d1b1b032a9bf" name="keywords.h" parent_id="include-20060801215408-cae6aaef0d0af590" text_sha1="db77325a16b7cb33c23dbc37c5b034c627c53657" />
+<file file_id="lisp_highlighter.cpp-20060801215408-7db50c0439cdc806" name="lisp_highlighter.cpp" parent_id="extensions-20060801215408-563706b4bff647a4" text_sha1="d876a5d2b580ce9afb1c762c3343af8fc7e9e3b4" />
+<file file_id="lisp_highlighter.h-20060801215408-c1ae50b0a5f95557" name="lisp_highlighter.h" parent_id="extensions-20060801215408-563706b4bff647a4" text_sha1="70b1628ffaea382b75eb3d2ed5233024a9e8736b" />
+<file file_id="painter_widget.cpp-20061115154628-94e7a08bdf2014b5" name="painter_widget.cpp" parent_id="extensions-20060801215408-563706b4bff647a4" />
+<file file_id="painter_widget.h-20061115154628-318f8456256867e0" name="painter_widget.h" parent_id="extensions-20060801215408-563706b4bff647a4" />
+<file file_id="wiggly_widget.cpp-20060801215408-919e8f1d15fcb1b4" name="wiggly_widget.cpp" parent_id="extensions-20060801215408-563706b4bff647a4" text_sha1="388618f6ecbe2520a83420d6dccac921ae6d02fb" />
+<file file_id="wiggly_widget.h-20060801215408-93474109fd141069" name="wiggly_widget.h" parent_id="extensions-20060801215408-563706b4bff647a4" text_sha1="4c758855ad2f2f9f08b3cd90b46f095a5ccbbcc8" />
+<directory file_id="gen-20060801215408-897e53a2f00836e4" name="gen" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" />
+<file file_id="gen.cpp-20060801215408-07ea5c116583215b" name="gen.cpp" parent_id="gen-20060801215408-897e53a2f00836e4" text_sha1="c655ce96f7311bfedf1d6146a2f25d9b411ea30f" />
+<file file_id="gen.lisp-20061115154628-cad36725eea3d3c3" name="gen.lisp" parent_id="gen-20060801215408-897e53a2f00836e4" />
+<file file_id="gen.pro-20061115154628-56d2b219fcd8331f" name="gen.pro" parent_id="gen-20060801215408-897e53a2f00836e4" />
+<file file_id="gen.rb-20060801215408-361f50048f530d03" name="gen.rb" parent_id="gen-20060801215408-897e53a2f00836e4" text_sha1="936d7092006ee46880d4630e3ff29f78066c8da5" />
+<directory file_id="include-20061115154628-07207a71f1ce56a6" name="include" parent_id="gen-20060801215408-897e53a2f00836e4" />
+<file file_id="invoke_method.cpp-20061115154628-b348ae2c257a7040" name="invoke_method.cpp" parent_id="include-20061115154628-07207a71f1ce56a6" />
+<file file_id="invoke_slots-20061115154628-486b59bcafa99dcd" name="invoke_slots" parent_id="include-20061115154628-07207a71f1ce56a6" />
+<file file_id="objects_include-20061115154628-5afd67c54c317b54" name="objects_include" parent_id="include-20061115154628-07207a71f1ce56a6" />
+<file file_id="objects_names-20061115154628-4e5db155c327b250" name="objects_names" parent_id="include-20061115154628-07207a71f1ce56a6" />
+<file file_id="objects_new-20061115154628-68af1dc303c20c83" name="objects_new" parent_id="include-20061115154628-07207a71f1ce56a6" />
+<file file_id="signals-20061115154628-1d7e92e1d3d015e8" name="signals" parent_id="include-20061115154628-07207a71f1ce56a6" />
+<file file_id="slots-20061115154628-3528c43a9d804feb" name="slots" parent_id="include-20061115154628-07207a71f1ce56a6" />
+<directory file_id="main-20061115154628-b30134a94ec36224" name="main" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" />
+<file file_id="proxy.h-20061114172712-b9c5ee71d1dd2787" name="proxy.h" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" text_sha1="fbb5049de540f92f1a88619a262171bf7ef44570" />
+<directory file_id="rb-20060801215408-45fd490c6d51be2f" name="rb" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" />
+<file file_id="qt.i-20060801215408-e70c01a1d5a581d1" name="qt.i" parent_id="rb-20060801215408-45fd490c6d51be2f" text_sha1="9cc606c9b475128a97524b1328db7997baec85a1" />
+<file file_id="qt_wrap.cxx-20061114170411-4306da4fbac8f4b4" name="qt_wrap.cxx" parent_id="rb-20060801215408-45fd490c6d51be2f" text_sha1="9277164273406e8d5ed309d8fb510fd9bae24d14" />
+<file file_id="swig.bat-20060801215408-af166fa085346767" name="swig.bat" parent_id="rb-20060801215408-45fd490c6d51be2f" text_sha1="7f2e3902a79b5343dfc031cf466659aaf6dbf73c" />
+<file file_id="subclass.lisp-20061115154628-93a701af146045dd" name="subclass.lisp" parent_id="cqt-20060801215408-d4d28d4fc5ff8f19" />
+<file file_id="dl_qt.rb-20060801215408-2450c01d4a62378e" name="dl_qt.rb" text_sha1="d3f3cf4a09fc461ba8b11ab93a8cb7a84786d99f" />
+<file file_id="gui.rb-20061111234817-22622a3e5fa59fcb" name="gui.rb" text_sha1="bedf3d7b6b3f2e46fa1aa8cd5844e7950eb58508" />
+<file file_id="obex.rb-20060911182034-19591926acbc0f04" name="obex.rb" text_sha1="48fc9047db39400e9da3c4f6e1b0188e011aadce" />
+<file file_id="qt.rb-20060801215408-a1d62c57aa4e9a1f" name="qt.rb" text_sha1="735d9e3685f621d33b13c215bb4185d6fe534d71" />
+<file file_id="sdp.rb-20060815211433-52914fad4256eca5" name="sdp.rb" text_sha1="e3f620a48d2378282241be50ed9cf147ac2d0d31" />
+<file file_id="t_obex.rb-20060918200930-7435332a0d1d5e38" name="t_obex.rb" text_sha1="3b304223538aa3415ce1baedbd3866e3fe2bd6e9" />
+<file file_id="t_sync.rb-20060922192458-1490da734063405f" name="t_sync.rb" text_sha1="fec648170882ccc4e3a475a0072604c5c8e821fa" />
+<file file_id="wbxml.rb-20060920204241-124f2d95293d50d8" name="wbxml.rb" text_sha1="a3056ec7f73ab64288553ed0e683bdbd3b694bf1" />
+</inventory>
