@@ -10,11 +10,6 @@ add_definitions(${QT_DEFINITIONS})
 
 find_package(Ruby REQUIRED) 
 
-#find_package(Swig REQUIRED)
-#set(CMAKE_SWIG_FLAGS "")
-#set_source_files_properties(qt.i PROPERTIES CPLUSPLUS ON)
-#SWIG_ADD_MODULE(qt ruby qt.i qt_qrap.cxx)
-
 include_directories(${QT_INCLUDE_DIR} ${RUBY_INCLUDE_PATH} base extensions )
 
 set(qtnative_SRCS

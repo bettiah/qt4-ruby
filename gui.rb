@@ -21,7 +21,6 @@ module Gui
 
       class Builder
          def initialize
-            @root = nil
             @layout_parent = nil
             @widget_parent = nil
             @parents = []
@@ -30,8 +29,7 @@ module Gui
          end
 
          def window(*args, &block)
-            #the symbol becomes the root the widget hiarchy
-            method_missing(:widget, *args.unshift(:root), &block)
+            method_missing(:main_window, *args, &block)
          end
 
          def method_missing(to_create, *args, &block)
@@ -39,8 +37,8 @@ module Gui
             obj = nil
             if instance_variables.include?("@#{to_create}")
                instance_variable_get("@#{to_create}")
-               #elsif @widget_parent && (@widget_parent.respond_to? to_create)
-               #    return @widget_parent.send to_create, *args, &block
+            elsif @widget_parent && (@widget_parent.respond_to? to_create)
+               return @widget_parent.send(to_create, *args, &block)
             else
                obj = create_widget!(to_create, *args)
             end
@@ -66,16 +64,13 @@ module Gui
 
          private
          def create_widget!(sym, *args)
-            obj = nil
-            obj = Qt4.Widget(Qt4.to_widget_name(sym), @widget_parent)
+            obj = QWidget.new(sym, @widget_parent)
             if args.first.class == Symbol
                instance_variable_set("@#{args.first.to_s}", obj)
             end
             args.each do |arg|
                if arg.respond_to?(:to_hash)
-                  arg.to_hash.each do |property, value|
-                     obj.setp property=>value
-                  end
+                  obj.setp arg.to_hash
                end
             end
             additional_methods_for sym, obj
@@ -111,12 +106,6 @@ module Gui
       module GridLayout
          def row(*args, &block)
             @col_count = 0
-            args.each do |arg, row_span, col_span|
-               row_span ||= 1
-               col_span ||= 1
-               grid(@layout_parent, :widget, arg, @row_count, @col_count, row_span, col_span) if arg
-               @col_count += col_span
-            end
             if block
                capture &block
             end
@@ -149,6 +138,9 @@ module Gui
             end
          end
       end
+
+	  class Widget
+	  end
 
    end #View
 end #Gui

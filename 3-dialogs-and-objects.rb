@@ -28,31 +28,25 @@ class Browser < View::Builder
       }
    end
 
-   def gui_dialog
-      group_box(:title=>'Dialogs', :flat=>true) do
-         grid_layout :layout do
-            row {
-               item push_button(:message)
-               item combo_box(:type_message)
-               item push_button(:font)
-               item line_edit(:selected_font)
-            }
-            row {
-               item push_button(:input)
-               item combo_box(:type_input)
-               item push_button(:color)
-               item line_edit(:selected_color)
-            }
-            row {
-               item push_button(:file)
-               item combo_box(:type_file)
-               item push_button(:error)
-               item line_edit(:error_text)
-            }
-            row { item; item push_button(:progress), 1, 2 }
-         end
+   def toolbar_add(bar, *objects)
+	 objects.each do |ob|
+		 bar.add_widget ob
+		 bar.add_separator
+	 end
+   end
 
-         4.times { |n| @layout.slotcall :'set-column-stretch', n, 1 }
+   def add_gui_dialog(main)
+	   tool_bar(:bar1) do
+		   toolbar_add(@bar1, push_button(:message), combo_box(:type_message), push_button(:input), combo_box(:type_input), push_button(:file), combo_box(:type_file), push_button(:progress))
+	   end
+	   
+	   tool_bar(:bar2) do
+		   toolbar_add(@bar2, push_button(:font), line_edit(:selected_font), push_button(:color), line_edit(:selected_color), push_button(:error), line_edit(:error_text))
+	   end
+
+	   main.add_tool_bar @bar1
+	   main.add_tool_bar @bar2
+	   main.insert_tool_bar_break @bar2
 
          [
             [@message,      "message-box"],
@@ -86,7 +80,6 @@ class Browser < View::Builder
          ].each do |obj, prc|
             obj.connect :clicked, prc
          end
-      end #group_box
    end
 
    def populate(widget, obj, type)
@@ -104,8 +97,8 @@ class Browser < View::Builder
             end
          end
       end #do
-         widget.setp :html=>str.join
-      end
+      widget.setp :html=>str.join
+   end
 
       def populate_enums(name)
          @enums.clear
@@ -114,7 +107,7 @@ class Browser < View::Builder
 
       def update_object_info(name)
          $temp_object.destroy if $temp_object
-         $temp_object = Widget(name)
+         $temp_object = create_widget name
          populate(@properties, $temp_object, :property)
          populate(@signals, $temp_object, :signal)
          populate(@slots, $temp_object, :slot)
@@ -164,7 +157,6 @@ class Browser < View::Builder
             @objects.slotcall :'add-items', object_list
             @events.slotcall :'add-items', event_list
 
-            $temp_object = nil
             update_object_info @objects.getp(:'current-text')
 
             [
@@ -178,11 +170,9 @@ class Browser < View::Builder
       end
 
       def show
-         window(:size=>'800 600') {
-            v_box_layout do
-               box gui_object
-               box gui_dialog
-            end
+         window(:main, :size=>'800 600') {
+			 @main.set_central_widget gui_object
+             add_gui_dialog @main
          }.show
       end
 

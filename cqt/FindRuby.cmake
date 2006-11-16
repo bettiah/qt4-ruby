@@ -46,7 +46,7 @@ FIND_PATH(RUBY_INCLUDE_PATH
   /usr/lib/ruby/1.8/i586-linux-gnu/ )
 
 FIND_LIBRARY(RUBY_LIBRARY
-  NAMES ruby libmsvcrt-ruby18
+  NAMES ruby libmsvcrt-ruby18 msvcr71-ruby18
   PATHS ${RUBY_POSSIBLE_LIB_PATH}
   )
 

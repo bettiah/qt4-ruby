@@ -22,15 +22,15 @@ end
 class CouldNotConnectError < RuntimeError
 end
 
-def add_methods_to(obj)
-    class << obj
-
-    def destroy()
-        Native.destroy_(self)
+class QWidget < QtProxy
+    def initialize(sym, parent=nil)
+        p "creating #{sym.to_s} with parent #{parent}"
+        super(to_widget_name(sym), parent)
+        #raise BadWidgetNameError unless w
     end
 
     def show(milliSecond=0, mode=0)
-        Native.show_delayed(self, milliSecond, 
+        show_delayed(milliSecond, 
 							case mode
 							when :minimized then 1
 							when :maximized then 2
@@ -44,14 +44,14 @@ def add_methods_to(obj)
     end
     
     def repaint_now()
-        slotcall self, "(repaint)"
+        slotcall "(repaint)"
         Native.process_events
     end
 
 #Property
     def setp(args)
         args.each { |name, val|
-            case get_property_type self, name.to_s
+            case get_property_type name.to_s
             when 1 then set_property_bool case val 
                                             when TrueClass then 1
                                             when FalseClass then 0
@@ -80,11 +80,10 @@ def add_methods_to(obj)
             when 77 then set_property_pen val
             end
         }
-		self
     end
     
     def getp(name)
-        case Native.get_property_type self, name.to_s
+        case get_property_type name.to_s
             when 1 then (Native.get_property_bool == 1) ? true : false
             when 2 then Native.get_property_int
             when 10, 17 then Native.get_property_string
@@ -103,19 +102,19 @@ def add_methods_to(obj)
     end
 
     def access_list(type)
-        Native.access_list_(self, (case type
+        access_list_(case type
              when :property then 0
              when :signal then 1
              when :slot then 2
-             end), 0)
+             end, 0)
     end
 
     def enum_property_list()
-        Native.access_list_(self, 0, 1)
+        access_list_(0, 1)
     end
     
     def enum_list(name)    
-         Native.enum_list_(self, (to_string name))
+         enum_list_ to_string(name)
     end
 
 #Connections
@@ -126,13 +125,13 @@ def add_methods_to(obj)
 #            args = argument_types_(self, signal.to_s)
 #            raise BadSlotNameError, "Could not find signal #{signal} in Object" unless args
  		callbacks.each {|callback|
-			cb = connect_(self, signal.to_s)
+			cb = connect_ signal.to_s
             raise CouldNotConnectError, "Could not connect to signal" unless cb
 			case callback
 			when Symbol
-				set_callback cb, method(callback)
+				cb.set_callback method(callback)
 			when Proc, Method
-				set_callback cb, callback
+				cb.set_callback callback
 			end
 		}
     end
@@ -168,11 +167,12 @@ def add_methods_to(obj)
 
 #Slot calls
     def method_missing(method_symbol, *parameters)#:nodoc:
-        slotcall method_symbol.id2name, *parameters
+        p "method_missing for #{method_symbol}"
+        slotcall to_widget_name(method_symbol), *parameters
     end
       
     def slotcall(name, *args)
-        case call_type self, name.to_s
+        case call_type name.to_s
         when 1 then call_void
         when 2 then call_bool args[0]
         when 3 then call_int args[0]
@@ -209,8 +209,7 @@ def add_methods_to(obj)
         when 39 then call_int_object_string_string args[0], args[1], args[2], args[3]
         end
     end
-    end # Metaclass
-end #add_methods_to
+end #QWidget
 
 def stop_gui()
     Native.stop_event_loop
@@ -220,18 +219,10 @@ def to_widget_name(sym)
 	sym.to_s.gsub('_', '-')
 end
 
-def Widget(name, parent=nil)
-   	p "creating #{name.to_s} with parent #{parent}"
-    w = Native.object_(name.to_s, parent) 
-	raise BadWidgetNameError unless w
-   	add_methods_to w
-	w
-end # widget
-
 #QObject
     def sender
-        obj = Native.sender
-        add_methods_to obj
+        obj = signal_sender
+        p "sender is #{obj}"
         return obj
     end
 
@@ -285,7 +276,7 @@ end # widget
     end
 
     def error_message(txt)
-        error_message = Widget :'error-message'
+        error_message = QWidget.new :'error-message'
         error_message.setp :modal=>true
         error_message.slotcall :'show-message', txt
     end
@@ -293,7 +284,7 @@ end # widget
 #ProgressDialog
     def progress_dialog(label, maximum)
         #pressed, progressCancelledException will be thrown
-        progress = Widget :'progress-dialog'
+        progress = QWidget.new :'progress-dialog'
         progress.setp(:'label-text'=>label)
         progress.setp(:maximum=>maximum)
         set_progress = Proc.new { |val|
@@ -321,10 +312,13 @@ end # widget
 
     def grid(layout, type, add, row, col, row_span=1, col_span=1)
         case type
-            when :layout then 
-                Native.grid_add_layout(layout, add, row, col, row_span, col_span)
-            when :widget then 
-                Native.grid_add_widget(layout, add, row, col, row_span, col_span)
+            when :layout then
+                layout.grid_add_layout(add, row, col, row_span, col_span)
+            when :widget then
+                layout.grid_add_widget(add, row, col, row_span, col_span)
             end
     end
-end
+
+end #module
+
+
