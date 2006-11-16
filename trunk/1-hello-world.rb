@@ -1,12 +1,21 @@
 require 'gui'
-
 include Gui
 
+class Symbol
+	def to_proc
+		proc { |obj, *args| obj.send(self, *args) }
+	end
+end
+
 class Baby < View::Builder
+	def on_click
+		message_box(:info, "#{@push.getp(:text)}")
+	end
+
 	def show()
 		push_button(:push, :text=>"Click", :'minimum-width'=>150, :'minimum-height'=>30) {
-			@push.connect :clicked, lambda {message_box(:info, "#{@push.getp(:text)}")}
-        }.show
+			@push.connect :clicked, method(:on_click)
+		}.show
 	end
 end
 

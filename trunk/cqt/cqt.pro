@@ -121,8 +121,8 @@ SOURCES += cqt.cpp \
 	   extensions/painter_widget.cpp \
 	   extensions/wiggly_widget.cpp
 
-win32:INCLUDEPATH += D:/scratch/rb_ex/usr/local/lib/ruby/1.8/i386-mingw32
-win32:LIBS += D:/scratch/rb_ex/usr/local/lib/libmsvcrt-ruby18.dll.a
+win32:INCLUDEPATH += C:/src/rb_/ruby_185/lib/ruby/1.8/i386-mswin32_71
+win32:LIBS += C:/src/rb_/ruby_185/lib/msvcr71-ruby18.lib
 DESTDIR = ../..
 TARGET = native
 TARGET_EXT = .so

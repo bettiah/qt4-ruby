@@ -3,6 +3,13 @@
 /* Includes the header in the wrapper code */
 #include "../cqt_api.h"
 #include "../proxy.h"
+
+
+QtProxy *signal_sender() {
+    void* obj = sender();
+    return reinterpret_cast< QtProxy * >(obj);   
+}
+
 %}
 
 
@@ -20,6 +27,7 @@
 }
 
 /* Parse the header file to generate wrappers */
+QtProxy *signal_sender();
 void ini();
 void make_gui();
 void start_event_loop();

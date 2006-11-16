@@ -94,26 +94,25 @@ class Calculator < View::Builder
       end
 
       but.setp :shortcut=>case name
-   when "=" then "Enter"
-   when "<<" then "Backspace"
-   when "AC" then "Delete"
-   when "blah" then "B"
-   when "1/x" then "R"
-   when "+-" then "S"
-   else name
-   end
-   but
-end
+  		 when "=" then "Return"
+	  	 when "<<" then "Backspace"
+	  	 when "AC" then "Delete"
+	  	 when "blah" then "B"
+	  	 when "1/x" then "R"
+	  	 when "+-" then "S"
+	  	 else name
+	  	 end
+	  but
+	end
 
 def show
-   window {
+   widget {
       grid_layout do
          row {
             item label(:real, :'frame-shape'=>:box, :alignment=>:'align-right'), 1, 5
          }
          row {
-            item line_edit(:float, :'read-only'=>true, :font=>14, :alignment=>:'align-right'),
-            1, 5
+            item line_edit(:float, :'read-only'=>true, :font=>14, :alignment=>:'align-right'), 1, 5
          }
          row {
             item do_button("1/x", :reci_clicked)
@@ -155,7 +154,5 @@ end
 end #class
 
 with_gui() {
-calc = Calculator.new
-p calc.methods
-calc
+	Calculator.new
 }
