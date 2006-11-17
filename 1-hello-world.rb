@@ -9,7 +9,7 @@ end
 
 class Baby < View::Builder
 	def on_click
-        message_box(:info, "#{sender{|obj| obj.getp(:text)}}")
+        message_box(:info, "#{sender{|obj| p obj; obj.getp(:text)}}")
 	end
 
 	def show()
