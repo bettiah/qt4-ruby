@@ -24,6 +24,7 @@ end
 
 class QWidget < QtProxy
     def initialize(sym, parent=nil)
+        @signals = {}
         p "creating #{sym.to_s} with parent #{parent}"
         super(to_widget_name(sym), parent)
     end
@@ -125,6 +126,7 @@ class QWidget < QtProxy
 #            raise BadSlotNameError, "Could not find signal #{signal} in Object" unless args
  		callbacks.each {|callback|
 			cb = connect_ signal.to_s
+            add_callbacks_for signal.to_s, cb
             raise CouldNotConnectError, "Could not connect to signal" unless cb
 			case callback
 			when Symbol
@@ -160,8 +162,10 @@ class QWidget < QtProxy
         result = send(signal) if respond_to_without_attributes?(signal)
 	end
 
-	def callbacks_for(signal)
-        self.class.read_inheritable_attribute(signal.to_sym) or []
+	def add_callbacks_for(signal, cb)
+        @signals[signal] ||= []
+        @signals[signal].push cb
+        #self.class.read_inheritable_attribute(signal.to_sym) or []
 	end
 
     def disconnect()
@@ -223,8 +227,11 @@ end
 
 #QObject
     def sender(&block)
-        $dummy = QWiget.new :widget unless $dummy
-        signal_sender($dummy, &block) if block_biven?
+        $dummy = QWidget.new :widget unless $dummy
+        p $dummy
+        if block_given?
+            signal_sender($dummy) { |dummy| block.call dummy }
+        end
     end
 
     def object_list

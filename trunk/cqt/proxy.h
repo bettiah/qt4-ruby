@@ -2,6 +2,8 @@
 
 class QtProxy {
 friend QtProxy* make_qt_gui();
+friend void signal_sender(VALUE r_dummy);
+
 public:
 ~QtProxy() {
     ::destroy_(_real_obj);

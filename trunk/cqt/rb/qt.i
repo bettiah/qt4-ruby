@@ -4,19 +4,26 @@
 #include "../cqt_api.h"
 #include "../proxy.h"
 
-static void signal_sender(VALUE dummy)
-{
-  if (rb_block_given_p()) {
-    /* use the dummy object and substitute the real object for the caller */
-    _old_real = dummy->_real_obj;
-    dummy->_real_obj = caller();
-    rb_yield(dummy);
-    dummy->_real_obj = old_real;
-  }
-}
-
 %}
 
+%inline %{
+void signal_sender(VALUE r_dummy) {
+    void *argp = 0 ;
+    int res = SWIG_ConvertPtr(r_dummy, &argp, SWIGTYPE_p_QtProxy, 0 |  0 );
+    if (!SWIG_IsOK(res)) {
+        SWIG_exception_fail(SWIG_ArgError(res), "in method '" "QtProxy" "', argument " "1"" of type '" "QtProxy const *""'"); 
+      }
+
+    QtProxy* dummy = reinterpret_cast< QtProxy * >(argp);
+    if (rb_block_given_p()) {
+        /* use the dummy object and substitute the real object for the caller */
+        void* _old_real = dummy->_real_obj;
+        dummy->_real_obj = sender();
+        rb_yield(r_dummy);
+        dummy->_real_obj = _old_real;
+    }
+}
+%}
 
 /* This sets the caller to the right type */
 %typemap(in) (unsigned long aproc) 
