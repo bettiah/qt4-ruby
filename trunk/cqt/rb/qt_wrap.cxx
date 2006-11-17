@@ -1555,13 +1555,6 @@ static VALUE mNative;
 #include "../proxy.h"
 
 
-QtProxy *signal_sender() {
-    void* obj = sender();
-    return reinterpret_cast< QtProxy * >(obj);   
-}
-
-
-
 #include <limits.h>
 #ifndef LLONG_MIN
 # define LLONG_MIN	LONG_LONG_MIN
@@ -1777,39 +1770,11 @@ SWIG_AsVal_unsigned_SS_long (VALUE obj, unsigned long *val)
 }
 
 SWIGINTERN VALUE
-_wrap_signal_sender(int argc, VALUE *argv, VALUE self) {
-  QtProxy *result = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  result = (QtProxy *)signal_sender();
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_QtProxy, 0 |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
 _wrap_ini(int argc, VALUE *argv, VALUE self) {
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
   ini();
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_make_gui(int argc, VALUE *argv, VALUE self) {
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  make_gui();
   return Qnil;
 fail:
   return Qnil;
@@ -3950,6 +3915,22 @@ fail:
 
 swig_class cQtProxy;
 
+SWIGINTERN VALUE
+_wrap_make_qt_gui(int argc, VALUE *argv, VALUE self) {
+  QtProxy *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  result = (QtProxy *)make_qt_gui();
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_QtProxy, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
 SWIGINTERN void
 free_QtProxy(QtProxy *arg1) {
     delete arg1;
@@ -5308,9 +5289,7 @@ SWIGEXPORT void Init_Native(void) {
   }
   
   SWIG_RubyInitializeTrackings();
-  rb_define_module_function(mNative, "signal_sender", VALUEFUNC(_wrap_signal_sender), -1);
   rb_define_module_function(mNative, "ini", VALUEFUNC(_wrap_ini), -1);
-  rb_define_module_function(mNative, "make_gui", VALUEFUNC(_wrap_make_gui), -1);
   rb_define_module_function(mNative, "start_event_loop", VALUEFUNC(_wrap_start_event_loop), -1);
   rb_define_module_function(mNative, "process_events", VALUEFUNC(_wrap_process_events), -1);
   rb_define_module_function(mNative, "destroy_gui", VALUEFUNC(_wrap_destroy_gui), -1);
@@ -5389,6 +5368,7 @@ SWIGEXPORT void Init_Native(void) {
   rb_define_module_function(mNative, "set_wait_cursor", VALUEFUNC(_wrap_set_wait_cursor), -1);
   rb_define_module_function(mNative, "restore_cursor", VALUEFUNC(_wrap_restore_cursor), -1);
   rb_define_module_function(mNative, "dir", VALUEFUNC(_wrap_dir), -1);
+  rb_define_module_function(mNative, "make_qt_gui", VALUEFUNC(_wrap_make_qt_gui), -1);
   
   cQtProxy.klass = rb_define_class_under(mNative, "QtProxy", rb_cObject);
   SWIG_TypeClientData(SWIGTYPE_p_QtProxy, (void *) &cQtProxy);

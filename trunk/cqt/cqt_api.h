@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 void ini();
-void make_gui();
+void *make_gui();
 void start_event_loop();
 void process_events();
 void destroy_gui();

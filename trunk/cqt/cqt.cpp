@@ -1004,7 +1004,7 @@ CQT_EXPORT void ini()
     
 // QApplication **********************************************************************************
 
-CQT_EXPORT void make_gui()
+CQT_EXPORT void *make_gui()
 {
     int argc = 1;
     char *argv[] = {"Lisp - Qt4.2"};
@@ -1020,6 +1020,7 @@ CQT_EXPORT void make_gui()
     dummy.resize(0, 0);
     dummy.show();
 #endif
+	return (void*)_qapplication_;
 }
 
 CQT_EXPORT void start_event_loop()

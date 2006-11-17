@@ -7,14 +7,14 @@ module Gui
    Qt4.Init
 
    def with_gui
-      Qt4::Native.make_gui
+      $app = Qt4::Native.make_qt_gui unless $app
+      #ObjectSpace.define_finalizer($app, proc {Qt4::Native.destroy_gui}) if $app
       if block_given?
          main = yield
          raise NoMainWidgetError unless main
          main.show
          Qt4::Native.start_event_loop
       end
-      Qt4::Native.destroy_gui
    end
 
    module View
@@ -65,6 +65,7 @@ module Gui
          private
          def create_widget!(sym, *args)
             obj = QWidget.new(sym, @widget_parent)
+            raise BadWidgetNameError unless obj
             if args.first.class == Symbol
                instance_variable_set("@#{args.first.to_s}", obj)
             end
