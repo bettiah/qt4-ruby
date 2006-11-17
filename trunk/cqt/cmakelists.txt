@@ -1,6 +1,6 @@
 project(qtnative) 
 
-cmake_minimum_required(VERSION 2.4.0)
+cmake_minimum_required(VERSION 2.4.3)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
@@ -75,7 +75,6 @@ set(qtnative_SRCS
 
 set(qtnative_MOC_HDRS
 	   cqt.h
-       cqt_api.h 
 	   base/action.h 
 	   base/button_group.h 
 	   base/calendar_widget.h 
@@ -141,4 +140,6 @@ add_library(qtnative SHARED ${qtnative_SRCS} ${qtnative_MOC_SRCS})
 
 target_link_libraries(qtnative ${QT_LIBRARIES} ${RUBY_LIBRARY})
 
+set_target_properties(qtnative PROPERTIES OUTPUT_NAME native PREFIX "" SUFFIX .so)
 
+install(TARGETS qtnative DESTINATION ${PROJECT_SOURCE_DIR}/..)
