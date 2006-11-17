@@ -1,6 +1,7 @@
 #include "cqt_api.h"
 
 class QtProxy {
+friend QtProxy* make_qt_gui();
 public:
 ~QtProxy() {
     ::destroy_(_real_obj);
@@ -125,4 +126,10 @@ private:
 void* _real_obj;
 };
 
+QtProxy* make_qt_gui()
+{
+	QtProxy* app = new QtProxy;
+	app->_real_obj = make_gui();
+	return app;
+}
 

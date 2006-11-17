@@ -9,12 +9,12 @@ end
 
 class Baby < View::Builder
 	def on_click
-		message_box(:info, "#{@push.getp(:text)}")
+        message_box(:info, "#{sender{|obj| obj.getp(:text)}}")
 	end
 
 	def show()
-		push_button(:push, :text=>"Click", :'minimum-width'=>150, :'minimum-height'=>30) {
-			@push.connect :clicked, method(:on_click)
+		push_button(:text=>"Click", :'minimum-width'=>150, :'minimum-height'=>30) {
+			connect :clicked, method(:on_click)
 		}.show
 	end
 end

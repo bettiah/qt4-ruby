@@ -26,7 +26,6 @@ class QWidget < QtProxy
     def initialize(sym, parent=nil)
         p "creating #{sym.to_s} with parent #{parent}"
         super(to_widget_name(sym), parent)
-        #raise BadWidgetNameError unless w
     end
 
     def show(milliSecond=0, mode=0)
@@ -129,8 +128,11 @@ class QWidget < QtProxy
             raise CouldNotConnectError, "Could not connect to signal" unless cb
 			case callback
 			when Symbol
+                raise CouldNotConnectError, "Could not connect to local symbol" unless self.respond_to? callback
 				cb.set_callback method(callback)
-			when Proc, Method
+			when Proc
+                cb.set_callback callback
+            when Method
 				cb.set_callback callback
 			end
 		}
@@ -220,10 +222,9 @@ def to_widget_name(sym)
 end
 
 #QObject
-    def sender
-        obj = signal_sender
-        p "sender is #{obj}"
-        return obj
+    def sender(&block)
+        $dummy = QWiget.new :widget unless $dummy
+        signal_sender($dummy, &block) if block_biven?
     end
 
     def object_list
@@ -301,12 +302,12 @@ end
     end
 
 #Layout   
-    def add_box(layout1, type, add)
+    def add_box(layout, type, add)
         case type
-            when :layout then Native.box_add_layout(layout1, add)
-            when :spacing then Native.box_add_spacing(layout1, add)
-            when :stretch then Native.box_add_stretch(layout1, 0)
-            when :widget  then Native.box_add_widget(layout1, add)
+            when :layout then layout.box_add_layout(add)
+            when :spacing then layout.box_add_spacing(add)
+            when :stretch then layout.box_add_stretch(0)
+            when :widget  then layout.box_add_widget(add)
             end
     end
 

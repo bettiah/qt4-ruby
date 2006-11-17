@@ -37,11 +37,13 @@ class Browser < View::Builder
 
    def add_gui_dialog(main)
 	   tool_bar(:bar1) do
-		   toolbar_add(@bar1, push_button(:message), combo_box(:type_message), push_button(:input), combo_box(:type_input), push_button(:file), combo_box(:type_file), push_button(:progress))
+		   toolbar_add(@bar1, push_button(:message), combo_box(:type_message), 
+                       push_button(:input), combo_box(:type_input), push_button(:file), combo_box(:type_file), push_button(:progress))
 	   end
 	   
 	   tool_bar(:bar2) do
-		   toolbar_add(@bar2, push_button(:font), line_edit(:selected_font), push_button(:color), line_edit(:selected_color), push_button(:error), line_edit(:error_text))
+		   toolbar_add(@bar2, push_button(:font), line_edit(:selected_font), 
+                       push_button(:color), line_edit(:selected_color), push_button(:error), line_edit(:error_text))
 	   end
 
 	   main.add_tool_bar @bar1
@@ -106,8 +108,8 @@ class Browser < View::Builder
       end
 
       def update_object_info(name)
-         $temp_object.destroy if $temp_object
-         $temp_object = create_widget name
+         $temp_object = nil
+         $temp_object = QWidget.new name
          populate(@properties, $temp_object, :property)
          populate(@signals, $temp_object, :signal)
          populate(@slots, $temp_object, :slot)

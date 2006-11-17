@@ -4,10 +4,15 @@
 #include "../cqt_api.h"
 #include "../proxy.h"
 
-
-QtProxy *signal_sender() {
-    void* obj = sender();
-    return reinterpret_cast< QtProxy * >(obj);   
+static void signal_sender(VALUE dummy)
+{
+  if (rb_block_given_p()) {
+    /* use the dummy object and substitute the real object for the caller */
+    _old_real = dummy->_real_obj;
+    dummy->_real_obj = caller();
+    rb_yield(dummy);
+    dummy->_real_obj = old_real;
+  }
 }
 
 %}
@@ -27,9 +32,7 @@ QtProxy *signal_sender() {
 }
 
 /* Parse the header file to generate wrappers */
-QtProxy *signal_sender();
 void ini();
-void make_gui();
 void start_event_loop();
 void process_events();
 void destroy_gui();
