@@ -20,7 +20,6 @@ class Browser < View::Builder
    def heavy_calculation
       max = 50
       progress_dialog("Calculating", max) { |set_progress|
-         p 'setting progress'
          catch :progressCancelledException do
             (1..max).each { |n| sleep(0.1); set_progress.call(n+1) }
          end
@@ -68,7 +67,7 @@ class Browser < View::Builder
             [@type_input,   [":int", ":float", ":text"]],
             [@type_file,    [":open-file", ":save-file", ":dir"]]
          ].each do |obj, rst|
-            obj.slotcall :'add-items', rst.join('^')
+            obj.add_items rst.join('^')
          end
 
          [
@@ -104,34 +103,34 @@ class Browser < View::Builder
 
       def populate_enums(name)
          @enums.clear
-         @enums.slotcall:'add-items', ($temp_object.enum_list name)
+         @enums.add_items $temp_object.enum_list(name)
       end
 
       def update_object_info(name)
-         $temp_object = nil
+         $temp_object.destroy if $temp_object
          $temp_object = QWidget.new name
          populate(@properties, $temp_object, :property)
          populate(@signals, $temp_object, :signal)
          populate(@slots, $temp_object, :slot)
 
          @enum_properties.clear
-         @enum_properties.slotcall :'add-items', $temp_object.enum_property_list
-         populate_enums(@enum_properties.getp(:'current-text'))
+         @enum_properties.add_items $temp_object.enum_property_list
+         populate_enums(@enum_properties.getp(:current_text))
       end
 
       def gui_object()
          group_box(:title=>'Objects', :flat=>true) do
             grid_layout do
-               layout(1, 3) {
-                  h_box_layout do
+               row {
+                  layout(:row_span=>1, :col_span=>3) { h_box_layout do
                      box combo_box(:objects)
                      box label(:text=>"  Enum")
-                     box combo_box(:enum_properties, :'size-adjust-policy'=>:'adjust-to-contents')
-                     box combo_box(:enums, :'size-adjust-policy'=>:'adjust-to-contents')
+                     box combo_box(:enum_properties, :size_adjust_policy=>:'adjust-to-contents')
+                     box combo_box(:enums, :size_adjust_policy=>:'adjust-to-contents')
                      box
                      box label(:text=>'Events')
                      box combo_box(:events)
-                  end
+                  end}
                }
                row {
                   item label(:text=>"<b><font color=#ff4020>Properties</font></b><br>\
@@ -146,8 +145,8 @@ class Browser < View::Builder
                }
                row {
                   item text_edit(:properties)
-                  item text_edit(:signals), 2
-                  item text_edit(:slots), 2
+                  item text_edit(:signals), :row_span=>2
+                  item text_edit(:slots), :row_span=>2
                }
                row { item label(:text => "[r] ... read only") }
             end
@@ -156,8 +155,8 @@ class Browser < View::Builder
                obj.setp :'read-only'=>true
             end
 
-            @objects.slotcall :'add-items', object_list
-            @events.slotcall :'add-items', event_list
+            @objects.add_items object_list
+            @events.add_items event_list
 
             update_object_info @objects.getp(:'current-text')
 
@@ -165,7 +164,7 @@ class Browser < View::Builder
                [@objects, :update_object_info],
                [@enum_properties, :populate_enums]
             ].each do |widget, meth|
-               widget.connect(:'activated', method(meth))
+               widget.connect(:activated, method(meth))
             end
 
          end #group_box

@@ -112,10 +112,10 @@ def show
    widget {
       grid_layout do
          row {
-            item label(:real, :'frame-shape'=>:box, :alignment=>:'align-right'), 1, 5
+            item label(:real, :'frame-shape'=>:box, :alignment=>:'align-right'), :row_span=>1, :col_span=>5
          }
          row {
-            item line_edit(:float, :'read-only'=>true, :font=>14, :alignment=>:'align-right'), 1, 5
+            item line_edit(:float, :'read-only'=>true, :font=>14, :alignment=>:'align-right'), :row_span=>1, :col_span=>5
          }
          row {
             item do_button("1/x", :reci_clicked)
@@ -128,7 +128,7 @@ def show
             item do_button('1', :number_clicked)
             item do_button('2', :number_clicked)
             item do_button('3', :number_clicked)
-            item do_button("+", :operation_clicked), 2
+            item do_button("+", :operation_clicked), :row_span=>2
             item do_button("<<", :back_clicked)
          }
          row {
@@ -136,7 +136,7 @@ def show
             item do_button('5', :number_clicked)
             item do_button('6', :number_clicked)
             item
-            item do_button("=", :equal_clicked), 2
+            item do_button("=", :equal_clicked), :row_span=>2
          }
          row {
             item do_button('7', :number_clicked)
@@ -145,7 +145,7 @@ def show
             item do_button("+-", :sign_clicked)
          }
          row {
-            item do_button('0', :number_clicked), 1, 3
+            item do_button('0', :number_clicked), :row_span=>1, :col_span=>3
             item do_button(".", :point_clicked)
             item do_button("blah", lambda {message_box(:info, "#{$value1.to_f.to_s}")})
          }

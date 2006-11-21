@@ -26,7 +26,7 @@ class QWidget < QtProxy
     def initialize(sym, parent=nil)
         @signals = {}
         p "creating #{sym.to_s} with parent #{parent}"
-        super(to_widget_name(sym), parent)
+        super(to_qt_name(sym), parent)
     end
 
     def show(milliSecond=0, mode=0)
@@ -44,14 +44,14 @@ class QWidget < QtProxy
     end
     
     def repaint_now()
-        slotcall "(repaint)"
+        slotcall :repaint
         Native.process_events
     end
 
 #Property
     def setp(args)
         args.each { |name, val|
-            case get_property_type name.to_s
+            case get_property_type to_qt_name(name)
             when 1 then set_property_bool case val 
                                             when TrueClass then 1
                                             when FalseClass then 0
@@ -61,7 +61,7 @@ class QWidget < QtProxy
                     when Fixnum then set_property_int val
                     when Symbol then set_property_enum val.to_s
                     end
-            when 10, 76 then set_property_string val
+            when 10, 76 then set_property_string to_qt_name(val)
             when 14 then set_property_date val
             when 15 then set_property_time val
             when 16 then set_property_date_time val
@@ -83,7 +83,7 @@ class QWidget < QtProxy
     end
     
     def getp(name)
-        case get_property_type name.to_s
+        case get_property_type to_qt_name(name)
             when 1 then (Native.get_property_bool == 1) ? true : false
             when 2 then Native.get_property_int
             when 10, 17 then Native.get_property_string
@@ -122,23 +122,26 @@ class QWidget < QtProxy
         cb = nil
         args = nil
         callbacks << block if block_given?
+		signal = to_qt_name signal
 #            args = argument_types_(self, signal.to_s)
 #            raise BadSlotNameError, "Could not find signal #{signal} in Object" unless args
  		callbacks.each {|callback|
-			cb = connect_ signal.to_s
-            add_callbacks_for signal.to_s, cb
+			cb = connect_ signal
             raise CouldNotConnectError, "Could not connect to signal" unless cb
 			case callback
 			when Symbol
                 raise CouldNotConnectError, "Could not connect to local symbol" unless self.respond_to? callback
-				cb.set_callback method(callback)
+				callback = method(callback)
 			when Proc
-                cb.set_callback callback
             when Method
-				cb.set_callback callback
 			end
+            add_callbacks_for signal, cb, callback
 		}
     end
+
+	def connect_qt(signal, to, slot)
+		connect_qt_ to_qt_name(signal), to, to_qt_name(slot), 1
+	end
 
 	def callback__(signal, *args)
 		callbacks_for(signal).each do |callback|
@@ -162,9 +165,11 @@ class QWidget < QtProxy
         result = send(signal) if respond_to_without_attributes?(signal)
 	end
 
-	def add_callbacks_for(signal, cb)
+	def add_callbacks_for(signal, cb, aproc)
         @signals[signal] ||= []
-        @signals[signal].push cb
+        @signals[signal].push [cb, aproc]
+		# add the callback to hash to keep reference count
+		cb.set_callback aproc
         #self.class.read_inheritable_attribute(signal.to_sym) or []
 	end
 
@@ -174,11 +179,11 @@ class QWidget < QtProxy
 #Slot calls
     def method_missing(method_symbol, *parameters)#:nodoc:
         p "method_missing for #{method_symbol}"
-        slotcall to_widget_name(method_symbol), *parameters
+        slotcall to_qt_name(method_symbol), *parameters
     end
       
     def slotcall(name, *args)
-        case call_type name.to_s
+        case call_type to_qt_name(name)
         when 1 then call_void
         when 2 then call_bool args[0]
         when 3 then call_int args[0]
@@ -221,16 +226,16 @@ def stop_gui()
     Native.stop_event_loop
 end
 
-def to_widget_name(sym)
+def to_qt_name(sym)
 	sym.to_s.gsub('_', '-')
 end
 
 #QObject
+    @@dummy = nil
     def sender(&block)
-        $dummy = QWidget.new :widget unless $dummy
-        p $dummy
+        @@dummy = QWidget.new :widget unless @@dummy
         if block_given?
-            signal_sender($dummy) { |dummy| block.call dummy }
+            signal_sender(@@dummy) { |dummy| block.call dummy }
         end
     end
 
@@ -286,7 +291,7 @@ end
     def error_message(txt)
         error_message = QWidget.new :'error-message'
         error_message.setp :modal=>true
-        error_message.slotcall :'show-message', txt
+        error_message.slotcall :show_message, txt
     end
 
 #ProgressDialog
