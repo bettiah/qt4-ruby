@@ -1004,7 +1004,7 @@ CQT_EXPORT void ini()
     
 // QApplication **********************************************************************************
 
-CQT_EXPORT void *make_gui()
+CQT_EXPORT void make_gui()
 {
     int argc = 1;
     char *argv[] = {"Lisp - Qt4.2"};
@@ -1020,7 +1020,6 @@ CQT_EXPORT void *make_gui()
     dummy.resize(0, 0);
     dummy.show();
 #endif
-	return (void*)_qapplication_;
 }
 
 CQT_EXPORT void start_event_loop()
@@ -1037,7 +1036,8 @@ CQT_EXPORT void process_events()
 
 CQT_EXPORT void destroy_gui()
 {
-    delete _qapplication_; _qapplication_ = 0;
+    _qapplication_->exit();
+	delete _qapplication_; _qapplication_ = 0;
 }
 
 CQT_EXPORT void set_silent_error_messages_(int sil)

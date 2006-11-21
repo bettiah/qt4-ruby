@@ -8,16 +8,19 @@
 %inline %{
 
 class QtProxy {
-friend QtProxy* make_qt_gui();
 friend void signal_sender(VALUE r_dummy);
 
 public:
 ~QtProxy() {
-    ::destroy_(_real_obj);
+    //::destroy_(_real_obj);
 }
 
 QtProxy(const char *name, const QtProxy *par) {
     _real_obj = ::object_(name, par ? par->_real_obj : NULL);
+}
+
+void destroy() {
+    ::destroy_(_real_obj);
 }
 
 void show_delayed(int ms, int mode) {
@@ -132,19 +135,11 @@ int save_screenshot(const char *file) {
 }
 
 private:
-QtProxy() :_real_obj(NULL)
-{}
+QtProxy() :_real_obj(NULL) {}
 
 private:
 void* _real_obj;
 };
-
-QtProxy* make_qt_gui()
-{
-	QtProxy* app = new QtProxy;
-	app->_real_obj = make_gui();
-	return app;
-}
 
 void signal_sender(VALUE r_dummy) {
     void *argp = 0 ;
@@ -170,10 +165,11 @@ void signal_sender(VALUE r_dummy) {
 }
 
 /* Parse the header file to generate wrappers */
+void make_gui();
+void destroy_gui();
 void ini();
 void start_event_loop();
 void process_events();
-void destroy_gui();
 void set_silent_error_messages_(int sil);
 const char *object_list();
 const char *event_list();
