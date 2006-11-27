@@ -11,6 +11,18 @@ module Gui
 
    set_trace_func nil
 
+   Widgets = object_list.gsub!('-','_').split('^')
+   Widgets.each { |ob|
+	   cls = ob.split('_').each{|m| m.capitalize!}.join
+	   eval <<-END
+		class #{cls} < QWidget
+			def initialize(*a, &b) 
+				super(:#{ob}, *a, &b)
+			end
+		end
+	END
+   }
+
    def with_gui
       Qt4::Native.make_gui
       main = nil
@@ -33,26 +45,16 @@ module Gui
             @node = nil
          end
 
+	 Widgets.each { |ob|
+	     eval <<-END
+      		def #{ob}(*a, &b)
+      			create_widget!(:#{ob.to_sym}, *a, &b)
+      		end
+      	     END
+	 }
+
          def window(*args, &block)
-            method_missing(:main_window, *args, &block)
-         end
-
-         def method_missing(to_create, *args, &block)
-            p "method missing for #{to_create}"
-            obj = nil
-            if instance_variables.include?("@#{to_create}")
-               instance_variable_get("@#{to_create}")
-            elsif @node and item = @node.item and item.respond_to? to_create
-               p "sending to #{item}"
-               return item.send(to_create, *args, &block)
-            else
-               obj = create_widget!(to_create, *args)
-            end
-
-            if block
-               capture &block
-            end
-            obj
+           main_window(*args, &block)
          end
 
          private
@@ -63,20 +65,23 @@ module Gui
             @parent_node = old_node
          end
 
-         def create_widget!(sym, *args)
-            obj = QWidget.new(sym, find_parent)
+         def create_widget!(sym, *args, &block)
+			p = find_parent
+			args.unshift p if p
+            obj = QWidget.new sym, *args
             raise BadWidgetNameError unless obj
             p "created #{obj}"
             @node = @widgets.add_node_under(@parent_node, obj)
+			args.shift if p
             if args.first.class == Symbol
                instance_variable_set("@#{args.first.to_s}", obj)
             end
-            args.each do |arg|
-               if arg.respond_to?(:to_hash)
-                  obj.setp arg.to_hash
-               end
-            end
             additional_methods_for sym, obj
+
+            if block
+               capture &block
+            end
+
             obj
          end
 
@@ -158,6 +163,10 @@ module Gui
                add_box(find_layout, :stretch, nil)
             end
          end
+
+	 def box_layout(arg)
+	     add_box(find_layout, :layout, arg)
+	 end
       end
 
       class Tree

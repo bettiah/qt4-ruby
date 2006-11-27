@@ -23,10 +23,21 @@ class CouldNotConnectError < RuntimeError
 end
 
 class QWidget < QtProxy
-    def initialize(sym, parent=nil)
+    def initialize(sym, *args, &block)
         @signals = {}
+        if args.first.class == QWidget
+			parent = args.first
+		else parent = nil
+		end
         p "creating #{sym.to_s} with parent #{parent}"
-        super(to_qt_name(sym), parent)
+		super to_qt_name(sym), parent
+
+		args.each do |arg|
+			if arg.respond_to?(:to_hash)
+				self.setp arg.to_hash
+			end
+		end
+		yield self if block
     end
 
     def show(milliSecond=0, mode=0)
@@ -59,7 +70,7 @@ class QWidget < QtProxy
             when 2 then 
                 case val
                     when Fixnum then set_property_int val
-                    when Symbol then set_property_enum val.to_s
+					else set_property_enum to_qt_name(val)
                     end
             when 10, 76 then set_property_string to_qt_name(val)
             when 14 then set_property_date val
@@ -76,7 +87,7 @@ class QWidget < QtProxy
             when 66 then set_property_brush val
             when 67 then set_property_color val
             when 71 then set_property_polygon val
-            when 74, 75 then set_property_enum val.to_s
+            when 74, 75 then set_property_enum to_qt_name(val)
             when 77 then set_property_pen val
             end
         }
@@ -178,7 +189,7 @@ class QWidget < QtProxy
 
 #Slot calls
     def method_missing(method_symbol, *parameters)#:nodoc:
-        p "method_missing for #{method_symbol}"
+        p "method_missing slotcall for #{method_symbol}"
         slotcall to_qt_name(method_symbol), *parameters
     end
       
@@ -190,7 +201,7 @@ class QWidget < QtProxy
         when 4 then call_float args[0].to_f
         when 5 then call_enum args[0]
         when 6 then call_string args[0]
-        when 7 then call_string_list args[0]
+        when 7 then call_string_list args.join("^")
         when 8 then call_url args[0]
         when 9, 10, 11, 12, 13 then call_vector arg[0]
         when 14 then call_color args[0]
@@ -200,7 +211,7 @@ class QWidget < QtProxy
         when 18 then call_object args[0]
         when 19 then call_int_int args[0], args[1]
         when 20 then call_int_string args[0], args[1]
-        when 21 then call_int_string_list args[0], args[1]
+        when 21 then call_int_string_list args[0], args.join("^")
         when 22 then call_float_float args[0].to_f, args[1].to_f
         when 23 then call_float_color args[0].to_f, args[1]
         when 24 then call_string_int args[0], args[1]
@@ -231,12 +242,11 @@ def to_qt_name(sym)
 end
 
 #QObject
-    @@dummy = nil
-    def sender(&block)
-        @@dummy = QWidget.new :widget unless @@dummy
-        if block_given?
-            signal_sender(@@dummy) { |dummy| block.call dummy }
-        end
+	@@dummy = nil
+    def sender()
+    	@@dummy = QWidget.new :widget unless @@dummy
+		signal_sender() 
+		@@dummy
     end
 
     def object_list

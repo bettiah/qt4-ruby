@@ -8,7 +8,7 @@
 %inline %{
 
 class QtProxy {
-friend void signal_sender(VALUE r_dummy);
+friend void signal_sender();
 
 public:
 ~QtProxy() {
@@ -141,21 +141,13 @@ private:
 void* _real_obj;
 };
 
-void signal_sender(VALUE r_dummy) {
+void signal_sender() {
     void *argp = 0 ;
-    int res = SWIG_ConvertPtr(r_dummy, &argp, SWIGTYPE_p_QtProxy, 0 |  0 );
-    if (!SWIG_IsOK(res)) {
-//        SWIG_exception_fail(SWIG_ArgError(res), "in method '" "QtProxy" "', argument " "1"" of type '" "QtProxy const *""'"); 
-      }
-
+    VALUE module = rb_const_get(rb_cObject, rb_intern("Qt4"));
+    VALUE rb_dummy = rb_ivar_get(module, rb_intern("@@dummy"));
+    int res = SWIG_ConvertPtr(rb_dummy, &argp, SWIGTYPE_p_QtProxy, 0 |  0 );
     QtProxy* dummy = reinterpret_cast< QtProxy * >(argp);
-    if (rb_block_given_p()) {
-        /* use the dummy object and substitute the real object for the caller */
-        void* _old_real = dummy->_real_obj;
-        dummy->_real_obj = sender();
-        rb_yield(r_dummy);
-        dummy->_real_obj = _old_real;
-    }
+    dummy->_real_obj=sender();
 }
 %}
 
@@ -164,7 +156,6 @@ void signal_sender(VALUE r_dummy) {
     /*free((char*)$1);*/
 }
 
-/* Parse the header file to generate wrappers */
 void make_gui();
 void destroy_gui();
 void ini();
