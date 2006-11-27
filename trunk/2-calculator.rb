@@ -22,9 +22,7 @@ class Calculator < View::Builder
          $reset = false
       end
       clicked = nil
-      sender{ |obj| 
-          clicked = obj.getp :text
-      }
+      clicked = sender.getp :text
       $value1 = $decimals \
       ? ($value1 + clicked.to_i * (10 ** -$decimals+=1)) \
       : (clicked.to_i + 10*$value1)
@@ -69,7 +67,7 @@ class Calculator < View::Builder
    end
 
    def operation_clicked
-      sender { |obj| $operation = obj.getp :text }
+      $operation = sender.getp :text 
       $value2 ? operate : $value2 = $value1
       p "#{$operation}"
       $reset = true

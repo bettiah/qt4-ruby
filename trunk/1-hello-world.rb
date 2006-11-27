@@ -7,20 +7,20 @@ class Symbol
    end
 end
 
-class Baby < View::Builder
+class Btn < PushButton
    def on_click
-      sender{|obj| message_box(:info, obj.getp(:text))}
+      message_box(:info, sender.getp(:text))
    end
 
-   def show()
-      push_button(:text=>"Click", :'minimum-width'=>150, :'minimum-height'=>30) {
-         connect :clicked, method(:on_click)
-      }.show
+   def initialize()
+	   super
+	   self.setp(:text=>"Click", :'minimum-width'=>150, :'minimum-height'=>30)
+ 	   self.connect :clicked, :on_click
    end
 end
 
-with_gui() { View::Builder.new.label(:text=>"<h1>Hello Baby!!") }
+with_gui() { Label.new(:text=>"<h1>Hello Baby!!") }
 
 with_gui() {
-   Baby.new
+   Btn.new
 }
