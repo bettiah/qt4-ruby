@@ -1,8 +1,26 @@
 require 'gui'
 include Gui
 
+def ostats(last_stat = nil)
+ stats = Hash.new(0)
+ ObjectSpace.each_object {|o| stats[o.class] += 1}
+
+ stats.sort {|(k1,v1),(k2,v2)| v2 <=> v1}.each do |k,v|
+   printf "%-30s  %10d", k, v
+   printf " | delta %10d", (v - last_stat[k]) if last_stat
+   puts
+ end
+
+ stats
+end
+
 class Browser < View::Builder
 
+	def initialize()
+		super
+  		@stats = nil
+	end
+    
    def get_kwd(widget)
       widget.getp(:'current-text').delete!(':').to_sym
    end
@@ -37,12 +55,14 @@ class Browser < View::Builder
    def add_gui_dialog(main)
 	   tool_bar(:bar1) do
 		   toolbar_add(@bar1, push_button(:message), combo_box(:type_message), 
-                       push_button(:input), combo_box(:type_input), push_button(:file), combo_box(:type_file), push_button(:progress))
+                       push_button(:input), combo_box(:type_input), push_button(:file), 
+					   combo_box(:type_file), push_button(:progress))
 	   end
 	   
 	   tool_bar(:bar2) do
 		   toolbar_add(@bar2, push_button(:font), line_edit(:selected_font), 
-                       push_button(:color), line_edit(:selected_color), push_button(:error), line_edit(:error_text))
+                       push_button(:color), line_edit(:selected_color), push_button(:error), 
+					   line_edit(:error_text))
 	   end
 
 	   main.add_tool_bar @bar1
@@ -81,24 +101,27 @@ class Browser < View::Builder
          ].each do |obj, prc|
             obj.connect :clicked, prc
          end
+		 @stats = ostats(@stats)
+ 		 GC.start
    end
 
    def populate(widget, obj, type)
-      lst = obj.access_list type
-      str=[]
-      lst.split('^').each do |item|
-         if item.length == 0
-            str << "<br>"
-         elsif
+      lst = (obj.access_list type).split('^')
+      lst.map! do |item|
+         i = if item.length == 0
+            "<br>"
+			 else
             if item =~ /\:$/
-               str << "<b>#{item}</b><br>"
+               "<b>#{item}</b><br>"
             elsif item =~ /\s/
-               str << "#{$`} <font color=#4040ff>#{$'}</font><br>"
-            else str << "#{item}<br>"
+               "#{$`} <font color=#4040ff>#{$'}</font><br>"
+            else
+			   	"#{item}<br>"
             end
          end
+		 i
       end #do
-      widget.setp :html=>str.join
+      widget.setp :html=>lst.join
    end
 
       def populate_enums(name)
@@ -107,6 +130,8 @@ class Browser < View::Builder
       end
 
       def update_object_info(name)
+		 @stats = ostats(@stats)
+ 		 GC.start
          $temp_object.destroy if $temp_object
          $temp_object = QWidget.new name
          populate(@properties, $temp_object, :property)
@@ -125,8 +150,8 @@ class Browser < View::Builder
                   layout(:row_span=>1, :col_span=>3) { h_box_layout do
                      box combo_box(:objects)
                      box label(:text=>"  Enum")
-                     box combo_box(:enum_properties, :size_adjust_policy=>:'adjust-to-contents')
-                     box combo_box(:enums, :size_adjust_policy=>:'adjust-to-contents')
+                     box combo_box(:enum_properties, :size_adjust_policy=>':adjust-to-contents')
+                     box combo_box(:enums, :size_adjust_policy=>':adjust-to-contents')
                      box
                      box label(:text=>'Events')
                      box combo_box(:events)
@@ -155,7 +180,9 @@ class Browser < View::Builder
                obj.setp :'read-only'=>true
             end
 
-            @objects.add_items object_list
+		 @stats = ostats(@stats)
+ 		 GC.start
+            @objects.add_items Gui::Widgets
             @events.add_items event_list
 
             update_object_info @objects.getp(:'current-text')
