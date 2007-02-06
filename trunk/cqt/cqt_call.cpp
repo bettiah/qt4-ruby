@@ -146,30 +146,25 @@ bool ItemModel::setData(const QModelIndex &index, const QVariant &value, int rol
 
 bool ItemModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-	if (!index.isValid())
 		return false;
 
 }
 
 bool ItemModel::insertColumns(int column, int count, const QModelIndex &parent)
 {
-	if (!index.isValid())
 		return false;
 
 }
 
 bool ItemModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-	if (!index.isValid())
 		return false;
 
 }
 
 bool ItemModel::removeColumns(int column, int count, const QModelIndex &parent)
 {
-	if (!index.isValid())
 		return false;
-
 }
 
 int ItemModel::rowCount(const QModelIndex &parent) const
