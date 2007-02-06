@@ -1,9 +1,0 @@
-*.o
-*~
-*.tmp
-*.py[co]
-*swp
-*bld
-cqt\bld\*
-.svn/*
-.svn
