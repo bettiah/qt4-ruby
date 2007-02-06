@@ -30,6 +30,7 @@ HEADERS += cqt.h \
 	   base/l_c_d_number.h \
 	   base/line_edit.h \
 	   base/list_widget.h \
+	   base/list_view.h \
 	   base/main_window.h \
 	   base/menu.h \
 	   base/menu_bar.h \
@@ -89,6 +90,7 @@ SOURCES += cqt.cpp \
 	   base/l_c_d_number.cpp \
 	   base/line_edit.cpp \
 	   base/list_widget.cpp \
+	   base/list_view.cpp \
 	   base/main_window.cpp \
 	   base/menu.cpp \
 	   base/menu_bar.cpp \

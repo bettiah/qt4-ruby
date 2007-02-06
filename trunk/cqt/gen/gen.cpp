@@ -38,9 +38,20 @@ QObject *newObject(int n)
     return 0;
 }
 
+char* str = NULL;
+const char* copy_tmp(const char* st)
+{
+	delete[] str;
+	str = NULL;
+
+	char* str  = new char[strlen(st)*sizeof(char)];
+	strcpy(str, st);
+	return str;
+}
+
 QString qtToLispStyle(const QString &name)
 {
-    char *qt = (char *)name.toAscii().constData();
+    char *qt = (char *)copy_tmp(name.toAscii().constData());
     if((qt[0] != '_') && (qt[0] != 'Q'))
 	--qt;
     char *n = _name_ - 1;
@@ -366,8 +377,8 @@ int main(int argc, char **argv)
     
     _name_ = new char[150];
     _arg_types_ = new unsigned char[_max_args_];
-    QFile f1("include/invoke_slots");
-    QFile f2("include/invoke_method.cpp");
+    QFile f1("../gen/include/invoke_slots");
+    QFile f2("../gen/include/invoke_method.cpp");
     if(!f1.open(QIODevice::WriteOnly) ||
        !f2.open(QIODevice::WriteOnly))
 	error("FILE OPEN");
@@ -387,7 +398,7 @@ int main(int argc, char **argv)
 	delete obj;
     }
     for(int s = Signal; s <= Slot; ++s) {
-	QFile f(QString("include/%1").arg((s == Signal) ? "signals" : "slots"));
+	QFile f(QString("../gen/include/%1").arg((s == Signal) ? "signals" : "slots"));
 	if(!f.open(QIODevice::WriteOnly))
 	    error("FILE OPEN");
 	QTextStream ts(&f);

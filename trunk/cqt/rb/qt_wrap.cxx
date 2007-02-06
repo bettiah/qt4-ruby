@@ -1552,7 +1552,235 @@ static VALUE mNative;
 
 /* Includes the header in the wrapper code */
 #include "../cqt_api.h"
-#include "../proxy.h"
+
+
+
+
+class QtProxy {
+friend void signal_sender();
+
+public:
+~QtProxy() {
+    //::destroy_(_real_obj);
+}
+
+QtProxy(const char *name, const QtProxy *par) {
+    _real_obj = ::object_(name, par ? par->_real_obj : NULL);
+}
+
+void destroy() {
+    ::destroy_(_real_obj);
+}
+
+void show_delayed(int ms, int mode) {
+    ::show_delayed(_real_obj, ms, mode);
+}
+
+int start_timer(int ms) {
+    return ::start_timer(_real_obj, ms);
+}
+
+void kill_timer(int tid) {
+    ::kill_timer(_real_obj, tid);
+}
+
+const char *access_list_(int type, int enums_only) {
+    return ::access_list_(_real_obj, type, enums_only);
+}
+    
+const char *enum_list_(const char *name) {
+    return ::enum_list_(_real_obj, name);
+}
+
+int get_property_type(const char *name) {
+    return ::get_property_type(_real_obj, name);
+}
+
+void set_color_(int role, const char *name) {
+    ::set_color_(_real_obj, role, name);
+}
+
+void box_add_layout(const QtProxy *add) {
+    ::box_add_layout(_real_obj, add ? add->_real_obj : NULL);
+}
+
+void box_add_spacing (int size) {
+    ::box_add_spacing(_real_obj, size);
+}
+
+void box_add_stretch(int stretch) {
+    ::box_add_stretch(_real_obj, stretch);
+}
+
+void box_add_widget(const QtProxy *w) {
+    ::box_add_widget(_real_obj, w ? w->_real_obj : NULL);
+}
+
+void grid_add_layout(const QtProxy *add, int row, int col, int row_span, int col_span) {
+    ::grid_add_layout(_real_obj, add ? add->_real_obj : NULL, row, col, row_span, col_span);
+}
+
+void grid_add_widget(const QtProxy *w, int row, int col, int row_span, int col_span) {
+    ::grid_add_widget(_real_obj, w ? w->_real_obj : NULL, row, col, row_span, col_span);
+}
+
+void connect_qt_(const char *signal, const QtProxy *to, const char *slot, int con) {
+    ::connect_qt_(_real_obj, signal, to ? to->_real_obj : NULL, slot, con);
+}
+
+QtProxy *connect_(const char *signal) {
+    void* obj = ::connect_(_real_obj, signal);
+    if(!obj)
+        return NULL;
+    QtProxy* proxy = new QtProxy;
+    proxy->_real_obj = obj;
+    return proxy;
+}
+
+const char *argument_types_(const char *signal) {
+    return ::argument_types_(_real_obj, signal);
+}
+
+void set_callback(VALUE aproc) {
+    unsigned long arg = 0;
+    Check_Type(aproc, T_DATA);
+    arg = (unsigned long)(aproc);
+
+    ::set_callback(_real_obj, aproc);
+}
+
+int call_type(const char *slot) {
+    return ::call_type(_real_obj, slot);
+}
+
+void call_object(const QtProxy *a) {
+    ::call_object(a ? a->_real_obj : NULL);
+}
+
+void call_enum_object(const char *a, const QtProxy *b) {
+    ::call_enum_object(a, b ? b->_real_obj : NULL);
+}
+
+void call_object_int(const QtProxy *a, int b) {
+    ::call_object_int(a ? a->_real_obj : NULL, b);
+}
+
+void call_object_enum(const QtProxy *a, const char *b) {
+    ::call_object_enum(a ? a->_real_obj : NULL, b);
+}
+
+void call_object_string(const QtProxy *a, const char *b) {
+    ::call_object_string(a ? a->_real_obj : NULL, b);
+}
+
+void call_int_object_string(int a, const QtProxy *b, const char *c) {
+    ::call_int_object_string(a, b ? b->_real_obj : NULL, c);
+}
+
+void call_object_string_string(const QtProxy *a, const char *b, const char *c) {
+    ::call_object_string_string(a ? a->_real_obj : NULL, b, c);
+}
+
+void call_int_object_string_string(int a, const QtProxy *b, const char *c, const char *d) {
+    ::call_int_object_string_string(a, b ? b->_real_obj : NULL, c, d);
+}
+
+void set_model(const QtProxy *b) {
+    ::set_model_(_real_obj, b ? b->_real_obj : NULL);
+}
+
+QtProxy* set_rb_model(const VALUE object) {
+    void* obj = ::set_rb_model_(_real_obj, object);
+    if(!obj)
+        return NULL;
+    QtProxy* proxy = new QtProxy;
+    proxy->_real_obj = obj;
+    return proxy;
+}
+
+void update_view(VALUE row, VALUE column) {
+    ::update_view_(_real_obj, FIX2INT(row), FIX2INT(column));
+}
+
+void event_filter_(const char *type, VALUE aproc, int eat) {
+    Check_Type(aproc, T_DATA);
+    unsigned long prc = (unsigned long)(aproc);
+    ::event_filter_(_real_obj, type, prc, eat);
+}
+
+int save_screenshot(const char *file) {
+    return ::save_screenshot(_real_obj, file);
+}
+
+private:
+QtProxy() :_real_obj(NULL) {}
+
+private:
+void* _real_obj;
+};
+
+void signal_sender() {
+    void *argp = 0 ;
+    VALUE module = rb_const_get(rb_cObject, rb_intern("Qt4"));
+    VALUE rb_dummy = rb_ivar_get(module, rb_intern("@@dummy"));
+    int res = SWIG_ConvertPtr(rb_dummy, &argp, SWIGTYPE_p_QtProxy, 0 |  0 );
+    QtProxy* dummy = reinterpret_cast< QtProxy * >(argp);
+    dummy->_real_obj=sender();
+}
+
+
+SWIGINTERN swig_type_info*
+SWIG_pchar_descriptor()
+{
+  static int init = 0;
+  static swig_type_info* info = 0;
+  if (!init) {
+    info = SWIG_TypeQuery("_p_char");
+    init = 1;
+  }
+  return info;
+}
+
+
+SWIGINTERN int
+SWIG_AsCharPtrAndSize(VALUE obj, char** cptr, size_t* psize, int *alloc)
+{
+  if (TYPE(obj) == T_STRING) {
+    
+
+
+    char *cstr = STR2CSTR(obj);
+    
+    size_t size = RSTRING(obj)->len + 1;
+    if (cptr)  {
+      if (alloc) {
+	if (*alloc == SWIG_NEWOBJ) {
+	  *cptr = reinterpret_cast< char* >(memcpy((new char[size]), cstr, sizeof(char)*(size)));
+	} else {
+	  *cptr = cstr;
+	  *alloc = SWIG_OLDOBJ;
+	}
+      }
+    }
+    if (psize) *psize = size;
+    return SWIG_OK;
+  } else {
+    swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+    if (pchar_descriptor) {
+      void* vptr = 0;
+      if (SWIG_ConvertPtr(obj, &vptr, pchar_descriptor, 0) == SWIG_OK) {
+	if (cptr) *cptr = (char *)vptr;
+	if (psize) *psize = vptr ? (strlen((char*)vptr) + 1) : 0;
+	if (alloc) *alloc = SWIG_OLDOBJ;
+	return SWIG_OK;
+      }
+    }
+  }  
+  return SWIG_TypeError;
+}
+
+
+
 
 
 #include <limits.h>
@@ -1629,58 +1857,28 @@ SWIG_From_int  (int value)
 }
 
 
-SWIGINTERN swig_type_info*
-SWIG_pchar_descriptor()
+SWIGINTERNINLINE VALUE 
+SWIG_FromCharPtrAndSize(const char* carray, size_t size)
 {
-  static int init = 0;
-  static swig_type_info* info = 0;
-  if (!init) {
-    info = SWIG_TypeQuery("_p_char");
-    init = 1;
-  }
-  return info;
-}
-
-
-SWIGINTERN int
-SWIG_AsCharPtrAndSize(VALUE obj, char** cptr, size_t* psize, int *alloc)
-{
-  if (TYPE(obj) == T_STRING) {
-    
-
-
-    char *cstr = STR2CSTR(obj);
-    
-    size_t size = RSTRING(obj)->len + 1;
-    if (cptr)  {
-      if (alloc) {
-	if (*alloc == SWIG_NEWOBJ) {
-	  *cptr = reinterpret_cast< char* >(memcpy((new char[size]), cstr, sizeof(char)*(size)));
-	} else {
-	  *cptr = cstr;
-	  *alloc = SWIG_OLDOBJ;
-	}
-      }
+  if (carray) {
+    if (size > LONG_MAX) {
+      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+      return pchar_descriptor ? 
+	SWIG_NewPointerObj(const_cast< char * >(carray), pchar_descriptor, 0) : Qnil;
+    } else {
+      return rb_str_new(carray, static_cast< long >(size));
     }
-    if (psize) *psize = size;
-    return SWIG_OK;
   } else {
-    swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
-    if (pchar_descriptor) {
-      void* vptr = 0;
-      if (SWIG_ConvertPtr(obj, &vptr, pchar_descriptor, 0) == SWIG_OK) {
-	if (cptr) *cptr = (char *)vptr;
-	if (psize) *psize = vptr ? (strlen((char*)vptr) + 1) : 0;
-	if (alloc) *alloc = SWIG_OLDOBJ;
-	return SWIG_OK;
-      }
-    }
-  }  
-  return SWIG_TypeError;
+    return Qnil;
+  }
 }
 
 
-
+SWIGINTERNINLINE VALUE 
+SWIG_FromCharPtr(const char *cptr)
+{ 
+  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
+}
 
 
 #include <float.h>
@@ -1740,34 +1938,1294 @@ SWIG_From_float  (float value)
   return SWIG_From_double  (value);
 }
 
+swig_class cQtProxy;
 
-/*@SWIG:%ruby_aux_method@*/
-SWIGINTERN VALUE SWIG_AUX_NUM2ULONG(VALUE *args)
-{
-  VALUE obj = args[0];
-  VALUE type = TYPE(obj);
-  unsigned long *res = (unsigned long *)(args[1]);
-  *res = type == T_FIXNUM ? NUM2ULONG(obj) : rb_big2ulong(obj);
-  return obj;
-}
-/*@SWIG@*/
-
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_long (VALUE obj, unsigned long *val) 
-{
-  VALUE type = TYPE(obj);
-  if ((type == T_FIXNUM) || (type == T_BIGNUM)) {
-    unsigned long v;
-    VALUE a[2];
-    a[0] = obj;
-    a[1] = (VALUE)(&v);
-    if (rb_rescue(RUBY_METHOD_FUNC(SWIG_AUX_NUM2ULONG), (VALUE)a, RUBY_METHOD_FUNC(SWIG_ruby_failed), 0) != Qnil) {
-      if (val) *val = v;
-      return SWIG_OK;
-    }
+SWIGINTERN VALUE
+_wrap_signal_sender(int argc, VALUE *argv, VALUE self) {
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  return SWIG_TypeError;
+  signal_sender();
+  return Qnil;
+fail:
+  return Qnil;
 }
+
+
+SWIGINTERN void
+free_QtProxy(QtProxy *arg1) {
+    delete arg1;
+}
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
+SWIGINTERN VALUE
+_wrap_QtProxy_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_QtProxy_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_QtProxy);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_QtProxy(int argc, VALUE *argv, VALUE self) {
+  char *arg1 = (char *) 0 ;
+  QtProxy *arg2 = (QtProxy *) 0 ;
+  QtProxy *result = 0 ;
+  int res1 ;
+  char *buf1 = 0 ;
+  int alloc1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_AsCharPtrAndSize(argv[0], &buf1, NULL, &alloc1);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QtProxy" "', argument " "1"" of type '" "char const *""'");
+  }
+  arg1 = buf1;
+  res2 = SWIG_ConvertPtr(argv[1], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "QtProxy" "', argument " "2"" of type '" "QtProxy const *""'"); 
+  }
+  arg2 = reinterpret_cast< QtProxy * >(argp2);
+  result = (QtProxy *)new QtProxy((char const *)arg1,(QtProxy const *)arg2);DATA_PTR(self) = result;
+  
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return self;
+fail:
+  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_destroy(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "destroy" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  (arg1)->destroy();
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_show_delayed(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "show_delayed" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "show_delayed" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "show_delayed" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  (arg1)->show_delayed(arg2,arg3);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_start_timer(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  int arg2 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "start_timer" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "start_timer" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  result = (int)(arg1)->start_timer(arg2);
+  vresult = SWIG_From_int(static_cast< int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_kill_timer(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "kill_timer" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "kill_timer" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  (arg1)->kill_timer(arg2);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_access_list_(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  char *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "access_list_" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "access_list_" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  ecode3 = SWIG_AsVal_int(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "access_list_" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  result = (char *)(arg1)->access_list_(arg2,arg3);
+  vresult = SWIG_FromCharPtr(result);
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_enum_list_(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "enum_list_" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "enum_list_" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = buf2;
+  result = (char *)(arg1)->enum_list_((char const *)arg2);
+  vresult = SWIG_FromCharPtr(result);
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return vresult;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_get_property_type(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  char *arg2 = (char *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "get_property_type" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "get_property_type" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = buf2;
+  result = (int)(arg1)->get_property_type((char const *)arg2);
+  vresult = SWIG_From_int(static_cast< int >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return vresult;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_set_color_(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  int arg2 ;
+  char *arg3 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "set_color_" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "set_color_" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_AsCharPtrAndSize(argv[1], &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "set_color_" "', argument " "3"" of type '" "char const *""'");
+  }
+  arg3 = buf3;
+  (arg1)->set_color_(arg2,(char const *)arg3);
+  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  return Qnil;
+fail:
+  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_box_add_layout(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  QtProxy *arg2 = (QtProxy *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "box_add_layout" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "box_add_layout" "', argument " "2"" of type '" "QtProxy const *""'"); 
+  }
+  arg2 = reinterpret_cast< QtProxy * >(argp2);
+  (arg1)->box_add_layout((QtProxy const *)arg2);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_box_add_spacing(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "box_add_spacing" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "box_add_spacing" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  (arg1)->box_add_spacing(arg2);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_box_add_stretch(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "box_add_stretch" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "box_add_stretch" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  (arg1)->box_add_stretch(arg2);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_box_add_widget(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  QtProxy *arg2 = (QtProxy *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "box_add_widget" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "box_add_widget" "', argument " "2"" of type '" "QtProxy const *""'"); 
+  }
+  arg2 = reinterpret_cast< QtProxy * >(argp2);
+  (arg1)->box_add_widget((QtProxy const *)arg2);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_grid_add_layout(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  QtProxy *arg2 = (QtProxy *) 0 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int arg6 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  int val6 ;
+  int ecode6 = 0 ;
+  
+  if ((argc < 5) || (argc > 5)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 5)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "grid_add_layout" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "grid_add_layout" "', argument " "2"" of type '" "QtProxy const *""'"); 
+  }
+  arg2 = reinterpret_cast< QtProxy * >(argp2);
+  ecode3 = SWIG_AsVal_int(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "grid_add_layout" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(argv[2], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "grid_add_layout" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(argv[3], &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "grid_add_layout" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = static_cast< int >(val5);
+  ecode6 = SWIG_AsVal_int(argv[4], &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "grid_add_layout" "', argument " "6"" of type '" "int""'");
+  } 
+  arg6 = static_cast< int >(val6);
+  (arg1)->grid_add_layout((QtProxy const *)arg2,arg3,arg4,arg5,arg6);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_grid_add_widget(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  QtProxy *arg2 = (QtProxy *) 0 ;
+  int arg3 ;
+  int arg4 ;
+  int arg5 ;
+  int arg6 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  int val6 ;
+  int ecode6 = 0 ;
+  
+  if ((argc < 5) || (argc > 5)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 5)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "grid_add_widget" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "grid_add_widget" "', argument " "2"" of type '" "QtProxy const *""'"); 
+  }
+  arg2 = reinterpret_cast< QtProxy * >(argp2);
+  ecode3 = SWIG_AsVal_int(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "grid_add_widget" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  ecode4 = SWIG_AsVal_int(argv[2], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "grid_add_widget" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(argv[3], &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "grid_add_widget" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = static_cast< int >(val5);
+  ecode6 = SWIG_AsVal_int(argv[4], &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "grid_add_widget" "', argument " "6"" of type '" "int""'");
+  } 
+  arg6 = static_cast< int >(val6);
+  (arg1)->grid_add_widget((QtProxy const *)arg2,arg3,arg4,arg5,arg6);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_connect_qt_(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  char *arg2 = (char *) 0 ;
+  QtProxy *arg3 = (QtProxy *) 0 ;
+  char *arg4 = (char *) 0 ;
+  int arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int res4 ;
+  char *buf4 = 0 ;
+  int alloc4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  
+  if ((argc < 4) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "connect_qt_" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "connect_qt_" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = buf2;
+  res3 = SWIG_ConvertPtr(argv[1], &argp3,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "connect_qt_" "', argument " "3"" of type '" "QtProxy const *""'"); 
+  }
+  arg3 = reinterpret_cast< QtProxy * >(argp3);
+  res4 = SWIG_AsCharPtrAndSize(argv[2], &buf4, NULL, &alloc4);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "connect_qt_" "', argument " "4"" of type '" "char const *""'");
+  }
+  arg4 = buf4;
+  ecode5 = SWIG_AsVal_int(argv[3], &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "connect_qt_" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = static_cast< int >(val5);
+  (arg1)->connect_qt_((char const *)arg2,(QtProxy const *)arg3,(char const *)arg4,arg5);
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
+  return Qnil;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_connect_(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  char *arg2 = (char *) 0 ;
+  QtProxy *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "connect_" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "connect_" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = buf2;
+  result = (QtProxy *)(arg1)->connect_((char const *)arg2);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return vresult;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_argument_types_(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "argument_types_" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "argument_types_" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = buf2;
+  result = (char *)(arg1)->argument_types_((char const *)arg2);
+  vresult = SWIG_FromCharPtr(result);
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return vresult;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_set_callback(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  VALUE arg2 = (VALUE) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "set_callback" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  arg2 = argv[0];
+  (arg1)->set_callback(arg2);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_call_type(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  char *arg2 = (char *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_type" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_type" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = buf2;
+  result = (int)(arg1)->call_type((char const *)arg2);
+  vresult = SWIG_From_int(static_cast< int >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return vresult;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_call_object(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  QtProxy *arg2 = (QtProxy *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_object" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_object" "', argument " "2"" of type '" "QtProxy const *""'"); 
+  }
+  arg2 = reinterpret_cast< QtProxy * >(argp2);
+  (arg1)->call_object((QtProxy const *)arg2);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_call_enum_object(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  char *arg2 = (char *) 0 ;
+  QtProxy *arg3 = (QtProxy *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_enum_object" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_enum_object" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = buf2;
+  res3 = SWIG_ConvertPtr(argv[1], &argp3,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_enum_object" "', argument " "3"" of type '" "QtProxy const *""'"); 
+  }
+  arg3 = reinterpret_cast< QtProxy * >(argp3);
+  (arg1)->call_enum_object((char const *)arg2,(QtProxy const *)arg3);
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_call_object_int(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  QtProxy *arg2 = (QtProxy *) 0 ;
+  int arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_object_int" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_object_int" "', argument " "2"" of type '" "QtProxy const *""'"); 
+  }
+  arg2 = reinterpret_cast< QtProxy * >(argp2);
+  ecode3 = SWIG_AsVal_int(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "call_object_int" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  (arg1)->call_object_int((QtProxy const *)arg2,arg3);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_call_object_enum(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  QtProxy *arg2 = (QtProxy *) 0 ;
+  char *arg3 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_object_enum" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_object_enum" "', argument " "2"" of type '" "QtProxy const *""'"); 
+  }
+  arg2 = reinterpret_cast< QtProxy * >(argp2);
+  res3 = SWIG_AsCharPtrAndSize(argv[1], &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_object_enum" "', argument " "3"" of type '" "char const *""'");
+  }
+  arg3 = buf3;
+  (arg1)->call_object_enum((QtProxy const *)arg2,(char const *)arg3);
+  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  return Qnil;
+fail:
+  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_call_object_string(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  QtProxy *arg2 = (QtProxy *) 0 ;
+  char *arg3 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_object_string" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_object_string" "', argument " "2"" of type '" "QtProxy const *""'"); 
+  }
+  arg2 = reinterpret_cast< QtProxy * >(argp2);
+  res3 = SWIG_AsCharPtrAndSize(argv[1], &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_object_string" "', argument " "3"" of type '" "char const *""'");
+  }
+  arg3 = buf3;
+  (arg1)->call_object_string((QtProxy const *)arg2,(char const *)arg3);
+  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  return Qnil;
+fail:
+  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_call_int_object_string(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  int arg2 ;
+  QtProxy *arg3 = (QtProxy *) 0 ;
+  char *arg4 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int res4 ;
+  char *buf4 = 0 ;
+  int alloc4 = 0 ;
+  
+  if ((argc < 3) || (argc > 3)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_int_object_string" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "call_int_object_string" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(argv[1], &argp3,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_int_object_string" "', argument " "3"" of type '" "QtProxy const *""'"); 
+  }
+  arg3 = reinterpret_cast< QtProxy * >(argp3);
+  res4 = SWIG_AsCharPtrAndSize(argv[2], &buf4, NULL, &alloc4);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "call_int_object_string" "', argument " "4"" of type '" "char const *""'");
+  }
+  arg4 = buf4;
+  (arg1)->call_int_object_string(arg2,(QtProxy const *)arg3,(char const *)arg4);
+  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
+  return Qnil;
+fail:
+  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_call_object_string_string(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  QtProxy *arg2 = (QtProxy *) 0 ;
+  char *arg3 = (char *) 0 ;
+  char *arg4 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  int res4 ;
+  char *buf4 = 0 ;
+  int alloc4 = 0 ;
+  
+  if ((argc < 3) || (argc > 3)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_object_string_string" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_object_string_string" "', argument " "2"" of type '" "QtProxy const *""'"); 
+  }
+  arg2 = reinterpret_cast< QtProxy * >(argp2);
+  res3 = SWIG_AsCharPtrAndSize(argv[1], &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_object_string_string" "', argument " "3"" of type '" "char const *""'");
+  }
+  arg3 = buf3;
+  res4 = SWIG_AsCharPtrAndSize(argv[2], &buf4, NULL, &alloc4);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "call_object_string_string" "', argument " "4"" of type '" "char const *""'");
+  }
+  arg4 = buf4;
+  (arg1)->call_object_string_string((QtProxy const *)arg2,(char const *)arg3,(char const *)arg4);
+  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
+  return Qnil;
+fail:
+  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_call_int_object_string_string(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  int arg2 ;
+  QtProxy *arg3 = (QtProxy *) 0 ;
+  char *arg4 = (char *) 0 ;
+  char *arg5 = (char *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  int res4 ;
+  char *buf4 = 0 ;
+  int alloc4 = 0 ;
+  int res5 ;
+  char *buf5 = 0 ;
+  int alloc5 = 0 ;
+  
+  if ((argc < 4) || (argc > 4)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_int_object_string_string" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "call_int_object_string_string" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(argv[1], &argp3,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_int_object_string_string" "', argument " "3"" of type '" "QtProxy const *""'"); 
+  }
+  arg3 = reinterpret_cast< QtProxy * >(argp3);
+  res4 = SWIG_AsCharPtrAndSize(argv[2], &buf4, NULL, &alloc4);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "call_int_object_string_string" "', argument " "4"" of type '" "char const *""'");
+  }
+  arg4 = buf4;
+  res5 = SWIG_AsCharPtrAndSize(argv[3], &buf5, NULL, &alloc5);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "call_int_object_string_string" "', argument " "5"" of type '" "char const *""'");
+  }
+  arg5 = buf5;
+  (arg1)->call_int_object_string_string(arg2,(QtProxy const *)arg3,(char const *)arg4,(char const *)arg5);
+  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
+  if (alloc5 == SWIG_NEWOBJ) delete[] buf5;
+  return Qnil;
+fail:
+  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
+  if (alloc5 == SWIG_NEWOBJ) delete[] buf5;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_set_model(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  QtProxy *arg2 = (QtProxy *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "set_model" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "set_model" "', argument " "2"" of type '" "QtProxy const *""'"); 
+  }
+  arg2 = reinterpret_cast< QtProxy * >(argp2);
+  (arg1)->set_model((QtProxy const *)arg2);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_set_rb_model(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  VALUE arg2 = (VALUE) (VALUE)0 ;
+  QtProxy *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "set_rb_model" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  arg2 = argv[0];
+  result = (QtProxy *)(arg1)->set_rb_model(arg2);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_QtProxy, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_update_view(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  VALUE arg2 = (VALUE) 0 ;
+  VALUE arg3 = (VALUE) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "update_view" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  arg2 = argv[0];
+  arg3 = argv[1];
+  (arg1)->update_view(arg2,arg3);
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_event_filter_(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  char *arg2 = (char *) 0 ;
+  VALUE arg3 = (VALUE) 0 ;
+  int arg4 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  
+  if ((argc < 3) || (argc > 3)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "event_filter_" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "event_filter_" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = buf2;
+  arg3 = argv[1];
+  ecode4 = SWIG_AsVal_int(argv[2], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "event_filter_" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  (arg1)->event_filter_((char const *)arg2,arg3,arg4);
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_QtProxy_save_screenshot(int argc, VALUE *argv, VALUE self) {
+  QtProxy *arg1 = (QtProxy *) 0 ;
+  char *arg2 = (char *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "save_screenshot" "', argument " "1"" of type '" "QtProxy *""'"); 
+  }
+  arg1 = reinterpret_cast< QtProxy * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "save_screenshot" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = buf2;
+  result = (int)(arg1)->save_screenshot((char const *)arg2);
+  vresult = SWIG_From_int(static_cast< int >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return vresult;
+fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_make_gui(int argc, VALUE *argv, VALUE self) {
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  make_gui();
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_destroy_gui(int argc, VALUE *argv, VALUE self) {
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  destroy_gui();
+  return Qnil;
+fail:
+  return Qnil;
+}
+
 
 SWIGINTERN VALUE
 _wrap_ini(int argc, VALUE *argv, VALUE self) {
@@ -1799,18 +3257,6 @@ _wrap_process_events(int argc, VALUE *argv, VALUE self) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
   process_events();
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_destroy_gui(int argc, VALUE *argv, VALUE self) {
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  destroy_gui();
   return Qnil;
 fail:
   return Qnil;
@@ -3913,1132 +5359,6 @@ fail:
 }
 
 
-swig_class cQtProxy;
-
-SWIGINTERN VALUE
-_wrap_make_qt_gui(int argc, VALUE *argv, VALUE self) {
-  QtProxy *result = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  result = (QtProxy *)make_qt_gui();
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_QtProxy, 0 |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN void
-free_QtProxy(QtProxy *arg1) {
-    delete arg1;
-}
-
-#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
-SWIGINTERN VALUE
-_wrap_QtProxy_allocate(VALUE self) {
-#else
-  SWIGINTERN VALUE
-  _wrap_QtProxy_allocate(int argc, VALUE *argv, VALUE self) {
-#endif
-    
-    
-    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_QtProxy);
-#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
-    rb_obj_call_init(vresult, argc, argv);
-#endif
-    return vresult;
-  }
-  
-
-SWIGINTERN VALUE
-_wrap_new_QtProxy(int argc, VALUE *argv, VALUE self) {
-  char *arg1 = (char *) 0 ;
-  QtProxy *arg2 = (QtProxy *) 0 ;
-  QtProxy *result = 0 ;
-  int res1 ;
-  char *buf1 = 0 ;
-  int alloc1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_AsCharPtrAndSize(argv[0], &buf1, NULL, &alloc1);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "QtProxy" "', argument " "1"" of type '" "char const *""'");
-  }
-  arg1 = buf1;
-  res2 = SWIG_ConvertPtr(argv[1], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "QtProxy" "', argument " "2"" of type '" "QtProxy const *""'"); 
-  }
-  arg2 = reinterpret_cast< QtProxy * >(argp2);
-  result = (QtProxy *)new QtProxy((char const *)arg1,(QtProxy const *)arg2);DATA_PTR(self) = result;
-  
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
-  return self;
-fail:
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_show_delayed(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  int arg2 ;
-  int arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "show_delayed" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "show_delayed" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  ecode3 = SWIG_AsVal_int(argv[1], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "show_delayed" "', argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
-  (arg1)->show_delayed(arg2,arg3);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_access_list_(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  int arg2 ;
-  int arg3 ;
-  char *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "access_list_" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "access_list_" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  ecode3 = SWIG_AsVal_int(argv[1], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "access_list_" "', argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
-  result = (char *)(arg1)->access_list_(arg2,arg3);
-  {
-    vresult = result ? rb_str_new2(result) : Qnil;
-    /*free((char*)result);*/
-  }
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_enum_list_(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  char *arg2 = (char *) 0 ;
-  char *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "enum_list_" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "enum_list_" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = buf2;
-  result = (char *)(arg1)->enum_list_((char const *)arg2);
-  {
-    vresult = result ? rb_str_new2(result) : Qnil;
-    /*free((char*)result);*/
-  }
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return vresult;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_get_property_type(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  char *arg2 = (char *) 0 ;
-  int result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "get_property_type" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "get_property_type" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = buf2;
-  result = (int)(arg1)->get_property_type((char const *)arg2);
-  vresult = SWIG_From_int(static_cast< int >(result));
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return vresult;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_set_color_(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  int arg2 ;
-  char *arg3 = (char *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int res3 ;
-  char *buf3 = 0 ;
-  int alloc3 = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "set_color_" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "set_color_" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_AsCharPtrAndSize(argv[1], &buf3, NULL, &alloc3);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "set_color_" "', argument " "3"" of type '" "char const *""'");
-  }
-  arg3 = buf3;
-  (arg1)->set_color_(arg2,(char const *)arg3);
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  return Qnil;
-fail:
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_box_add_layout(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  QtProxy *arg2 = (QtProxy *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "box_add_layout" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "box_add_layout" "', argument " "2"" of type '" "QtProxy const *""'"); 
-  }
-  arg2 = reinterpret_cast< QtProxy * >(argp2);
-  (arg1)->box_add_layout((QtProxy const *)arg2);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_box_add_spacing(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "box_add_spacing" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "box_add_spacing" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  (arg1)->box_add_spacing(arg2);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_box_add_stretch(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "box_add_stretch" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "box_add_stretch" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  (arg1)->box_add_stretch(arg2);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_box_add_widget(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  QtProxy *arg2 = (QtProxy *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "box_add_widget" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "box_add_widget" "', argument " "2"" of type '" "QtProxy const *""'"); 
-  }
-  arg2 = reinterpret_cast< QtProxy * >(argp2);
-  (arg1)->box_add_widget((QtProxy const *)arg2);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_grid_add_layout(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  QtProxy *arg2 = (QtProxy *) 0 ;
-  int arg3 ;
-  int arg4 ;
-  int arg5 ;
-  int arg6 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  int val5 ;
-  int ecode5 = 0 ;
-  int val6 ;
-  int ecode6 = 0 ;
-  
-  if ((argc < 5) || (argc > 5)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 5)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "grid_add_layout" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "grid_add_layout" "', argument " "2"" of type '" "QtProxy const *""'"); 
-  }
-  arg2 = reinterpret_cast< QtProxy * >(argp2);
-  ecode3 = SWIG_AsVal_int(argv[1], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "grid_add_layout" "', argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
-  ecode4 = SWIG_AsVal_int(argv[2], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "grid_add_layout" "', argument " "4"" of type '" "int""'");
-  } 
-  arg4 = static_cast< int >(val4);
-  ecode5 = SWIG_AsVal_int(argv[3], &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "grid_add_layout" "', argument " "5"" of type '" "int""'");
-  } 
-  arg5 = static_cast< int >(val5);
-  ecode6 = SWIG_AsVal_int(argv[4], &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "grid_add_layout" "', argument " "6"" of type '" "int""'");
-  } 
-  arg6 = static_cast< int >(val6);
-  (arg1)->grid_add_layout((QtProxy const *)arg2,arg3,arg4,arg5,arg6);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_grid_add_widget(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  QtProxy *arg2 = (QtProxy *) 0 ;
-  int arg3 ;
-  int arg4 ;
-  int arg5 ;
-  int arg6 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  int val5 ;
-  int ecode5 = 0 ;
-  int val6 ;
-  int ecode6 = 0 ;
-  
-  if ((argc < 5) || (argc > 5)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 5)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "grid_add_widget" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "grid_add_widget" "', argument " "2"" of type '" "QtProxy const *""'"); 
-  }
-  arg2 = reinterpret_cast< QtProxy * >(argp2);
-  ecode3 = SWIG_AsVal_int(argv[1], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "grid_add_widget" "', argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
-  ecode4 = SWIG_AsVal_int(argv[2], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "grid_add_widget" "', argument " "4"" of type '" "int""'");
-  } 
-  arg4 = static_cast< int >(val4);
-  ecode5 = SWIG_AsVal_int(argv[3], &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "grid_add_widget" "', argument " "5"" of type '" "int""'");
-  } 
-  arg5 = static_cast< int >(val5);
-  ecode6 = SWIG_AsVal_int(argv[4], &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "grid_add_widget" "', argument " "6"" of type '" "int""'");
-  } 
-  arg6 = static_cast< int >(val6);
-  (arg1)->grid_add_widget((QtProxy const *)arg2,arg3,arg4,arg5,arg6);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_connect_qt_(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  char *arg2 = (char *) 0 ;
-  QtProxy *arg3 = (QtProxy *) 0 ;
-  char *arg4 = (char *) 0 ;
-  int arg5 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  int res4 ;
-  char *buf4 = 0 ;
-  int alloc4 = 0 ;
-  int val5 ;
-  int ecode5 = 0 ;
-  
-  if ((argc < 4) || (argc > 4)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "connect_qt_" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "connect_qt_" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = buf2;
-  res3 = SWIG_ConvertPtr(argv[1], &argp3,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "connect_qt_" "', argument " "3"" of type '" "QtProxy const *""'"); 
-  }
-  arg3 = reinterpret_cast< QtProxy * >(argp3);
-  res4 = SWIG_AsCharPtrAndSize(argv[2], &buf4, NULL, &alloc4);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "connect_qt_" "', argument " "4"" of type '" "char const *""'");
-  }
-  arg4 = buf4;
-  ecode5 = SWIG_AsVal_int(argv[3], &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "connect_qt_" "', argument " "5"" of type '" "int""'");
-  } 
-  arg5 = static_cast< int >(val5);
-  (arg1)->connect_qt_((char const *)arg2,(QtProxy const *)arg3,(char const *)arg4,arg5);
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
-  return Qnil;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_connect_(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  char *arg2 = (char *) 0 ;
-  QtProxy *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "connect_" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "connect_" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = buf2;
-  result = (QtProxy *)(arg1)->connect_((char const *)arg2);
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return vresult;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_argument_types_(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  char *arg2 = (char *) 0 ;
-  char *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "argument_types_" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "argument_types_" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = buf2;
-  result = (char *)(arg1)->argument_types_((char const *)arg2);
-  {
-    vresult = result ? rb_str_new2(result) : Qnil;
-    /*free((char*)result);*/
-  }
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return vresult;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_set_callback(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  unsigned long arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "set_callback" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  {
-    arg2 = 0;
-    Check_Type(argv[0], T_DATA);
-    arg2 = (unsigned long)(argv[0]);
-  }
-  (arg1)->set_callback(arg2);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_call_type(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  char *arg2 = (char *) 0 ;
-  int result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_type" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_type" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = buf2;
-  result = (int)(arg1)->call_type((char const *)arg2);
-  vresult = SWIG_From_int(static_cast< int >(result));
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return vresult;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_call_object(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  QtProxy *arg2 = (QtProxy *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_object" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_object" "', argument " "2"" of type '" "QtProxy const *""'"); 
-  }
-  arg2 = reinterpret_cast< QtProxy * >(argp2);
-  (arg1)->call_object((QtProxy const *)arg2);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_call_enum_object(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  char *arg2 = (char *) 0 ;
-  QtProxy *arg3 = (QtProxy *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_enum_object" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_enum_object" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = buf2;
-  res3 = SWIG_ConvertPtr(argv[1], &argp3,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_enum_object" "', argument " "3"" of type '" "QtProxy const *""'"); 
-  }
-  arg3 = reinterpret_cast< QtProxy * >(argp3);
-  (arg1)->call_enum_object((char const *)arg2,(QtProxy const *)arg3);
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return Qnil;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_call_object_int(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  QtProxy *arg2 = (QtProxy *) 0 ;
-  int arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_object_int" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_object_int" "', argument " "2"" of type '" "QtProxy const *""'"); 
-  }
-  arg2 = reinterpret_cast< QtProxy * >(argp2);
-  ecode3 = SWIG_AsVal_int(argv[1], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "call_object_int" "', argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
-  (arg1)->call_object_int((QtProxy const *)arg2,arg3);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_call_object_enum(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  QtProxy *arg2 = (QtProxy *) 0 ;
-  char *arg3 = (char *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int res3 ;
-  char *buf3 = 0 ;
-  int alloc3 = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_object_enum" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_object_enum" "', argument " "2"" of type '" "QtProxy const *""'"); 
-  }
-  arg2 = reinterpret_cast< QtProxy * >(argp2);
-  res3 = SWIG_AsCharPtrAndSize(argv[1], &buf3, NULL, &alloc3);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_object_enum" "', argument " "3"" of type '" "char const *""'");
-  }
-  arg3 = buf3;
-  (arg1)->call_object_enum((QtProxy const *)arg2,(char const *)arg3);
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  return Qnil;
-fail:
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_call_object_string(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  QtProxy *arg2 = (QtProxy *) 0 ;
-  char *arg3 = (char *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int res3 ;
-  char *buf3 = 0 ;
-  int alloc3 = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_object_string" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_object_string" "', argument " "2"" of type '" "QtProxy const *""'"); 
-  }
-  arg2 = reinterpret_cast< QtProxy * >(argp2);
-  res3 = SWIG_AsCharPtrAndSize(argv[1], &buf3, NULL, &alloc3);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_object_string" "', argument " "3"" of type '" "char const *""'");
-  }
-  arg3 = buf3;
-  (arg1)->call_object_string((QtProxy const *)arg2,(char const *)arg3);
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  return Qnil;
-fail:
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_call_int_object_string(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  int arg2 ;
-  QtProxy *arg3 = (QtProxy *) 0 ;
-  char *arg4 = (char *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  int res4 ;
-  char *buf4 = 0 ;
-  int alloc4 = 0 ;
-  
-  if ((argc < 3) || (argc > 3)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_int_object_string" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "call_int_object_string" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(argv[1], &argp3,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_int_object_string" "', argument " "3"" of type '" "QtProxy const *""'"); 
-  }
-  arg3 = reinterpret_cast< QtProxy * >(argp3);
-  res4 = SWIG_AsCharPtrAndSize(argv[2], &buf4, NULL, &alloc4);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "call_int_object_string" "', argument " "4"" of type '" "char const *""'");
-  }
-  arg4 = buf4;
-  (arg1)->call_int_object_string(arg2,(QtProxy const *)arg3,(char const *)arg4);
-  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
-  return Qnil;
-fail:
-  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_call_object_string_string(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  QtProxy *arg2 = (QtProxy *) 0 ;
-  char *arg3 = (char *) 0 ;
-  char *arg4 = (char *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  int res3 ;
-  char *buf3 = 0 ;
-  int alloc3 = 0 ;
-  int res4 ;
-  char *buf4 = 0 ;
-  int alloc4 = 0 ;
-  
-  if ((argc < 3) || (argc > 3)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_object_string_string" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "call_object_string_string" "', argument " "2"" of type '" "QtProxy const *""'"); 
-  }
-  arg2 = reinterpret_cast< QtProxy * >(argp2);
-  res3 = SWIG_AsCharPtrAndSize(argv[1], &buf3, NULL, &alloc3);
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_object_string_string" "', argument " "3"" of type '" "char const *""'");
-  }
-  arg3 = buf3;
-  res4 = SWIG_AsCharPtrAndSize(argv[2], &buf4, NULL, &alloc4);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "call_object_string_string" "', argument " "4"" of type '" "char const *""'");
-  }
-  arg4 = buf4;
-  (arg1)->call_object_string_string((QtProxy const *)arg2,(char const *)arg3,(char const *)arg4);
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
-  return Qnil;
-fail:
-  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
-  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_call_int_object_string_string(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  int arg2 ;
-  QtProxy *arg3 = (QtProxy *) 0 ;
-  char *arg4 = (char *) 0 ;
-  char *arg5 = (char *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  int res4 ;
-  char *buf4 = 0 ;
-  int alloc4 = 0 ;
-  int res5 ;
-  char *buf5 = 0 ;
-  int alloc5 = 0 ;
-  
-  if ((argc < 4) || (argc > 4)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "call_int_object_string_string" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  ecode2 = SWIG_AsVal_int(argv[0], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "call_int_object_string_string" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  res3 = SWIG_ConvertPtr(argv[1], &argp3,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "call_int_object_string_string" "', argument " "3"" of type '" "QtProxy const *""'"); 
-  }
-  arg3 = reinterpret_cast< QtProxy * >(argp3);
-  res4 = SWIG_AsCharPtrAndSize(argv[2], &buf4, NULL, &alloc4);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "call_int_object_string_string" "', argument " "4"" of type '" "char const *""'");
-  }
-  arg4 = buf4;
-  res5 = SWIG_AsCharPtrAndSize(argv[3], &buf5, NULL, &alloc5);
-  if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "call_int_object_string_string" "', argument " "5"" of type '" "char const *""'");
-  }
-  arg5 = buf5;
-  (arg1)->call_int_object_string_string(arg2,(QtProxy const *)arg3,(char const *)arg4,(char const *)arg5);
-  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
-  if (alloc5 == SWIG_NEWOBJ) delete[] buf5;
-  return Qnil;
-fail:
-  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
-  if (alloc5 == SWIG_NEWOBJ) delete[] buf5;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_event_filter_(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  char *arg2 = (char *) 0 ;
-  QtProxy *arg3 = (QtProxy *) 0 ;
-  int arg4 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  
-  if ((argc < 3) || (argc > 3)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "event_filter_" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "event_filter_" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = buf2;
-  res3 = SWIG_ConvertPtr(argv[1], &argp3,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "event_filter_" "', argument " "3"" of type '" "QtProxy const *""'"); 
-  }
-  arg3 = reinterpret_cast< QtProxy * >(argp3);
-  ecode4 = SWIG_AsVal_int(argv[2], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "event_filter_" "', argument " "4"" of type '" "int""'");
-  } 
-  arg4 = static_cast< int >(val4);
-  (arg1)->event_filter_((char const *)arg2,(QtProxy const *)arg3,arg4);
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return Qnil;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_QtProxy_save_screenshot(int argc, VALUE *argv, VALUE self) {
-  QtProxy *arg1 = (QtProxy *) 0 ;
-  char *arg2 = (char *) 0 ;
-  int result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "save_screenshot" "', argument " "1"" of type '" "QtProxy *""'"); 
-  }
-  arg1 = reinterpret_cast< QtProxy * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "save_screenshot" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = buf2;
-  result = (int)(arg1)->save_screenshot((char const *)arg2);
-  vresult = SWIG_From_int(static_cast< int >(result));
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return vresult;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return Qnil;
-}
-
-
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
@@ -5289,10 +5609,52 @@ SWIGEXPORT void Init_Native(void) {
   }
   
   SWIG_RubyInitializeTrackings();
+  rb_define_module_function(mNative, "signal_sender", VALUEFUNC(_wrap_signal_sender), -1);
+  
+  cQtProxy.klass = rb_define_class_under(mNative, "QtProxy", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_QtProxy, (void *) &cQtProxy);
+  rb_define_alloc_func(cQtProxy.klass, _wrap_QtProxy_allocate);
+  rb_define_method(cQtProxy.klass, "initialize", VALUEFUNC(_wrap_new_QtProxy), -1);
+  rb_define_method(cQtProxy.klass, "destroy", VALUEFUNC(_wrap_QtProxy_destroy), -1);
+  rb_define_method(cQtProxy.klass, "show_delayed", VALUEFUNC(_wrap_QtProxy_show_delayed), -1);
+  rb_define_method(cQtProxy.klass, "start_timer", VALUEFUNC(_wrap_QtProxy_start_timer), -1);
+  rb_define_method(cQtProxy.klass, "kill_timer", VALUEFUNC(_wrap_QtProxy_kill_timer), -1);
+  rb_define_method(cQtProxy.klass, "access_list_", VALUEFUNC(_wrap_QtProxy_access_list_), -1);
+  rb_define_method(cQtProxy.klass, "enum_list_", VALUEFUNC(_wrap_QtProxy_enum_list_), -1);
+  rb_define_method(cQtProxy.klass, "get_property_type", VALUEFUNC(_wrap_QtProxy_get_property_type), -1);
+  rb_define_method(cQtProxy.klass, "set_color_", VALUEFUNC(_wrap_QtProxy_set_color_), -1);
+  rb_define_method(cQtProxy.klass, "box_add_layout", VALUEFUNC(_wrap_QtProxy_box_add_layout), -1);
+  rb_define_method(cQtProxy.klass, "box_add_spacing", VALUEFUNC(_wrap_QtProxy_box_add_spacing), -1);
+  rb_define_method(cQtProxy.klass, "box_add_stretch", VALUEFUNC(_wrap_QtProxy_box_add_stretch), -1);
+  rb_define_method(cQtProxy.klass, "box_add_widget", VALUEFUNC(_wrap_QtProxy_box_add_widget), -1);
+  rb_define_method(cQtProxy.klass, "grid_add_layout", VALUEFUNC(_wrap_QtProxy_grid_add_layout), -1);
+  rb_define_method(cQtProxy.klass, "grid_add_widget", VALUEFUNC(_wrap_QtProxy_grid_add_widget), -1);
+  rb_define_method(cQtProxy.klass, "connect_qt_", VALUEFUNC(_wrap_QtProxy_connect_qt_), -1);
+  rb_define_method(cQtProxy.klass, "connect_", VALUEFUNC(_wrap_QtProxy_connect_), -1);
+  rb_define_method(cQtProxy.klass, "argument_types_", VALUEFUNC(_wrap_QtProxy_argument_types_), -1);
+  rb_define_method(cQtProxy.klass, "set_callback", VALUEFUNC(_wrap_QtProxy_set_callback), -1);
+  rb_define_method(cQtProxy.klass, "call_type", VALUEFUNC(_wrap_QtProxy_call_type), -1);
+  rb_define_method(cQtProxy.klass, "call_object", VALUEFUNC(_wrap_QtProxy_call_object), -1);
+  rb_define_method(cQtProxy.klass, "call_enum_object", VALUEFUNC(_wrap_QtProxy_call_enum_object), -1);
+  rb_define_method(cQtProxy.klass, "call_object_int", VALUEFUNC(_wrap_QtProxy_call_object_int), -1);
+  rb_define_method(cQtProxy.klass, "call_object_enum", VALUEFUNC(_wrap_QtProxy_call_object_enum), -1);
+  rb_define_method(cQtProxy.klass, "call_object_string", VALUEFUNC(_wrap_QtProxy_call_object_string), -1);
+  rb_define_method(cQtProxy.klass, "call_int_object_string", VALUEFUNC(_wrap_QtProxy_call_int_object_string), -1);
+  rb_define_method(cQtProxy.klass, "call_object_string_string", VALUEFUNC(_wrap_QtProxy_call_object_string_string), -1);
+  rb_define_method(cQtProxy.klass, "call_int_object_string_string", VALUEFUNC(_wrap_QtProxy_call_int_object_string_string), -1);
+  rb_define_method(cQtProxy.klass, "set_model", VALUEFUNC(_wrap_QtProxy_set_model), -1);
+  rb_define_method(cQtProxy.klass, "set_rb_model", VALUEFUNC(_wrap_QtProxy_set_rb_model), -1);
+  rb_define_method(cQtProxy.klass, "update_view", VALUEFUNC(_wrap_QtProxy_update_view), -1);
+  rb_define_method(cQtProxy.klass, "event_filter_", VALUEFUNC(_wrap_QtProxy_event_filter_), -1);
+  rb_define_method(cQtProxy.klass, "save_screenshot", VALUEFUNC(_wrap_QtProxy_save_screenshot), -1);
+  cQtProxy.mark = 0;
+  cQtProxy.destroy = (void (*)(void *)) free_QtProxy;
+  cQtProxy.trackObjects = 0;
+  rb_define_module_function(mNative, "make_gui", VALUEFUNC(_wrap_make_gui), -1);
+  rb_define_module_function(mNative, "destroy_gui", VALUEFUNC(_wrap_destroy_gui), -1);
   rb_define_module_function(mNative, "ini", VALUEFUNC(_wrap_ini), -1);
   rb_define_module_function(mNative, "start_event_loop", VALUEFUNC(_wrap_start_event_loop), -1);
   rb_define_module_function(mNative, "process_events", VALUEFUNC(_wrap_process_events), -1);
-  rb_define_module_function(mNative, "destroy_gui", VALUEFUNC(_wrap_destroy_gui), -1);
   rb_define_module_function(mNative, "set_silent_error_messages_", VALUEFUNC(_wrap_set_silent_error_messages_), -1);
   rb_define_module_function(mNative, "object_list", VALUEFUNC(_wrap_object_list), -1);
   rb_define_module_function(mNative, "event_list", VALUEFUNC(_wrap_event_list), -1);
@@ -5368,40 +5730,5 @@ SWIGEXPORT void Init_Native(void) {
   rb_define_module_function(mNative, "set_wait_cursor", VALUEFUNC(_wrap_set_wait_cursor), -1);
   rb_define_module_function(mNative, "restore_cursor", VALUEFUNC(_wrap_restore_cursor), -1);
   rb_define_module_function(mNative, "dir", VALUEFUNC(_wrap_dir), -1);
-  rb_define_module_function(mNative, "make_qt_gui", VALUEFUNC(_wrap_make_qt_gui), -1);
-  
-  cQtProxy.klass = rb_define_class_under(mNative, "QtProxy", rb_cObject);
-  SWIG_TypeClientData(SWIGTYPE_p_QtProxy, (void *) &cQtProxy);
-  rb_define_alloc_func(cQtProxy.klass, _wrap_QtProxy_allocate);
-  rb_define_method(cQtProxy.klass, "initialize", VALUEFUNC(_wrap_new_QtProxy), -1);
-  rb_define_method(cQtProxy.klass, "show_delayed", VALUEFUNC(_wrap_QtProxy_show_delayed), -1);
-  rb_define_method(cQtProxy.klass, "access_list_", VALUEFUNC(_wrap_QtProxy_access_list_), -1);
-  rb_define_method(cQtProxy.klass, "enum_list_", VALUEFUNC(_wrap_QtProxy_enum_list_), -1);
-  rb_define_method(cQtProxy.klass, "get_property_type", VALUEFUNC(_wrap_QtProxy_get_property_type), -1);
-  rb_define_method(cQtProxy.klass, "set_color_", VALUEFUNC(_wrap_QtProxy_set_color_), -1);
-  rb_define_method(cQtProxy.klass, "box_add_layout", VALUEFUNC(_wrap_QtProxy_box_add_layout), -1);
-  rb_define_method(cQtProxy.klass, "box_add_spacing", VALUEFUNC(_wrap_QtProxy_box_add_spacing), -1);
-  rb_define_method(cQtProxy.klass, "box_add_stretch", VALUEFUNC(_wrap_QtProxy_box_add_stretch), -1);
-  rb_define_method(cQtProxy.klass, "box_add_widget", VALUEFUNC(_wrap_QtProxy_box_add_widget), -1);
-  rb_define_method(cQtProxy.klass, "grid_add_layout", VALUEFUNC(_wrap_QtProxy_grid_add_layout), -1);
-  rb_define_method(cQtProxy.klass, "grid_add_widget", VALUEFUNC(_wrap_QtProxy_grid_add_widget), -1);
-  rb_define_method(cQtProxy.klass, "connect_qt_", VALUEFUNC(_wrap_QtProxy_connect_qt_), -1);
-  rb_define_method(cQtProxy.klass, "connect_", VALUEFUNC(_wrap_QtProxy_connect_), -1);
-  rb_define_method(cQtProxy.klass, "argument_types_", VALUEFUNC(_wrap_QtProxy_argument_types_), -1);
-  rb_define_method(cQtProxy.klass, "set_callback", VALUEFUNC(_wrap_QtProxy_set_callback), -1);
-  rb_define_method(cQtProxy.klass, "call_type", VALUEFUNC(_wrap_QtProxy_call_type), -1);
-  rb_define_method(cQtProxy.klass, "call_object", VALUEFUNC(_wrap_QtProxy_call_object), -1);
-  rb_define_method(cQtProxy.klass, "call_enum_object", VALUEFUNC(_wrap_QtProxy_call_enum_object), -1);
-  rb_define_method(cQtProxy.klass, "call_object_int", VALUEFUNC(_wrap_QtProxy_call_object_int), -1);
-  rb_define_method(cQtProxy.klass, "call_object_enum", VALUEFUNC(_wrap_QtProxy_call_object_enum), -1);
-  rb_define_method(cQtProxy.klass, "call_object_string", VALUEFUNC(_wrap_QtProxy_call_object_string), -1);
-  rb_define_method(cQtProxy.klass, "call_int_object_string", VALUEFUNC(_wrap_QtProxy_call_int_object_string), -1);
-  rb_define_method(cQtProxy.klass, "call_object_string_string", VALUEFUNC(_wrap_QtProxy_call_object_string_string), -1);
-  rb_define_method(cQtProxy.klass, "call_int_object_string_string", VALUEFUNC(_wrap_QtProxy_call_int_object_string_string), -1);
-  rb_define_method(cQtProxy.klass, "event_filter_", VALUEFUNC(_wrap_QtProxy_event_filter_), -1);
-  rb_define_method(cQtProxy.klass, "save_screenshot", VALUEFUNC(_wrap_QtProxy_save_screenshot), -1);
-  cQtProxy.mark = 0;
-  cQtProxy.destroy = (void (*)(void *)) free_QtProxy;
-  cQtProxy.trackObjects = 0;
 }
 

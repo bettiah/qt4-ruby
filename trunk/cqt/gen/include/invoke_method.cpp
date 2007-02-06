@@ -322,93 +322,85 @@ case 52:
         return;
     break;
 case 53:
-    q1 = qobject_cast<QAbstractItemModel*>((QObject*)a1);
-    if(!q1)
-        arg_type_error = true;
-    else if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
-        Q_ARG(QAbstractItemModel*, (QAbstractItemModel*)q1)))
+    if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
+        Q_ARG(int, *(int*)a1),
+        Q_ARG(QString, (const char*)a2)))
         return;
     break;
 case 54:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(int, *(int*)a1),
-        Q_ARG(QString, (const char*)a2)))
+        Q_ARG(QStringList, stringToList((const char*)a2))))
         return;
     break;
 case 55:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
-        Q_ARG(int, *(int*)a1),
-        Q_ARG(QStringList, stringToList((const char*)a2))))
-        return;
-    break;
-case 56:
-    if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(const QTreeWidgetItem*, (const QTreeWidgetItem*)a1)))
         return;
     break;
-case 57:
+case 56:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(const QTreeWidgetItem*, (const QTreeWidgetItem*)a1),
         Q_ARG(QAbstractItemView::ScrollHint, (QAbstractItemView::ScrollHint)*(int*)a2)))
         return;
     break;
-case 58:
+case 57:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(QBrush, stringToBrush((const char*)a1))))
         return;
     break;
-case 59:
+case 58:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(QRect, stringToRect((const char*)a1)),
         Q_ARG(QBrush, stringToBrush((const char*)a2))))
         return;
     break;
-case 60:
+case 59:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(QRect, stringToRect((const char*)a1))))
         return;
     break;
-case 61:
+case 60:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(QPoint, stringToPoint((const char*)a1)),
         Q_ARG(QString, (const char*)a2)))
         return;
     break;
-case 62:
+case 61:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(QRect, stringToRect((const char*)a1)),
         Q_ARG(int, *(int*)a2),
         Q_ARG(int, *(int*)a3)))
         return;
     break;
-case 63:
+case 62:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(QPolygon, stringToPolygon((const char*)a1))))
         return;
     break;
-case 64:
+case 63:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(QPoint, stringToPoint((const char*)a1))))
         return;
     break;
-case 65:
+case 64:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(QPoint, stringToPoint((const char*)a1)),
         Q_ARG(QString, (const char*)a2),
         Q_ARG(QRect, stringToRect((const char*)a3))))
         return;
     break;
-case 66:
+case 65:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(QLine, stringToLine((const char*)a1))))
         return;
     break;
-case 67:
+case 66:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(QPen, stringToPen((const char*)a1))))
         return;
     break;
-case 68:
+case 67:
     if(QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection,
         Q_ARG(float, *(float*)a1),
         Q_ARG(QColor, stringToColor((const char*)a2))))

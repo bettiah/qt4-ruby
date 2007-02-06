@@ -1,3 +1,15 @@
+class Symbol
+	def to_qt_name
+		to_s.gsub('_', '-')
+	end
+end
+
+class String
+	def to_qt_name
+		to_s.gsub('_', '-')
+	end
+end
+
 module Qt4
 
 require "Native"
@@ -22,15 +34,18 @@ end
 class CouldNotConnectError < RuntimeError
 end
 
+class UnknownModelError < RuntimeError
+end
+
 class QWidget < QtProxy
     def initialize(sym, *args, &block)
         @signals = {}
-        if args.first.class == QWidget
+        if args.first.kind_of? QWidget
 			parent = args.first
 		else parent = nil
 		end
         p "creating #{sym.to_s} with parent #{parent}"
-		super to_qt_name(sym), parent
+		super sym.to_qt_name, parent
 
 		args.each do |arg|
 			if arg.respond_to?(:to_hash)
@@ -62,7 +77,7 @@ class QWidget < QtProxy
 #Property
     def setp(args)
         args.each { |name, val|
-            case get_property_type to_qt_name(name)
+            case get_property_type name.to_qt_name
             when 1 then set_property_bool case val 
                                             when TrueClass then 1
                                             when FalseClass then 0
@@ -70,9 +85,9 @@ class QWidget < QtProxy
             when 2 then 
                 case val
                     when Fixnum then set_property_int val
-					else set_property_enum to_qt_name(val)
+					else set_property_enum val.to_qt_name
                     end
-            when 10, 76 then set_property_string to_qt_name(val)
+            when 10, 76 then set_property_string val.to_qt_name
             when 14 then set_property_date val
             when 15 then set_property_time val
             when 16 then set_property_date_time val
@@ -87,14 +102,14 @@ class QWidget < QtProxy
             when 66 then set_property_brush val
             when 67 then set_property_color val
             when 71 then set_property_polygon val
-            when 74, 75 then set_property_enum to_qt_name(val)
+            when 74, 75 then set_property_enum val.to_qt_name
             when 77 then set_property_pen val
             end
         }
     end
     
     def getp(name)
-        case get_property_type to_qt_name(name)
+        case get_property_type name.to_qt_name
             when 1 then (Native.get_property_bool == 1) ? true : false
             when 2 then Native.get_property_int
             when 10, 17 then Native.get_property_string
@@ -133,12 +148,12 @@ class QWidget < QtProxy
         cb = nil
         args = nil
         callbacks << block if block_given?
-		signal = to_qt_name signal
+		signal = signal.to_qt_name
 #            args = argument_types_(self, signal.to_s)
 #            raise BadSlotNameError, "Could not find signal #{signal} in Object" unless args
  		callbacks.each {|callback|
 			cb = connect_ signal
-            raise CouldNotConnectError, "Could not connect to signal" unless cb
+            raise CouldNotConnectError, "Could not connect to signal #{signal}" if cb == nil
 			case callback
 			when Symbol
                 raise CouldNotConnectError, "Could not connect to local symbol" unless self.respond_to? callback
@@ -146,12 +161,12 @@ class QWidget < QtProxy
 			when Proc
             when Method
 			end
-            add_callbacks_for signal, cb, callback
+            add_callbacks_for signal, callback, cb
 		}
     end
 
 	def connect_qt(signal, to, slot)
-		connect_qt_ to_qt_name(signal), to, to_qt_name(slot), 1
+		connect_qt_ signal.to_qt_name, to, slot.to_qt_name, 1
 	end
 
 	def callback__(signal, *args)
@@ -176,25 +191,32 @@ class QWidget < QtProxy
         result = send(signal) if respond_to_without_attributes?(signal)
 	end
 
-	def add_callbacks_for(signal, cb, aproc)
+	def add_callbacks_for(signal, aproc, cb = nil)
         @signals[signal] ||= []
-        @signals[signal].push [cb, aproc]
+        @signals[signal].push [aproc, cb]
 		# add the callback to hash to keep reference count
-		cb.set_callback aproc
+		cb.set_callback aproc if cb
         #self.class.read_inheritable_attribute(signal.to_sym) or []
 	end
 
     def disconnect()
     end
 
+#Events
+	def event_filter(signal, callback, eat=0)
+		signal = signal.to_qt_name
+		event_filter_ signal, callback, eat
+		add_callbacks_for(signal, callback)
+	end
+
 #Slot calls
     def method_missing(method_symbol, *parameters)#:nodoc:
-        p "method_missing slotcall for #{method_symbol}"
-        slotcall to_qt_name(method_symbol), *parameters
+        #p "method_missing slotcall for #{method_symbol}"
+        slotcall method_symbol.to_qt_name, *parameters
     end
       
     def slotcall(name, *args)
-        case call_type to_qt_name(name)
+        case call_type name.to_qt_name
         when 1 then call_void
         when 2 then call_bool args[0]
         when 3 then call_int args[0]
@@ -203,7 +225,7 @@ class QWidget < QtProxy
         when 6 then call_string args[0]
         when 7 then call_string_list args.join("^")
         when 8 then call_url args[0]
-        when 9, 10, 11, 12, 13 then call_vector arg[0]
+        when 9, 10, 11, 12, 13 then call_vector args[0]
         when 14 then call_color args[0]
         when 15 then call_font args[0]
         when 16 then call_pen args[0]
@@ -211,7 +233,7 @@ class QWidget < QtProxy
         when 18 then call_object args[0]
         when 19 then call_int_int args[0], args[1]
         when 20 then call_int_string args[0], args[1]
-        when 21 then call_int_string_list args[0], args.join("^")
+        when 21 then call_int_string_list args.shift, args.join("^")
         when 22 then call_float_float args[0].to_f, args[1].to_f
         when 23 then call_float_color args[0].to_f, args[1]
         when 24 then call_string_int args[0], args[1]
@@ -224,7 +246,7 @@ class QWidget < QtProxy
         when 31 then call_int_int_int args[0], args[1], args[2]
         when 32 then call_int_int_enum args[0], args[1], args[2]
         when 33 then call_int_int_string args[0], args[1], args[2]
-        when 35 then call_int_int_font args[0], args[1], args[2]
+        when 34 then call_int_int_font args[0], args[1], args[2]
         when 36 then call_vector_string_vector args[0], args[1], args[2]
         when 37 then call_vector_int_int args[0], args[1], args[2]
         when 38 then call_object_string_string args[0], args[1], args[2]
@@ -235,10 +257,6 @@ end #QWidget
 
 def stop_gui()
     Native.stop_event_loop
-end
-
-def to_qt_name(sym)
-	sym.to_s.gsub('_', '-')
 end
 
 #QObject

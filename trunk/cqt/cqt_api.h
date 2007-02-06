@@ -18,6 +18,8 @@ void set_silent_error_messages_(int sil);
 void *object_(const char *name, const void *par);
 void destroy_(void *obj);
 void show_delayed(void *obj, int ms, int mode);
+int start_timer(void* obj, int ms);
+void kill_timer(void* obj, int tid);
 const char *object_list();
 const char *access_list_(const void *obj, int type, int enums_only);
 const char *enum_list_(const void *obj, const char *name);
@@ -113,7 +115,10 @@ void call_int_object_string(int a, const void *b, const char *c);
 void call_vector_int_int(const char *a, int b, int c);
 void call_object_string_string(const void *a, const char *b, const char *c);
 void call_int_object_string_string(int a, const void *b, const char *c, const char *d);
-void event_filter_(const void *object, const char *type, const void *callback, int eat);
+void set_model_(const void* object, const void* model);
+void* set_rb_model_(const void* object, unsigned long rb_object);
+void update_view_(const void* object, int row, int column);
+void event_filter_(const void *object, const char *type, unsigned long callback, int eat);
 void set_wait_cursor();
 void restore_cursor();
 int save_screenshot(void *obj, const char *file);
@@ -124,5 +129,4 @@ const char *dir(const char *path);
 #endif
 
 #endif //__CQT_API_H__
-
 
