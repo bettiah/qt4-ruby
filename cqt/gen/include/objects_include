@@ -22,6 +22,7 @@
 #include <l_c_d_number.h>
 #include <line_edit.h>
 #include <list_widget.h>
+#include <list_view.h>
 #include <main_window.h>
 #include <menu.h>
 #include <menu_bar.h>

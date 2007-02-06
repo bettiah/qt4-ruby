@@ -68,19 +68,15 @@ static const char *_object_names_[] = {
     0};
 
 // For copying strings temporarily	
-char* _to_free_;
- const char* copy_tmp(const char* st)
+char* str = NULL;
+const char* copy_tmp(const char* st)
 {
+	delete[] str;
+	str = NULL;
+
 	char* str  = new char[strlen(st)*sizeof(char)];
 	strcpy(str, st);
-	_to_free_ = str;
 	return str;
-}
-
- void free_tmp()
-{
-	delete[] _to_free_;
-	_to_free_ = NULL;
 }
 
 // Qt <-> Lisp style *****************************************************************************
@@ -111,7 +107,6 @@ QString qtToLispStyle(const QString &name)
 	    *++n = *qt;
     }
     *++n = 0;
-//	free_tmp();
     return QString(_name_);
 }
 
@@ -569,11 +564,19 @@ QBrush stringToBrush(const char *s)
 {
     QStringList args = argumentList(s);
     QBrush brush;
+	QColor color;
     int i = args.indexOf(":type");
     if(i == -1) {
 	i = args.indexOf(":color");
 	if(i != -1)
 	    brush.setColor(QColor(trim1(args[i + 1])));
+	i = args.indexOf(":alpha");
+	if(i != -1)
+		{
+		color = brush.color();
+		color.setAlpha(args[i + 1].toFloat());
+		brush.setColor(color);
+		}
 	i = args.indexOf(":style");
 	if(i == -1)
 	    brush.setStyle(Qt::SolidPattern);
@@ -1099,6 +1102,24 @@ CQT_EXPORT void show_delayed(void *obj, int ms, int mode)
 		SLOT(show()));
     else
 	msgTypeError("show-delayed");
+}
+
+CQT_EXPORT int start_timer(void* obj, int ms)
+{
+	QWidget *w = qobject_cast<QWidget*>((QObject*)obj);
+    if(w)
+		return w->startTimer(ms);
+	else 
+		return 0;
+}
+
+CQT_EXPORT void kill_timer(void* obj, int tid)
+{
+	QWidget *w = qobject_cast<QWidget*>((QObject*)obj);
+    if(w)
+		w->killTimer(tid);
+	else 
+		msgTypeError("kill - timer");
 }
 
 // Object and access lists ***********************************************************************
@@ -1946,9 +1967,40 @@ CQT_EXPORT void call_int_object_string_string(int a, const void *b, const char *
     invokeSlotMethod(&a, b, c, d);
 }
 
+/* Model - view stuff */
+CQT_EXPORT void set_model_(const void* object, const void* model)
+{
+	QAbstractItemModel* m = qobject_cast<QAbstractItemModel*>((QObject*)model);
+	if (!m)
+		msgTypeError("set_model - model");
+	QAbstractItemView* v = qobject_cast<QAbstractItemView*>((QObject*)object);
+	if (!v)
+		msgTypeError("set_model - view");
+	
+	v->setModel(m); 
+}
+
+CQT_EXPORT void* set_rb_model_(const void* object, unsigned long rb_object)
+{
+	QAbstractItemView* v = qobject_cast<QAbstractItemView*>((QObject*)object);
+	if (!v)
+		msgTypeError("set_model - view");
+	
+	QAbstractItemModel* m = new ItemModel(v, rb_object);
+	v->setModel(m); 
+	return (void*)m;
+}
+
+CQT_EXPORT void update_view_(const void* object, int row, int column)
+{
+	ItemModel* view =  qobject_cast<ItemModel*>((ItemModel*)object);
+	if (view)
+		view->update(row, column);
+}
+
 // Custom event filter ***************************************************************************
 
-CQT_EXPORT void event_filter_(const void *object, const char *type, const void *callback, int eat)
+CQT_EXPORT void event_filter_(const void *object, const char *type, unsigned long callback, int eat)
 {
     CustomEventFilter *filter = new CustomEventFilter(type, callback, (bool)eat);
     ((QObject*)object)->installEventFilter(filter);
@@ -2101,8 +2153,8 @@ void CQt::call(const QFont &a)
     if(fn) sfunc_s(fn, fontToString(a));
 }
 
-CustomEventFilter::CustomEventFilter(const char *_type, const void *callback, bool _eat)
-    : QObject(), eat(_eat), type(0), fn((func_s)callback)
+CustomEventFilter::CustomEventFilter(const char *_type, unsigned long callback, bool _eat)
+    : QObject(), eat(_eat), type(0), fn(callback)
 {
     if(_events_.contains(_type))
 	type = _events_.value(_type);
@@ -2202,8 +2254,12 @@ bool CustomEventFilter::eventFilter(QObject *obj, QEvent *ev)
 		    << ":global-x" << QString::number(((QWheelEvent*)ev)->globalX())
 		    << ":global-y" << QString::number(((QWheelEvent*)ev)->globalY());
 		break;
+		case QEvent::Close:
+			lst << "Close";
+		break;
 	}
-	(fn)(QString("(" + lst.join(" ") + ")").toAscii().constData());
+	//(fn)(QString("(" + lst.join(" ") + ")").toAscii().constData());
+	sfunc_s(fn, QString("(" + lst.join(" ") + ")").toAscii().constData());
 	return eat;
     }
     return QObject::eventFilter(obj, ev);

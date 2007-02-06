@@ -27,8 +27,7 @@ public slots:
 
     void reset() {
 	_setFixedSize(size());
-	update();
-    }
+	}
 
     void clear() {
 	pix->fill();
@@ -37,28 +36,23 @@ public slots:
 
     void drawArc(const QRect &rectangle, int startAngle, int spanAngle) {
 	pnt->drawArc(rectangle, 16 * startAngle, 16 * spanAngle);
-	update();
     }
 
     void drawChord (const QRect &rectangle, int startAngle, int spanAngle) {
 	pnt->drawChord(rectangle, 16 * startAngle, 16 * spanAngle);
-	update();
-    }
+	}
     
     void drawEllipse(const QRect &rectangle) {
 	pnt->drawEllipse(rectangle);
-	update();
-    }
+	}
     
     void drawLine(const QLine &line) {
 	pnt->drawLine(line);
-	update();
-    }
+	}
 
     void drawPie(const QRect &rectangle, int startAngle, int spanAngle) {
 	pnt->drawPie(rectangle, 16 * startAngle, 16 * spanAngle);
-	update();
-    }
+	}
 
     void drawPixmapFile(const QPoint &point, const QString &pixmap, const QRect &source) {
 	QRect _source(source);
@@ -66,58 +60,47 @@ public slots:
 	if(_source.isNull())
 	    _source = pix.rect();
 	pnt->drawPixmap(point, pix, _source);
-	update();
-    }
+	}
     
     void drawPoint(const QPoint &position) {
 	pnt->drawPoint(position);
-	update();
-    }
+	}
 
     void drawPolygon(const QPolygon &points) {
 	pnt->drawPolygon(points);
-	update();
-    }
+	}
 
     void drawPolyline(const QPolygon &points) {
 	pnt->drawPolyline(points);
-	update();
-    }
+	}
     
     void drawRect(const QRect &rectangle) {
 	pnt->drawRect(rectangle);
-	update();
-    }
+	}
 
     void drawRoundRect(const QRect &r, int xRnd, int yRnd) {
 	pnt->drawRoundRect(r, xRnd, yRnd);
-	update();
-    }
+	}
 
     void drawText(const QPoint &position, const QString &text) {
 	pnt->drawText(position, text);
-	update();
-    }
+	}
 
     void eraseRect(const QRect &rectangle) {
 	pnt->eraseRect(rectangle);
-	update();
-    }
+	}
 
     void fillRect(const QRect &rectangle, const QBrush &brush) {
 	pnt->fillRect(rectangle, brush);
-	update();
-    }
+	}
 
     void rotate(float angle) {
 	pnt->rotate(angle);
-	update();
-    }
+	}
 
     void setBackground(const QBrush &brush) {
 	pnt->setBackground(brush);
-	update();
-    }
+	}
 
 protected:
     void paintEvent(QPaintEvent *);

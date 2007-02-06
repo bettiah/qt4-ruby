@@ -6,7 +6,7 @@
 
 #include <QObject>
 #include <QHash>
-
+#include <QAbstractItemModel>
 
 void sfunc(unsigned long proc);
 void sfunc_i(unsigned long proc, int a);
@@ -14,24 +14,6 @@ void sfunc_ii(unsigned long porc, int a, int b);
 void sfunc_iii(unsigned long proc, int a, int b, int c);
 void sfunc_iis(unsigned long proc, int a, int b, const char *c);
 void sfunc_s(unsigned long proc, const char *a);
-
-typedef void (*func)
-    (unsigned long);
-
-typedef void (*func_i)
-    (unsigned long, int);
-
-typedef void (*func_ii)
-    (unsigned long, int, int);
-
-typedef void (*func_iii)
-    (unsigned long, int, int, int);
-
-typedef void (*func_iis)
-    (unsigned long, int, int, const char *);
-
-typedef void (*func_s)
-    (unsigned long, const char *);
 
 class QUrl;
 class QStringList;
@@ -68,10 +50,8 @@ public:
 	return NonQObjects.contains(obj) ? parentQObject(obj) : (QObject*)obj;
     }
 
-    //void *fn;
     unsigned long fn;
 
-    //void setCallback(void *cb) { fn = cb; }
     void setCallback(unsigned long aproc) { fn = aproc; }
 
 public slots:
@@ -99,8 +79,7 @@ class CustomEventFilter : public QObject
     Q_OBJECT
 
 public:
-    CustomEventFilter(const char *_type, const void *callback, bool _eat = false);
-
+	CustomEventFilter(const char *_type, unsigned long callback, bool _eat = false);
 protected:
     bool eventFilter(QObject *, QEvent *);
 
@@ -108,8 +87,38 @@ private:
     bool eat;
     int type;
 
-    typedef void (*func_s)(const char *);
-    func_s fn;
+	unsigned long fn;
+};
+
+class ItemModel : public QAbstractItemModel
+{
+	Q_OBJECT
+
+public:
+	ItemModel(QObject* parent, unsigned long rb_object);
+
+	QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+	QModelIndex parent(const QModelIndex &child) const;
+	Qt::ItemFlags flags(const QModelIndex &index) const;
+
+	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+	bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
+
+	bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+	bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex());
+	bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+	bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex());
+
+	int rowCount(const QModelIndex &parent = QModelIndex()) const;
+	int columnCount(const QModelIndex &parent = QModelIndex()) const;
+
+	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+	void update(int row, int col);
+
+private:
+	unsigned long rb_model;
 };
 
 #endif // CQT_H

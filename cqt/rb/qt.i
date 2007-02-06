@@ -27,6 +27,14 @@ void show_delayed(int ms, int mode) {
     ::show_delayed(_real_obj, ms, mode);
 }
 
+int start_timer(int ms) {
+    return ::start_timer(_real_obj, ms);
+}
+
+void kill_timer(int tid) {
+    ::kill_timer(_real_obj, tid);
+}
+
 const char *access_list_(int type, int enums_only) {
     return ::access_list_(_real_obj, type, enums_only);
 }
@@ -73,6 +81,8 @@ void connect_qt_(const char *signal, const QtProxy *to, const char *slot, int co
 
 QtProxy *connect_(const char *signal) {
     void* obj = ::connect_(_real_obj, signal);
+    if(!obj)
+        return NULL;
     QtProxy* proxy = new QtProxy;
     proxy->_real_obj = obj;
     return proxy;
@@ -126,8 +136,27 @@ void call_int_object_string_string(int a, const QtProxy *b, const char *c, const
     ::call_int_object_string_string(a, b ? b->_real_obj : NULL, c, d);
 }
 
-void event_filter_(const char *type, const QtProxy *callback, int eat) {
-    ::event_filter_(_real_obj, type, callback ? callback->_real_obj : NULL, eat);
+void set_model(const QtProxy *b) {
+    ::set_model_(_real_obj, b ? b->_real_obj : NULL);
+}
+
+QtProxy* set_rb_model(const VALUE object) {
+    void* obj = ::set_rb_model_(_real_obj, object);
+    if(!obj)
+        return NULL;
+    QtProxy* proxy = new QtProxy;
+    proxy->_real_obj = obj;
+    return proxy;
+}
+
+void update_view(VALUE row, VALUE column) {
+    ::update_view_(_real_obj, FIX2INT(row), FIX2INT(column));
+}
+
+void event_filter_(const char *type, VALUE aproc, int eat) {
+    Check_Type(aproc, T_DATA);
+    unsigned long prc = (unsigned long)(aproc);
+    ::event_filter_(_real_obj, type, prc, eat);
 }
 
 int save_screenshot(const char *file) {

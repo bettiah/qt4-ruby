@@ -12,7 +12,7 @@ public:
 
 public slots:
     // note: on name collisions use an underscore (this is handled automatically in "cqt.cpp")
-    void _setModel(QAbstractItemModel *m) { setModel(m); }
+    //void _setModel(QAbstractItemModel *m) { setModel(m); }
 };
 
 #endif // TREEVIEW_H
