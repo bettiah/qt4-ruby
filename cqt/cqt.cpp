@@ -68,15 +68,15 @@ static const char *_object_names_[] = {
     0};
 
 // For copying strings temporarily	
-char* str = NULL;
+char* g_str = NULL;
 const char* copy_tmp(const char* st)
 {
-	delete[] str;
-	str = NULL;
+	free (g_str);
+	g_str = NULL;
 
-	char* str  = new char[strlen(st)*sizeof(char)];
-	strcpy(str, st);
-	return str;
+	char* g_str  = (char*)malloc(strlen(st)+1) ;
+	strcpy(g_str, st);
+	return g_str;
 }
 
 // Qt <-> Lisp style *****************************************************************************
