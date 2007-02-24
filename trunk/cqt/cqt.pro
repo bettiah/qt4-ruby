@@ -125,7 +125,9 @@ SOURCES += cqt.cpp \
 
 win32:INCLUDEPATH += C:/src/rb_/ruby_185/lib/ruby/1.8/i386-mswin32_71
 win32:LIBS += C:/src/rb_/ruby_185/lib/msvcr71-ruby18.lib
+unix:INCLUDEPATH += /usr/lib/ruby/1.8/i486-linux
+unix:LIBS += /usr/lib/libruby1.8-static.a
 DESTDIR = ../..
-TARGET = native
+TARGET = Native
 TARGET_EXT = .so
 
