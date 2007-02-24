@@ -1,13 +1,13 @@
 class Symbol
-	def to_qt_name
-		to_s.gsub('_', '-')
-	end
+    def to_qt_name
+        to_s.gsub('_', '-')
+    end
 end
 
 class String
-	def to_qt_name
-		to_s.gsub('_', '-')
-	end
+    def to_qt_name
+        to_s.gsub('_', '-')
+    end
 end
 
 module Qt4
@@ -18,7 +18,7 @@ include Native
 
 #Initialization
 def Init
-	Native.ini
+    Native.ini
 end
 
 
@@ -41,28 +41,28 @@ class QWidget < QtProxy
     def initialize(sym, *args, &block)
         @signals = {}
         if args.first.kind_of? QWidget
-			parent = args.first
-		else parent = nil
-		end
+            parent = args.first
+        else parent = nil
+        end
         p "creating #{sym.to_s} with parent #{parent}"
-		super sym.to_qt_name, parent
+        super sym.to_qt_name, parent
 
-		args.each do |arg|
-			if arg.respond_to?(:to_hash)
-				self.setp arg.to_hash
-			end
-		end
-		yield self if block
+        args.each do |arg|
+            if arg.respond_to?(:to_hash)
+                self.setp arg.to_hash
+            end
+        end
+        yield self if block
     end
 
     def show(milliSecond=0, mode=0)
         show_delayed(milliSecond, 
-							case mode
-							when :minimized then 1
-							when :maximized then 2
-							when :'full-screen' then 3
-							else 0
-							end)
+                            case mode
+                            when :minimized then 1
+                            when :maximized then 2
+                            when :'full-screen' then 3
+                            else 0
+                            end)
     end
      
     def to_string(slot=nil)
@@ -85,7 +85,7 @@ class QWidget < QtProxy
             when 2 then 
                 case val
                     when Fixnum then set_property_int val
-					else set_property_enum val.to_qt_name
+                    else set_property_enum val.to_qt_name
                     end
             when 10, 76 then set_property_string val.to_qt_name
             when 14 then set_property_date val
@@ -148,29 +148,29 @@ class QWidget < QtProxy
         cb = nil
         args = nil
         callbacks << block if block_given?
-		signal = signal.to_qt_name
+        signal = signal.to_qt_name
 #            args = argument_types_(self, signal.to_s)
 #            raise BadSlotNameError, "Could not find signal #{signal} in Object" unless args
- 		callbacks.each {|callback|
-			cb = connect_ signal
+        callbacks.each {|callback|
+            cb = connect_ signal
             raise CouldNotConnectError, "Could not connect to signal #{signal}" if cb == nil
-			case callback
-			when Symbol
+            case callback
+            when Symbol
                 raise CouldNotConnectError, "Could not connect to local symbol" unless self.respond_to? callback
-				callback = method(callback)
-			when Proc
+                callback = method(callback)
+            when Proc
             when Method
-			end
+            end
             add_callbacks_for signal, callback, cb
-		}
+        }
     end
 
-	def connect_qt(signal, to, slot)
-		connect_qt_ signal.to_qt_name, to, slot.to_qt_name, 1
-	end
+    def connect_qt(signal, to, slot)
+        connect_qt_ signal.to_qt_name, to, slot.to_qt_name, 1
+    end
 
-	def callback__(signal, *args)
-		callbacks_for(signal).each do |callback|
+    def callback__(signal, *args)
+        callbacks_for(signal).each do |callback|
           result = case callback
             when Symbol
               self.send(callback, *args)
@@ -189,25 +189,25 @@ class QWidget < QtProxy
         end
 
         result = send(signal) if respond_to_without_attributes?(signal)
-	end
+    end
 
-	def add_callbacks_for(signal, aproc, cb = nil)
+    def add_callbacks_for(signal, aproc, cb = nil)
         @signals[signal] ||= []
         @signals[signal].push [aproc, cb]
-		# add the callback to hash to keep reference count
-		cb.set_callback aproc if cb
+        # add the callback to hash to keep reference count
+        cb.set_callback aproc if cb
         #self.class.read_inheritable_attribute(signal.to_sym) or []
-	end
+    end
 
     def disconnect()
     end
 
 #Events
-	def event_filter(signal, callback, eat=0)
-		signal = signal.to_qt_name
-		event_filter_ signal, callback, eat
-		add_callbacks_for(signal, callback)
-	end
+    def event_filter(signal, callback, eat=0)
+        signal = signal.to_qt_name
+        event_filter_ signal, callback, eat
+        add_callbacks_for(signal, callback)
+    end
 
 #Slot calls
     def method_missing(method_symbol, *parameters)#:nodoc:
@@ -260,11 +260,11 @@ def stop_gui()
 end
 
 #QObject
-	@@dummy = nil
+    @@dummy = nil
     def sender()
-    	@@dummy = QWidget.new :widget unless @@dummy
-		signal_sender() 
-		@@dummy
+        @@dummy = QWidget.new :widget unless @@dummy
+        signal_sender() 
+        @@dummy
     end
 
     def object_list
@@ -316,20 +316,20 @@ end
         Native.color_dialog_ default
     end
 
-    def error_message(txt)
-        error_message = QWidget.new :'error-message'
+    def show_error_message(txt)
+        error_message = ErrorMessage.new
         error_message.setp :modal=>true
         error_message.slotcall :show_message, txt
     end
 
 #ProgressDialog
-    def progress_dialog(label, maximum)
+    def show_progress_dialog(label, maximum)
         #pressed, progressCancelledException will be thrown
-        progress = QWidget.new :'progress-dialog'
-        progress.setp(:'label-text'=>label)
+        progress = ProgressDialog.new
+        progress.setp(:label_text=>label)
         progress.setp(:maximum=>maximum)
         set_progress = Proc.new { |val|
-            if progress.getp(:'was-canceled')
+            if progress.getp(:was_canceled)
                 throw :progressCancelledException
             end
             progress.setp(:value=>val)

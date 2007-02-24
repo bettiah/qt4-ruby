@@ -16,13 +16,13 @@ end
 
 class Browser < View::Builder
 
-	def initialize()
-		super
-  		@stats = nil
-	end
+    def initialize()
+        super
+        @stats = nil
+    end
     
    def get_kwd(widget)
-      widget.getp(:'current-text').delete!(':').to_sym
+      widget.getp(:current_text).delete!(':').to_sym
    end
 
    def show_font_dialog
@@ -32,12 +32,12 @@ class Browser < View::Builder
 
    def show_color_dialog
       color = color_dialog(@selected_color.getp(:text))
-      @selected_color.setp :text=>color
+      @selected_color.setp :text=>color if color
    end
 
    def heavy_calculation
       max = 50
-      progress_dialog("Calculating", max) { |set_progress|
+      show_progress_dialog("Calculating", max) { |set_progress|
          catch :progressCancelledException do
             (1..max).each { |n| sleep(0.1); set_progress.call(n+1) }
          end
@@ -46,28 +46,28 @@ class Browser < View::Builder
    end
 
    def toolbar_add(bar, *objects)
-	 objects.each do |ob|
-		 bar.add_widget ob
-		 bar.add_separator
-	 end
+     objects.each do |ob|
+         bar.add_widget ob
+         bar.add_separator
+     end
    end
 
    def add_gui_dialog(main)
-	   tool_bar(:bar1) do
-		   toolbar_add(@bar1, push_button(:message), combo_box(:type_message), 
+       tool_bar(:bar1) do
+           toolbar_add(@bar1, push_button(:message), combo_box(:type_message), 
                        push_button(:input), combo_box(:type_input), push_button(:file), 
-					   combo_box(:type_file), push_button(:progress))
-	   end
-	   
-	   tool_bar(:bar2) do
-		   toolbar_add(@bar2, push_button(:font), line_edit(:selected_font), 
+                       combo_box(:type_file), push_button(:progress))
+       end
+       
+       tool_bar(:bar2) do
+           toolbar_add(@bar2, push_button(:font), line_edit(:selected_font), 
                        push_button(:color), line_edit(:selected_color), push_button(:error), 
-					   line_edit(:error_text))
-	   end
+                       line_edit(:error_text))
+       end
 
-	   main.add_tool_bar @bar1
-	   main.add_tool_bar @bar2
-	   main.insert_tool_bar_break @bar2
+       main.add_tool_bar @bar1
+       main.add_tool_bar @bar2
+       main.insert_tool_bar_break @bar2
 
          [
             [@message,      "message-box"],
@@ -96,13 +96,11 @@ class Browser < View::Builder
             [@file, lambda { file_dialog get_kwd(@type_file), "Name" }],
             [@font, method(:show_font_dialog)],
             [@color, method(:show_color_dialog)],
-            [@error, lambda { error_message(@error_text.getp(:text)) }],
+            [@error, lambda { show_error_message(@error_text.getp(:text)) }],
             [@progress, method(:heavy_calculation)]
          ].each do |obj, prc|
             obj.connect :clicked, prc
          end
-		 @stats = ostats(@stats)
- 		 GC.start
    end
 
    def populate(widget, obj, type)
@@ -110,16 +108,16 @@ class Browser < View::Builder
       lst.map! do |item|
          i = if item.length == 0
             "<br>"
-			 else
+             else
             if item =~ /\:$/
                "<b>#{item}</b><br>"
             elsif item =~ /\s/
                "#{$`} <font color=#4040ff>#{$'}</font><br>"
             else
-			   	"#{item}<br>"
+                "#{item}<br>"
             end
          end
-		 i
+         i
       end #do
       widget.setp :html=>lst.join
    end
@@ -130,8 +128,6 @@ class Browser < View::Builder
       end
 
       def update_object_info(name)
-		 @stats = ostats(@stats)
- 		 GC.start
          $temp_object.destroy if $temp_object
          $temp_object = QWidget.new name
          populate(@properties, $temp_object, :property)
@@ -180,8 +176,6 @@ class Browser < View::Builder
                obj.setp :'read-only'=>true
             end
 
-		 @stats = ostats(@stats)
- 		 GC.start
             @objects.add_items Gui::Widgets
             @events.add_items event_list
 
@@ -199,7 +193,7 @@ class Browser < View::Builder
 
       def show
          window(:main, :size=>'800 600') {
-			 @main.set_central_widget gui_object
+             @main.set_central_widget gui_object
              add_gui_dialog @main
          }.show
       end
