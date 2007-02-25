@@ -129,7 +129,7 @@ class Browser < View::Builder
 
       def update_object_info(name)
          $temp_object.destroy if $temp_object
-         $temp_object = QWidget.new name
+         $temp_object = Qt4::QWidget.new name
          populate(@properties, $temp_object, :property)
          populate(@signals, $temp_object, :signal)
          populate(@slots, $temp_object, :slot)
@@ -177,7 +177,7 @@ class Browser < View::Builder
             end
 
             @objects.add_items Gui::Widgets
-            @events.add_items event_list
+            @events.add_items Qt4::Native.event_list
 
             update_object_info @objects.getp(:'current-text')
 
