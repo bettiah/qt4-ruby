@@ -67,16 +67,16 @@ static const char *_object_names_[] = {
 #include "gen/include/objects_names"
     0};
 
-// For copying strings temporarily	
+// For copying strings temporarily  
 char* g_str = NULL;
 const char* copy_tmp(const char* st)
 {
-	free (g_str);
-	g_str = NULL;
+    free (g_str);
+    g_str = NULL;
 
-	char* g_str  = (char*)malloc(strlen(st)+1) ;
-	strcpy(g_str, st);
-	return g_str;
+    char* g_str  = (char*)malloc(strlen(st)+1) ;
+    strcpy(g_str, st);
+    return g_str;
 }
 
 // Qt <-> Lisp style *****************************************************************************
@@ -87,24 +87,24 @@ QString qtToLispStyle(const QString &name)
     char *qt = (char*)copy_tmp(name.toAscii().constData()) - 1;
     char *n = _name_ - 1;
     while(*++qt && (++l <= _max_len_)) {
-	if(*qt == 'Q') {
-	    if(l == 1)
-		continue;
-	    if(!QChar(*(qt - 1)).isLetter())
-		continue;
-	}
-	else if(*qt == '|') {
-	    *++n = '+';
-	    ++qt;
-	}
-	if((*qt >= 'A') && (*qt <= 'Z')) {
-	    if((l > 2) || name.at(0).isLower())
-		if((*n != ' ') && (*n != '+'))
-		    *++n = '-';
-	    *++n = *qt + 32;
-	}
-	else
-	    *++n = *qt;
+    if(*qt == 'Q') {
+        if(l == 1)
+        continue;
+        if(!QChar(*(qt - 1)).isLetter())
+        continue;
+    }
+    else if(*qt == '|') {
+        *++n = '+';
+        ++qt;
+    }
+    if((*qt >= 'A') && (*qt <= 'Z')) {
+        if((l > 2) || name.at(0).isLower())
+        if((*n != ' ') && (*n != '+'))
+            *++n = '-';
+        *++n = *qt + 32;
+    }
+    else
+        *++n = *qt;
     }
     *++n = 0;
     return QString(_name_);
@@ -116,7 +116,7 @@ void lispToQtStyle(const char *name)
     char *n = (char*)name - 1;
     char *qt = _name_ - 1;
     while(*++n && (++l <= _max_len_))
-	*++qt = (*n == '-') ? (*++n - 32) : *n;
+    *++qt = (*n == '-') ? (*++n - 32) : *n;
     *++qt = 0;
 }
 
@@ -126,26 +126,26 @@ void lispEnumToQtStyle(const char *name, const char *prop_name = 0, QObject *obj
     char *n = (char*)name;
     char *qt = _name_enum_ - 1;
     if(prop_name) {
-	if(!strcmp("toolButtonStyle", prop_name)) {
-	    strcpy(_name_enum_, "ToolButton");
-	    qt += 10; l += 10;
-	}
+    if(!strcmp("toolButtonStyle", prop_name)) {
+        strcpy(_name_enum_, "ToolButton");
+        qt += 10; l += 10;
+    }
     }
     *++qt = *++n - 32;
     while(*++n && (++l <= _max_len_enum_)) {
-	if(*n == '+') {
-	    *++qt = '|';
-	    *++qt = *++n - 32;
-	    ++l;
-	}
-	else
-	    *++qt = (*n == '-') ? (*++n - 32) : *n;
+    if(*n == '+') {
+        *++qt = '|';
+        *++qt = *++n - 32;
+        ++l;
+    }
+    else
+        *++qt = (*n == '-') ? (*++n - 32) : *n;
     }
     *++qt = 0;
     if(obj) {
-	QMainWindow *mw = qobject_cast<QMainWindow*>(obj);
-	if(mw)
-	    strcpy(qt, "DockWidgetArea");
+    QMainWindow *mw = qobject_cast<QMainWindow*>(obj);
+    if(mw)
+        strcpy(qt, "DockWidgetArea");
     }
 }
 
@@ -155,8 +155,8 @@ QErrorMessage *errorMessage()
 {
     static QErrorMessage *em = 0;
     if(!em) {
-	em = new QErrorMessage(QApplication::activeWindow());
-	em->setModal(true);
+    em = new QErrorMessage(QApplication::activeWindow());
+    em->setModal(true);
     }
     return em;
 }
@@ -164,9 +164,9 @@ QErrorMessage *errorMessage()
 void showMessage(const QString &msg)
 {
     if(_silent_error_messages_)
-	qDebug() << "[Qt]" << msg;
+    qDebug() << "[Qt]" << msg;
     else
-	errorMessage()->showMessage(msg);
+    errorMessage()->showMessage(msg);
 }
 
 void msgNotFound(const QString &type, const QString &name)
@@ -177,9 +177,9 @@ void msgNotFound(const QString &type, const QString &name)
 void msgSetPropertyError(const QString &val)
 {
     if(_object_->metaObject()->indexOfProperty(_name_) == -1)
-	msgNotFound("Property", qtToLispStyle(_name_));
+    msgNotFound("Property", qtToLispStyle(_name_));
     else
-	showMessage(QString("Property \"%1\" could not be set to value: %2").arg(qtToLispStyle(_name_)).arg(val));
+    showMessage(QString("Property \"%1\" could not be set to value: %2").arg(qtToLispStyle(_name_)).arg(val));
 }
 
 void msgTypeError(const QString &func)
@@ -211,17 +211,17 @@ QStringList argumentList(const char *s)
     QString args(s);
     args = args.simplified();
     if(args[0] == '\'')
-	args = args.mid(1);
+    args = args.mid(1);
     if(args[0] == '(')
-	args = trim1(args);
+    args = trim1(args);
     int len = args.length();
     for(int i = 0; i < len; ++i) {
-	if(args[i] == '(') {
-	    while((args[i] != ')') && (i < len))
-		++i;
-	}
-	if(args[i] == ' ')
-	    args[i] = '^';
+    if(args[i] == '(') {
+        while((args[i] != ')') && (i < len))
+        ++i;
+    }
+    if(args[i] == ' ')
+        args[i] = '^';
     }
     return args.split('^');
 }
@@ -284,8 +284,8 @@ const char *polygonToString(const QPolygon poly)
     QStringList lst;
     QVectorIterator<QPoint> it(poly);
     while(it.hasNext()) {
-	QPoint p(it.next());
-	lst << QString::number(p.x()) << QString::number(p.y());
+    QPoint p(it.next());
+    lst << QString::number(p.x()) << QString::number(p.y());
     }
     return QString("#(" + lst.join(" ") + ")").toAscii().constData();
 }
@@ -297,9 +297,9 @@ QPolygon stringToPolygon(const char *c_str)
     int max = pts.count() / 2;
     QList<QString>::iterator it = pts.begin();
     for(int n = 0; n < max; ++n) {
-	int x = (*it++).toInt();
-	int y = (*it++).toInt();
-	poly << QPoint(x, y);
+    int x = (*it++).toInt();
+    int y = (*it++).toInt();
+    poly << QPoint(x, y);
     }
     return poly;
 }
@@ -350,10 +350,10 @@ QLine stringToLine(const char *c_str)
     int p2 = s.indexOf(' ', p1 + 1);
     int p3 = s.indexOf(' ', p2 + 1);
     return QLine(
-	    s.left(p1).toInt(),
-	    s.mid(p1 + 1, p2 - p1 - 1).toInt(),
-	    s.mid(p2 + 1, p3 - p2 - 1).toInt(),
-	    s.mid(p3 + 1).toInt());
+        s.left(p1).toInt(),
+        s.mid(p1 + 1, p2 - p1 - 1).toInt(),
+        s.mid(p2 + 1, p3 - p2 - 1).toInt(),
+        s.mid(p3 + 1).toInt());
 }
 
 QLineF stringToLineF(const char *c_str)
@@ -364,10 +364,10 @@ QLineF stringToLineF(const char *c_str)
     int p2 = s.indexOf(' ', p1 + 1);
     int p3 = s.indexOf(' ', p2 + 1);
     return QLineF(
-	    s.left(p1).toFloat(),
-	    s.mid(p1 + 1, p2 - p1 - 1).toFloat(),
-	    s.mid(p2 + 1, p3 - p2 - 1).toFloat(),
-	    s.mid(p3 + 1).toFloat());
+        s.left(p1).toFloat(),
+        s.mid(p1 + 1, p2 - p1 - 1).toFloat(),
+        s.mid(p2 + 1, p3 - p2 - 1).toFloat(),
+        s.mid(p3 + 1).toFloat());
 }
 
 inline const char *rectToString(const QRect &r)
@@ -390,10 +390,10 @@ QRect stringToRect(const char *c_str)
     int p2 = s.indexOf(' ', p1 + 1);
     int p3 = s.indexOf(' ', p2 + 1);
     return QRect(
-	    s.left(p1).toInt(),
-	    s.mid(p1 + 1, p2 - p1 - 1).toInt(),
-	    s.mid(p2 + 1, p3 - p2 - 1).toInt(),
-	    s.mid(p3 + 1).toInt());
+        s.left(p1).toInt(),
+        s.mid(p1 + 1, p2 - p1 - 1).toInt(),
+        s.mid(p2 + 1, p3 - p2 - 1).toInt(),
+        s.mid(p3 + 1).toInt());
 }
 
 QRectF stringToRectF(const char *c_str)
@@ -404,10 +404,10 @@ QRectF stringToRectF(const char *c_str)
     int p2 = s.indexOf(' ', p1 + 1);
     int p3 = s.indexOf(' ', p2 + 1);
     return QRectF(
-	    s.left(p1).toFloat(),
-	    s.mid(p1 + 1, p2 - p1 - 1).toFloat(),
-	    s.mid(p2 + 1, p3 - p2 - 1).toFloat(),
-	    s.mid(p3 + 1).toFloat());
+        s.left(p1).toFloat(),
+        s.mid(p1 + 1, p2 - p1 - 1).toFloat(),
+        s.mid(p2 + 1, p3 - p2 - 1).toFloat(),
+        s.mid(p3 + 1).toFloat());
 }
 
 
@@ -426,18 +426,18 @@ const char *fontToString(const QFont &f)
     QStringList lst;
     lst << ":family" << ("\"" + f.family() + "\"");
     if(f.pointSize() != -1) {
-	QString s;
-	s.setNum(f.pointSize());
-	lst << ":size" << s;
+    QString s;
+    s.setNum(f.pointSize());
+    lst << ":size" << s;
     }
     if(f.bold())
-	lst << ":bold t";
+    lst << ":bold t";
     if(f.italic())
-	lst << ":italic t";
+    lst << ":italic t";
     if(f.underline())
-	lst << ":underline t";
+    lst << ":underline t";
     if(f.strikeOut())
-	lst << ":strikeout t";
+    lst << ":strikeout t";
     return copy_tmp(QString("(" + lst.join(" ") + ")").toAscii().constData());
 }
 
@@ -447,22 +447,22 @@ QFont stringToFont(const char *s)
     QFont font;
     int i = args.indexOf(":family");
     if(i != -1)
-	font.setFamily(trim1(args[i + 1]));
+    font.setFamily(trim1(args[i + 1]));
     i = args.indexOf(":size");
     if(i != -1)
-	font.setPointSize(args[i + 1].toInt());
+    font.setPointSize(args[i + 1].toInt());
     i = args.indexOf(":bold");
     if(i != -1)
-	font.setBold((args[i + 1] == "t"));
+    font.setBold((args[i + 1] == "t"));
     i = args.indexOf(":italic");
     if(i != -1)
-	font.setItalic((args[i + 1] == "t"));
+    font.setItalic((args[i + 1] == "t"));
     i = args.indexOf(":underline");
     if(i != -1)
-	font.setUnderline((args[i + 1] == "t"));
+    font.setUnderline((args[i + 1] == "t"));
     i = args.indexOf(":strikeout");
     if(i != -1)
-	font.setStrikeOut((args[i + 1] == "t"));
+    font.setStrikeOut((args[i + 1] == "t"));
     return font;
 }
 
@@ -502,19 +502,19 @@ QPen stringToPen(const char *s)
     QPen pen;
     int i = args.indexOf(":color");
     if(i != -1)
-	pen.setColor(QColor(trim1(args[i + 1])));
+    pen.setColor(QColor(trim1(args[i + 1])));
     i = args.indexOf(":width");
     if(i != -1)
-	pen.setWidthF(args[i + 1].toFloat());
+    pen.setWidthF(args[i + 1].toFloat());
     i = args.indexOf(":style");
     if(i != -1)
-	pen.setStyle((Qt::PenStyle)CQt::globalEnumToInt("PenStyle", args[i + 1]));
+    pen.setStyle((Qt::PenStyle)CQt::globalEnumToInt("PenStyle", args[i + 1]));
     i = args.indexOf(":cap-style");
     if(i != -1)
-	pen.setCapStyle((Qt::PenCapStyle)CQt::globalEnumToInt("PenCapStyle", args[i + 1]));
+    pen.setCapStyle((Qt::PenCapStyle)CQt::globalEnumToInt("PenCapStyle", args[i + 1]));
     i = args.indexOf(":join-style");
     if(i != -1)
-	pen.setJoinStyle((Qt::PenJoinStyle)CQt::globalEnumToInt("PenJoinStyle", args[i + 1]));
+    pen.setJoinStyle((Qt::PenJoinStyle)CQt::globalEnumToInt("PenJoinStyle", args[i + 1]));
     return pen;
 }
 
@@ -523,39 +523,39 @@ QBrush argumentsToGradient(int i, const QStringList &args)
     QBrush brush;
     QString type = args[i + 1];
     if(type == ":conical") {
-	QPointF center;
-	qreal angle = 0.0;
-	i = args.indexOf(":center");
-	if(i != -1)
-	    center = stringToPointF(args[i + 1]);
-	i = args.indexOf(":angle");
-	if(i != -1)
-	    angle = args[i + 1].toFloat();
-	brush = QBrush(QConicalGradient(center, angle));
+    QPointF center;
+    qreal angle = 0.0;
+    i = args.indexOf(":center");
+    if(i != -1)
+        center = stringToPointF(args[i + 1]);
+    i = args.indexOf(":angle");
+    if(i != -1)
+        angle = args[i + 1].toFloat();
+    brush = QBrush(QConicalGradient(center, angle));
     }
     else if(type == ":linear") {
-	QPointF start, finalStop;
-	i = args.indexOf(":start");
-	if(i != -1)
-	    start = stringToPointF(args[i + 1]);
-	i = args.indexOf(":final-stop");
-	if(i != -1)
-	    finalStop = stringToPointF(args[i + 1]);
-	brush = QBrush(QLinearGradient(start, finalStop));
+    QPointF start, finalStop;
+    i = args.indexOf(":start");
+    if(i != -1)
+        start = stringToPointF(args[i + 1]);
+    i = args.indexOf(":final-stop");
+    if(i != -1)
+        finalStop = stringToPointF(args[i + 1]);
+    brush = QBrush(QLinearGradient(start, finalStop));
     }
     else if(type == ":radial") {
-	QPointF center, focalPoint;
-	qreal radius = 0.0;
-	i = args.indexOf(":center");
-	if(i != -1)
-	    center = stringToPointF(args[i + 1]);
-	i = args.indexOf(":radius");
-	if(i != -1)
-	    radius = args[i + 1].toFloat();
-	i = args.indexOf(":focal-point");
-	if(i != -1)
-	    focalPoint = stringToPointF(args[i + 1]);
-	brush = QBrush(QRadialGradient(center, radius, focalPoint));
+    QPointF center, focalPoint;
+    qreal radius = 0.0;
+    i = args.indexOf(":center");
+    if(i != -1)
+        center = stringToPointF(args[i + 1]);
+    i = args.indexOf(":radius");
+    if(i != -1)
+        radius = args[i + 1].toFloat();
+    i = args.indexOf(":focal-point");
+    if(i != -1)
+        focalPoint = stringToPointF(args[i + 1]);
+    brush = QBrush(QRadialGradient(center, radius, focalPoint));
     }
     return brush;
 }
@@ -564,27 +564,27 @@ QBrush stringToBrush(const char *s)
 {
     QStringList args = argumentList(s);
     QBrush brush;
-	QColor color;
+    QColor color;
     int i = args.indexOf(":type");
     if(i == -1) {
-	i = args.indexOf(":color");
-	if(i != -1)
-	    brush.setColor(QColor(trim1(args[i + 1])));
-	i = args.indexOf(":alpha");
-	if(i != -1)
-		{
-		color = brush.color();
-		color.setAlpha(args[i + 1].toFloat());
-		brush.setColor(color);
-		}
-	i = args.indexOf(":style");
-	if(i == -1)
-	    brush.setStyle(Qt::SolidPattern);
-	else
-	    brush.setStyle((Qt::BrushStyle)CQt::globalEnumToInt("BrushStyle", args[i + 1]));
+    i = args.indexOf(":color");
+    if(i != -1)
+        brush.setColor(QColor(trim1(args[i + 1])));
+    i = args.indexOf(":alpha");
+    if(i != -1)
+        {
+        color = brush.color();
+        color.setAlpha(args[i + 1].toFloat());
+        brush.setColor(color);
+        }
+    i = args.indexOf(":style");
+    if(i == -1)
+        brush.setStyle(Qt::SolidPattern);
+    else
+        brush.setStyle((Qt::BrushStyle)CQt::globalEnumToInt("BrushStyle", args[i + 1]));
     }
     else
-	brush = argumentsToGradient(i, args);
+    brush = argumentsToGradient(i, args);
     return brush;
 }
 
@@ -592,8 +592,8 @@ int enumStringToInt(const char *str, const char *name, const QMetaProperty &mp)
 {
     lispEnumToQtStyle(str, name);
     return mp.isFlagType()
-	? mp.enumerator().keysToValue(_name_enum_)
-	: mp.enumerator().keyToValue(_name_enum_);
+    ? mp.enumerator().keysToValue(_name_enum_)
+    : mp.enumerator().keyToValue(_name_enum_);
 }
 
 // Utils *****************************************************************************************
@@ -609,42 +609,42 @@ void populateStrNumHash(StrNumHash &hash, const char **names)
 {
     int n = -1;
     while(names[++n])
-	hash[names[n]] = n + 1;
+    hash[names[n]] = n + 1;
 }
 
 void populateMethodHash(StrStrHash &hash, const char **names)
 {
     int n = 0;
     while(names[n]) {
-	hash[names[n]] = names[n + 1];
-	n += 2;
+    hash[names[n]] = names[n + 1];
+    n += 2;
     }
 }
 
 inline int getType(const StrNumHash &hash, const char *name, const char *type)
 {
     if(hash.contains(name))
-	return hash.value(name);
+    return hash.value(name);
     else
-	msgNotFound(type, name);
+    msgNotFound(type, name);
     return -1;
 }
 
 inline const char *getMethod(const StrStrHash &hash, const char *type, const char *msg)
 {
     if(hash.contains(_name_))
-	return hash.value(_name_);
+    return hash.value(_name_);
     else
-	msgNotFound(type, msg);
+    msgNotFound(type, msg);
     return 0;
 }
 
 inline const char *getInvokeMethod(const char *type, const char *msg)
 {
     if(_invoke_slots_.contains(_name_))
-	return _invoke_slots_.value(_name_);
+    return _invoke_slots_.value(_name_);
     else
-	msgNotFound(type, msg);
+    msgNotFound(type, msg);
     return 0;
 }
 
@@ -653,8 +653,8 @@ QString removeFromTo(const QString &str, const QString &from, const QString &to)
     QString s(str);
     int e;
     while((e = s.indexOf(to)) != -1) {
-	int b = s.lastIndexOf(from, e - 1);
-	s.remove(b, e - b + to.length());
+    int b = s.lastIndexOf(from, e - 1);
+    s.remove(b, e - b + to.length());
     }
     return s;
 }
@@ -664,9 +664,9 @@ QString replaceEnums(const QString &str)
     QString s(str);
     int e;
     while((e = s.indexOf("::")) != -1) {
-	int b = s.lastIndexOf(' ', e - 1);
-	e = s.indexOf(' ', e + 2);
-	s = s.left(b + 1) + "enum" + s.mid(e);
+    int b = s.lastIndexOf(' ', e - 1);
+    e = s.indexOf(' ', e + 2);
+    s = s.left(b + 1) + "enum" + s.mid(e);
     }
     return s;
 }
@@ -678,8 +678,8 @@ QString replacePointers(const QString &str)
     s.replace("char*", "string");
     int e;
     while((e = s.indexOf('*')) != -1) {
-	int b = s.lastIndexOf(' ', e - 1);
-	s = s.left(b + 1) + "object" + s.mid(e + 1);
+    int b = s.lastIndexOf(' ', e - 1);
+    s = s.left(b + 1) + "object" + s.mid(e + 1);
     }
     return s;
 }
@@ -688,22 +688,22 @@ QString qtToLispMethod(const char *name, bool args = false)
 {
     QString s(name);
     if(!args)
-	s.truncate(s.indexOf('('));
+    s.truncate(s.indexOf('('));
     s.remove('_');
     if(args) {
-	s.replace("const char *", "enum");
-	s.replace("double", "float");
-	s.replace("qreal", "float");
-	s.replace("QPointF", "QPoint");
-	s.remove("const ");
-	s.remove('&');
-	s = removeFromTo(s, "<", ">");
-	s.replace('(', ' ');
-	s.replace(',', ' ');
-	s.replace(')', ' ');
-	s = replaceEnums(s);
-	s = replacePointers(s);
-	s = s.simplified();
+    s.replace("const char *", "enum");
+    s.replace("double", "float");
+    s.replace("qreal", "float");
+    s.replace("QPointF", "QPoint");
+    s.remove("const ");
+    s.remove('&');
+    s = removeFromTo(s, "<", ">");
+    s.replace('(', ' ');
+    s.replace(',', ' ');
+    s.replace(')', ' ');
+    s = replaceEnums(s);
+    s = replacePointers(s);
+    s = s.simplified();
     }
     return qtToLispStyle(s);
 }
@@ -723,9 +723,9 @@ QString qtToLispPropertyType(const char *name)
 bool supportedType(const QString &name)
 {
     static const QString types =
-	" bool int enum float string string-list point point-f polygon"
-	" size line line-f rect rect-f"
-	" cursor font color url date time date-time pen brush object ";
+    " bool int enum float string string-list point point-f polygon"
+    " size line line-f rect rect-f"
+    " cursor font color url date time date-time pen brush object ";
     return (types.indexOf(QString(" " + name + " ")) != -1);
 }
 
@@ -733,12 +733,12 @@ bool supportedMethod(const QString &name)
 {
     int p = name.indexOf(' ');
     if(p == -1)
-	return true;
+    return true;
 
     QStringList args = name.mid(p + 1).split(' ');
     foreach(QString arg, args) {
-	if(!supportedType(arg))
-	    return false;
+    if(!supportedType(arg))
+        return false;
     }
     return true;
 }
@@ -746,14 +746,14 @@ bool supportedMethod(const QString &name)
 inline void setProperty(QVariant val)
 {
     if(!_object_->setProperty(_property_name_, val))
-	msgSetPropertyError(val.toString());
+    msgSetPropertyError(val.toString());
 }
 
 inline QString cutExtraLongEnumNames(const QString &name)
 {
     QString s(name);
     if(s.startsWith("tool-button-"))
-	s = s.mid(12);
+    s = s.mid(12);
     return s;
 }
 
@@ -764,36 +764,36 @@ void invokeSlotMethod(const void *a1, const void *a2 = 0, const void *a3 = 0, co
 #include "gen/include/invoke_method.cpp"
     }
     if(arg_type_error)
-	msgArgTypeError("call");
+    msgArgTypeError("call");
     else
-	msgCallError();
+    msgCallError();
 }
 
 const char *getCallSlot(const char *signal)
 {
     static const char *function_slots[] = {
-	"1""call()",
-	"1""call(bool)",
-	"1""call(int)",
-	"1""call(int, int)",
-	"1""call(int, bool)",
-	"1""call(int, int, int)",
-	"1""call(int, int, const QString &)",
-	"1""call(const QString &)",
-	"1""call(const QUrl &)",
-	"1""call(const QStringList &)",
-	"1""call(const QDate &)",
-	"1""call(const QTime &)",
-	"1""call(const QDateTime &)",
-	"1""call(const QFont &)",
-	0};
+    "1""call()",
+    "1""call(bool)",
+    "1""call(int)",
+    "1""call(int, int)",
+    "1""call(int, bool)",
+    "1""call(int, int, int)",
+    "1""call(int, int, const QString &)",
+    "1""call(const QString &)",
+    "1""call(const QUrl &)",
+    "1""call(const QStringList &)",
+    "1""call(const QDate &)",
+    "1""call(const QTime &)",
+    "1""call(const QDateTime &)",
+    "1""call(const QFont &)",
+    0};
 
     char *args = (char*)signal;
     while(*++args != '(') {}
     int n = -1;
     while(function_slots[++n])
-	if(!strcmp(function_slots[n] + 5, args))
-	    return function_slots[n];
+    if(!strcmp(function_slots[n] + 5, args))
+        return function_slots[n];
 
     msgNotFound("Callback slot type", args);
     return 0;
@@ -803,30 +803,30 @@ QString modifiersToString(int m)
 {
     QStringList lst;
     if(m & Qt::ShiftModifier)
-	lst << ":shift";
+    lst << ":shift";
     if(m & Qt::ControlModifier)
-	lst << ":control";
+    lst << ":control";
     if(m & Qt::AltModifier)
-	lst << ":alt";
+    lst << ":alt";
     if(m & Qt::MetaModifier)
-	lst << ":meta";
+    lst << ":meta";
     if(m & Qt::KeypadModifier)
-	lst << ":keypad";
+    lst << ":keypad";
     return "(" + lst.join(" ") + ")";
 }
 
 QString buttonToQString(int b)
 {
     if(b & Qt::LeftButton)
-	return ":left";
+    return ":left";
     if(b & Qt::RightButton)
-	return ":right";
+    return ":right";
     if(b & Qt::MidButton)
-	return ":mid";
+    return ":mid";
     if(b & Qt::XButton1)
-	return ":x1";
+    return ":x1";
     if(b & Qt::XButton2)
-	return ":x2";
+    return ":x2";
     return "nil";
 }
 
@@ -834,15 +834,15 @@ QString buttonsToQString(int b)
 {
     QStringList lst;
     if(b & Qt::LeftButton)
-	lst << ":left";
+    lst << ":left";
     if(b & Qt::RightButton)
-	lst << ":right";
+    lst << ":right";
     if(b & Qt::MidButton)
-	lst << ":mid";
+    lst << ":mid";
     if(b & Qt::XButton1)
-	lst << ":x1";
+    lst << ":x1";
     if(b & Qt::XButton2)
-	lst << ":x2";
+    lst << ":x2";
     return "(" + lst.join(" ") + ")";
 }
 
@@ -859,7 +859,7 @@ CQT_EXPORT void ini()
 {
     static bool ini = false;
     if(ini)
-	return;
+    return;
 
     ini = true;
     char *__name_ = new char[_max_len_ + 2];
@@ -868,13 +868,13 @@ CQT_EXPORT void ini()
     _name_enum_ = new char[_max_len_enum_ + 1];
 
     _size_policies_
-	<< ":fixed"
-	<< ":minimum"
-	<< ":maximum" 
-	<< ":preferred"
-	<< ":expanding" 
-	<< ":minimum-expanding" 
-	<< ":ignored";
+    << ":fixed"
+    << ":minimum"
+    << ":maximum" 
+    << ":preferred"
+    << ":expanding" 
+    << ":minimum-expanding" 
+    << ":ignored";
 
     _cursor_shapes_[":arrow"] = Qt::ArrowCursor;
     _cursor_shapes_[":up-arrow"] = Qt::UpArrowCursor;
@@ -989,15 +989,15 @@ CQT_EXPORT void ini()
 
     static const char *sig[] = {
 #include "gen/include/signals"
-	0};
+    0};
 
     static const char *slo[] = {
 #include "gen/include/slots"
-	0};
+    0};
 
     static const char *invoke[] = {
 #include "gen/include/invoke_slots"
-	0};
+    0};
 
     populateStrNumHash(_objects_, _object_names_);
     populateMethodHash(_signals_, sig);
@@ -1028,19 +1028,19 @@ CQT_EXPORT void make_gui()
 CQT_EXPORT void start_event_loop()
 {
     if(_qapplication_)
-	_qapplication_->exec();
+    _qapplication_->exec();
 }
 
 CQT_EXPORT void process_events()
 {
     if(_qapplication_)
-	_qapplication_->processEvents();
+    _qapplication_->processEvents();
 }
 
 CQT_EXPORT void destroy_gui()
 {
     _qapplication_->exit();
-	delete _qapplication_; _qapplication_ = 0;
+    delete _qapplication_; _qapplication_ = 0;
 }
 
 CQT_EXPORT void set_silent_error_messages_(int sil)
@@ -1053,24 +1053,24 @@ CQT_EXPORT void set_silent_error_messages_(int sil)
 CQT_EXPORT void *object_(const char *name, const void *par)
 {
     if(!_qapplication_)
-	make_gui();
+    make_gui();
 
     QObject *parent = 0;
     if(par) {
-	parent = (QObject*)par;
-	GraphicsView *gv = qobject_cast<GraphicsView*>(parent);
-	if(gv)
-	    return gv->addItem(name);
+    parent = (QObject*)par;
+    GraphicsView *gv = qobject_cast<GraphicsView*>(parent);
+    if(gv)
+        return gv->addItem(name);
     }
     
     int type = getType(_objects_, name, "Widget");
     if(type == -1)
-	return 0;
+    return 0;
 
     if(!par) {
-	if(!strcmp("progress-dialog", name)
-	|| !strcmp("error-message", name))
-	    parent = QApplication::activeWindow();
+    if(!strcmp("progress-dialog", name)
+    || !strcmp("error-message", name))
+        parent = QApplication::activeWindow();
     }
     switch(type) {
 #include "gen/include/objects_new"
@@ -1082,11 +1082,11 @@ CQT_EXPORT void destroy_(void *obj)
 {
     QObject *object = CQt::qobject(obj);
     if(object != obj) {
-	GraphicsView *view = qobject_cast<GraphicsView*>(object);
-	if(view) {
-	    view->scene()->removeItem((QGraphicsItem*)obj);
-	    return;
-	}
+    GraphicsView *view = qobject_cast<GraphicsView*>(object);
+    if(view) {
+        view->scene()->removeItem((QGraphicsItem*)obj);
+        return;
+    }
     }
     delete (QObject*)obj; obj = 0;
 }
@@ -1095,31 +1095,31 @@ CQT_EXPORT void show_delayed(void *obj, int ms, int mode)
 {
     QWidget *w = qobject_cast<QWidget*>((QObject*)obj);
     if(w)
-	QTimer::singleShot(ms, w,
-		(mode == 1) ? SLOT(showMinimized())  :
-		(mode == 2) ? SLOT(showMaximized())  :
-		(mode == 3) ? SLOT(showFullScreen()) :
-		SLOT(show()));
+    QTimer::singleShot(ms, w,
+        (mode == 1) ? SLOT(showMinimized())  :
+        (mode == 2) ? SLOT(showMaximized())  :
+        (mode == 3) ? SLOT(showFullScreen()) :
+        SLOT(show()));
     else
-	msgTypeError("show-delayed");
+    msgTypeError("show-delayed");
 }
 
 CQT_EXPORT int start_timer(void* obj, int ms)
 {
-	QWidget *w = qobject_cast<QWidget*>((QObject*)obj);
+    QWidget *w = qobject_cast<QWidget*>((QObject*)obj);
     if(w)
-		return w->startTimer(ms);
-	else 
-		return 0;
+        return w->startTimer(ms);
+    else 
+        return 0;
 }
 
 CQT_EXPORT void kill_timer(void* obj, int tid)
 {
-	QWidget *w = qobject_cast<QWidget*>((QObject*)obj);
+    QWidget *w = qobject_cast<QWidget*>((QObject*)obj);
     if(w)
-		w->killTimer(tid);
-	else 
-		msgTypeError("kill - timer");
+        w->killTimer(tid);
+    else 
+        msgTypeError("kill - timer");
 }
 
 // Object and access lists ***********************************************************************
@@ -1129,7 +1129,7 @@ CQT_EXPORT const char *object_list()
     int n = -1;
     QStringList lst;
     while(_object_names_[++n])
-	lst << _object_names_[n];
+    lst << _object_names_[n];
     lst.sort();
     return listToString(lst);
 }
@@ -1137,8 +1137,8 @@ CQT_EXPORT const char *object_list()
 CQT_EXPORT const char *access_list_(const void *obj, int type, int enums_only)
 {
     if(type == -1) {
-	showMessage("Unknown type in function: access-list");
-	return 0;
+    showMessage("Unknown type in function: access-list");
+    return 0;
     }
     
     QStringList lst, classes;
@@ -1147,89 +1147,89 @@ CQT_EXPORT const char *access_list_(const void *obj, int type, int enums_only)
     QMetaObject *smo = (QMetaObject*)mo;
     QString name(mo->className());
     if(mo->className()[0] != 'Q') {
-	if(!strcmp(mo->className(), mo->superClass()->className() + 1))
-	    name += "*";
+    if(!strcmp(mo->className(), mo->superClass()->className() + 1))
+        name += "*";
     }
     classes << name;
     int offset = enums_only ? 0 : (type ? mo->methodOffset() : mo->propertyOffset());
     int max = type ? mo->methodCount() : mo->propertyCount();
     for(int i = max; i + 1; --i) {
-	if(type) {
-	    QMetaMethod mm(mo->method(i));
-	    if(mm.access() && (mm.methodType() == type)) {
-		QString classAndMethod = QString(mo->className()) + ":" + qtToLispMethod(mm.signature());
-		StrStrHash &hash = (type == 1) ? _signals_ : _slots_;
-		if(hash.contains(classAndMethod)) {
-		    QString lispMethod = qtToLispMethod(hash.value(classAndMethod) + 1, true);
-		    if(supportedMethod(lispMethod) && !lst.contains(lispMethod))
-			lst << lispMethod;
-		}
-	    }
-	}
-	else {
-	    QMetaProperty mp(mo->property(i));
-	    if(enums_only) {
-		if(mp.isEnumType())
-		    lst << qtToLispStyle(mp.name());
-	    }
-	    else {
-		QString name(mp.name());
-		if(name[0] == '_')
-		    name = name.mid(1);
-		if(name == "sizePolicy") {
-		    lst << "size-policy enum";
-		}
-		else if(name == "cursor") {
-		    lst << "cursor enum";
-		}
-		else {
-		    if(!name.isEmpty()) {
-			QString type = mp.isEnumType()
-			    ? "enum" : qtToLispPropertyType(mp.typeName());
-			if(supportedType(type))
-			    lst << qtToLispStyle(name) + (mp.isWritable() ? " " : " [r] ") + type;
-		    }
-		}
-	    }
-	}
-	if(!enums_only && (i <= offset)) {
-	    if(smo) {
-		smo = (QMetaObject*)smo->superClass();
-		if(smo) {
-		    classes << smo->className();
-		    offset = (type ? smo->methodOffset() : smo->propertyOffset());
-		    lstLst << lst;
-		    lst.clear();
-		}
-	    }
-	}
+    if(type) {
+        QMetaMethod mm(mo->method(i));
+        if(mm.access() && (mm.methodType() == type)) {
+        QString classAndMethod = QString(mo->className()) + ":" + qtToLispMethod(mm.signature());
+        StrStrHash &hash = (type == 1) ? _signals_ : _slots_;
+        if(hash.contains(classAndMethod)) {
+            QString lispMethod = qtToLispMethod(hash.value(classAndMethod) + 1, true);
+            if(supportedMethod(lispMethod) && !lst.contains(lispMethod))
+            lst << lispMethod;
+        }
+        }
+    }
+    else {
+        QMetaProperty mp(mo->property(i));
+        if(enums_only) {
+        if(mp.isEnumType())
+            lst << qtToLispStyle(mp.name());
+        }
+        else {
+        QString name(mp.name());
+        if(name[0] == '_')
+            name = name.mid(1);
+        if(name == "sizePolicy") {
+            lst << "size-policy enum";
+        }
+        else if(name == "cursor") {
+            lst << "cursor enum";
+        }
+        else {
+            if(!name.isEmpty()) {
+            QString type = mp.isEnumType()
+                ? "enum" : qtToLispPropertyType(mp.typeName());
+            if(supportedType(type))
+                lst << qtToLispStyle(name) + (mp.isWritable() ? " " : " [r] ") + type;
+            }
+        }
+        }
+    }
+    if(!enums_only && (i <= offset)) {
+        if(smo) {
+        smo = (QMetaObject*)smo->superClass();
+        if(smo) {
+            classes << smo->className();
+            offset = (type ? smo->methodOffset() : smo->propertyOffset());
+            lstLst << lst;
+            lst.clear();
+        }
+        }
+    }
     }
     lstLst << lst;
     lst.clear();
     QStringList::Iterator it = classes.begin();
     bool first = true;
     foreach(QStringList l, lstLst) {
-	l.sort();
-	if(!enums_only) {
-	    if(it != classes.end()) {
-		qtToLispStyle(*it);
-		if(first)
-		    first = false;
-		else
-		    lst << QString();
-		if(*_name_)
-		    lst << QString(_name_) + ":";
-		++it;
-	    }
-	}
-	lst += l;
+    l.sort();
+    if(!enums_only) {
+        if(it != classes.end()) {
+        qtToLispStyle(*it);
+        if(first)
+            first = false;
+        else
+            lst << QString();
+        if(*_name_)
+            lst << QString(_name_) + ":";
+        ++it;
+        }
+    }
+    lst += l;
     }
     if(enums_only) {
-	QWidget *w = qobject_cast<QWidget*>((QObject*)obj);
-	if(w) {
-	    lst << "cursor" << "size-policy";
-	    lst.sort();
-	}
+    QWidget *w = qobject_cast<QWidget*>((QObject*)obj);
+    if(w) {
+        lst << "cursor" << "size-policy";
+        lst.sort();
+    }
     }
     return listToString(lst);   
 }
@@ -1238,25 +1238,25 @@ CQT_EXPORT const char *enum_list_(const void *obj, const char *name)
 {
     QStringList lst;
     if(!strcmp("size-policy", name)) {
-	foreach(QString s, _size_policies_)
-	    lst << s.mid(1);
+    foreach(QString s, _size_policies_)
+        lst << s.mid(1);
     }
     else if(!strcmp("cursor", name)) {
-	QStringList shapes = _cursor_shapes_.keys();
-	shapes.sort();
-	foreach(QString s, shapes)
-	    lst << s.mid(1);
+    QStringList shapes = _cursor_shapes_.keys();
+    shapes.sort();
+    foreach(QString s, shapes)
+        lst << s.mid(1);
     }
     else {
-	lispToQtStyle(name);
-	const QMetaObject *mo = ((QObject*)obj)->metaObject();
-	QMetaProperty mp(mo->property(mo->indexOfProperty(_name_)));
-	if(mp.isEnumType()) {
-	    QMetaEnum me = mp.enumerator();
-	    int max = me.keyCount();
-	    for(int i = 0; i < max; ++i)
-		lst << cutExtraLongEnumNames(qtToLispStyle(me.key(i)));
-	}
+    lispToQtStyle(name);
+    const QMetaObject *mo = ((QObject*)obj)->metaObject();
+    QMetaProperty mp(mo->property(mo->indexOfProperty(_name_)));
+    if(mp.isEnumType()) {
+        QMetaEnum me = mp.enumerator();
+        int max = me.keyCount();
+        for(int i = 0; i < max; ++i)
+        lst << cutExtraLongEnumNames(qtToLispStyle(me.key(i)));
+    }
     }
     return listToString(lst);   
 }
@@ -1276,16 +1276,16 @@ CQT_EXPORT int get_property_type(const void *obj, const char *name)
     _property_name_ = _name_;
     _object_ = CQt::qobject((void*)obj);
     if(_object_ != obj) {
-	GraphicsView *view = qobject_cast<GraphicsView*>(_object_);
-	if(view) {
-	    view->currentItem = (QGraphicsItem*)obj;
-	    --_property_name_; // add underscore
-	}
+        GraphicsView *view = qobject_cast<GraphicsView*>(_object_);
+        if(view) {
+            view->currentItem = (QGraphicsItem*)obj;
+            --_property_name_; // add underscore
+        }
     }
     _curr_property_ = _object_->property(_property_name_);
     if(!_curr_property_.isValid()) {
-	msgNotFound("Property", name);
-	return 0;
+    msgNotFound("Property", name);
+    return 0;
     }
     return (int)_curr_property_.type();
 }
@@ -1308,9 +1308,9 @@ CQT_EXPORT const char *get_property_string()
 CQT_EXPORT const char *get_property_point_or_size()
 {
     if(_curr_property_.type() == QVariant::Point)
-	return pointToString(_curr_property_.toPoint());
+    return pointToString(_curr_property_.toPoint());
     else if(_curr_property_.type() == QVariant::Size)
-	return sizeToString(_curr_property_.toSize());
+    return sizeToString(_curr_property_.toSize());
     return 0;
 }
 
@@ -1412,9 +1412,9 @@ CQT_EXPORT void set_property_font(const char *value)
 CQT_EXPORT void set_property_point_or_size(const char *value)
 {
     if(!strcmp("pos", _name_))
-	setProperty(stringToPoint(value));
+    setProperty(stringToPoint(value));
     else
-	setProperty(stringToSize(value));
+    setProperty(stringToSize(value));
 }
 
 CQT_EXPORT void set_property_point_f(const char *value)
@@ -1461,13 +1461,13 @@ int sizePolicy(const QString &name)
 {
     int i = _size_policies_.indexOf(name);
     switch(i) {
-	case 0: return QSizePolicy::Fixed;
-	case 1: return QSizePolicy::Minimum;
-	case 2: return QSizePolicy::Maximum;
-	case 3: return QSizePolicy::Preferred;
-	case 4: return QSizePolicy::Expanding;
-	case 5: return QSizePolicy::MinimumExpanding;
-	case 6: return QSizePolicy::Ignored;
+    case 0: return QSizePolicy::Fixed;
+    case 1: return QSizePolicy::Minimum;
+    case 2: return QSizePolicy::Maximum;
+    case 3: return QSizePolicy::Preferred;
+    case 4: return QSizePolicy::Expanding;
+    case 5: return QSizePolicy::MinimumExpanding;
+    case 6: return QSizePolicy::Ignored;
     }
     msgNotFound("Size policy", name);
     return -1;
@@ -1476,49 +1476,49 @@ int sizePolicy(const QString &name)
 CQT_EXPORT void set_property_enum(const char *value)
 {
     if(!strcmp("sizePolicy", _name_)) {
-	int i1, i2;
-	if(value[0] == '(') {
-	    QString v(value);
-	    v = trim1(v);
-	    int p = v.indexOf(' ');
-	    if(p == -1)
-		i1 = i2 = -1;
-	    else {
-		i1 = sizePolicy(v.left(p));
-		i2 = sizePolicy(v.mid(p + 1));
-	    }
-	}
-	else
-	    i1 = i2 = sizePolicy(value);
-	if((i1 != -1) && (i2 != -1))
-	    _object_->setProperty("sizePolicy", QSizePolicy(QSizePolicy::Policy(i1), QSizePolicy::Policy(i2)));
+    int i1, i2;
+    if(value[0] == '(') {
+        QString v(value);
+        v = trim1(v);
+        int p = v.indexOf(' ');
+        if(p == -1)
+        i1 = i2 = -1;
+        else {
+        i1 = sizePolicy(v.left(p));
+        i2 = sizePolicy(v.mid(p + 1));
+        }
+    }
+    else
+        i1 = i2 = sizePolicy(value);
+    if((i1 != -1) && (i2 != -1))
+        _object_->setProperty("sizePolicy", QSizePolicy(QSizePolicy::Policy(i1), QSizePolicy::Policy(i2)));
     }
     else if(!strcmp("cursor", _name_)) {
-	if(_cursor_shapes_.contains(value))
-	    _object_->setProperty("cursor", QCursor((Qt::CursorShape)_cursor_shapes_.value(value)));
-	else
-	    msgNotFound("Cursor", value);
+    if(_cursor_shapes_.contains(value))
+        _object_->setProperty("cursor", QCursor((Qt::CursorShape)_cursor_shapes_.value(value)));
+    else
+        msgNotFound("Cursor", value);
     }
     else {
-	const QMetaObject *mo = _object_->metaObject();
-	QMetaProperty mp(mo->property(mo->indexOfProperty(_name_)));
-	if(mp.isEnumType())
-	    setProperty(enumStringToInt(value, _name_, mp));
-	else
-	    msgNotFound("Enumerator property", qtToLispStyle(_name_));
+    const QMetaObject *mo = _object_->metaObject();
+    QMetaProperty mp(mo->property(mo->indexOfProperty(_name_)));
+    if(mp.isEnumType())
+        setProperty(enumStringToInt(value, _name_, mp));
+    else
+        msgNotFound("Enumerator property", qtToLispStyle(_name_));
     }
 }
 
 CQT_EXPORT void set_color_(const void *obj, int role, const char *name)
 {
     if(role == -1) {
-	showMessage("Unknown role in function: set-color");
-	return;
+    showMessage("Unknown role in function: set-color");
+    return;
     }
     QWidget *w = qobject_cast<QWidget*>((QObject*)obj);
     if(!w) {
-	msgTypeError("set-color");
-	return;
+    msgTypeError("set-color");
+    return;
     }
     QPalette pal(w->palette());
     pal.setColor((QPalette::ColorRole)role, QColor(name));
@@ -1530,9 +1530,9 @@ CQT_EXPORT void set_color_(const void *obj, int role, const char *name)
 CQT_EXPORT void message_box_(const char *caption, const char *text, int type)
 {
     switch(type) {
-	case 0: QMessageBox::information(QApplication::activeWindow(), caption, text); break;
-	case 1: QMessageBox::warning    (QApplication::activeWindow(), caption, text); break;
-	case 2: QMessageBox::critical   (QApplication::activeWindow(), caption, text); break;
+    case 0: QMessageBox::information(QApplication::activeWindow(), caption, text); break;
+    case 1: QMessageBox::warning    (QApplication::activeWindow(), caption, text); break;
+    case 2: QMessageBox::critical   (QApplication::activeWindow(), caption, text); break;
     }
 }
 
@@ -1548,7 +1548,7 @@ CQT_EXPORT float input_dialog_float(const char *caption, const char *lab, float 
     bool ok;
     float res = QInputDialog::getDouble(QApplication::activeWindow(), caption, lab, val, min, max, dec, &ok);
     if(!ok)
-	res = cancel_val;
+    res = cancel_val;
     return res;
 }
 
@@ -1557,7 +1557,7 @@ CQT_EXPORT int input_dialog_int(const char *caption, const char *lab, int cancel
     bool ok;
     int res = QInputDialog::getInteger(QApplication::activeWindow(), caption, lab, val,  min, max, 1, &ok);
     if(!ok)
-	res = cancel_val;
+    res = cancel_val;
     return res;
 }
 
@@ -1566,7 +1566,7 @@ CQT_EXPORT const char *input_dialog_text(const char *caption, const char *lab, c
     bool ok;
     QString res = QInputDialog::getText(QApplication::activeWindow(), caption, lab, QLineEdit::Normal, text, &ok);
     if(!ok)
-	res = QString();
+    res = QString();
     return copy_tmp(res.toAscii().constData());
 }
 
@@ -1576,8 +1576,8 @@ CQT_EXPORT const char *file_dialog_(const char *caption, const char *dir, const 
 {
     QString file;
     switch(type) {
-	case 0: file = QFileDialog::getOpenFileName(QApplication::activeWindow(), caption, dir, filter); break;
-	case 1: file = QFileDialog::getSaveFileName(QApplication::activeWindow(), caption, dir, filter); break;
+    case 0: file = QFileDialog::getOpenFileName(QApplication::activeWindow(), caption, dir, filter); break;
+    case 1: file = QFileDialog::getSaveFileName(QApplication::activeWindow(), caption, dir, filter); break;
     }
     return copy_tmp(file.toAscii().constData());
 }
@@ -1595,10 +1595,10 @@ CQT_EXPORT const char *font_dialog_(const char *initial)
     bool ok;
     QFont fnt;
     if(*initial)
-	fnt = stringToFont(initial);
+    fnt = stringToFont(initial);
     fnt = QFontDialog::getFont(&ok, fnt, QApplication::activeWindow());
     if(ok)
-	return fontToString(fnt);
+    return fontToString(fnt);
     return 0;
 }
 
@@ -1609,10 +1609,10 @@ CQT_EXPORT const char *color_dialog_(const char *initial)
     QColor cl(Qt::white);
     QString name(initial);
     if(!name.isEmpty())
-	cl.setNamedColor(name);
+    cl.setNamedColor(name);
     cl = QColorDialog::getColor(cl, QApplication::activeWindow());
     if(cl.isValid())
-	return copy_tmp(cl.name().toAscii().constData());
+    return copy_tmp(cl.name().toAscii().constData());
     return 0;
 }
 
@@ -1623,27 +1623,27 @@ CQT_EXPORT void box_add_layout(const void *lay, const void *add)
     QBoxLayout *qlay = qobject_cast<QBoxLayout*>((QObject*)lay);
     QLayout *qadd = qobject_cast<QLayout*>((QObject*)add);
     if(qlay && qadd)
-	qlay->addLayout(qadd);
+    qlay->addLayout(qadd);
     else
-	msgTypeError("box");
+    msgTypeError("box");
 }
 
 CQT_EXPORT void box_add_spacing (const void *lay, int size)
 {
     QBoxLayout *qlay = qobject_cast<QBoxLayout*>((QObject*)lay);
     if(qlay)
-	qlay->addSpacing(size);
+    qlay->addSpacing(size);
     else
-	msgTypeError("box");
+    msgTypeError("box");
 }
 
 CQT_EXPORT void box_add_stretch(const void *lay, int stretch)
 {
     QBoxLayout *qlay = qobject_cast<QBoxLayout*>((QObject*)lay);
     if(qlay)
-	qlay->addStretch(stretch);
+    qlay->addStretch(stretch);
     else
-	msgTypeError("box");
+    msgTypeError("box");
 }
     
 CQT_EXPORT void box_add_widget(const void *lay, const void *w)
@@ -1651,9 +1651,9 @@ CQT_EXPORT void box_add_widget(const void *lay, const void *w)
     QBoxLayout *qlay = qobject_cast<QBoxLayout*>((QObject*)lay);
     QWidget *qw = qobject_cast<QWidget*>((QObject*)w);
     if(qlay && qw)
-	qlay->addWidget(qw);
+    qlay->addWidget(qw);
     else
-	msgTypeError("box");
+    msgTypeError("box");
 }
 
 CQT_EXPORT void grid_add_layout(const void *lay, const void *add, int row, int col, int row_span, int col_span)
@@ -1661,9 +1661,9 @@ CQT_EXPORT void grid_add_layout(const void *lay, const void *add, int row, int c
     QGridLayout *qlay = qobject_cast<QGridLayout*>((QObject*)lay);
     QLayout *qadd = qobject_cast<QLayout*>((QObject*)add);
     if(qlay && qadd)
-	qlay->addLayout(qadd, row, col, row_span, col_span);
+    qlay->addLayout(qadd, row, col, row_span, col_span);
     else
-	msgTypeError("grid");
+    msgTypeError("grid");
 }
 
 CQT_EXPORT void grid_add_widget(const void *lay, const void *w, int row, int col, int row_span, int col_span)
@@ -1671,9 +1671,9 @@ CQT_EXPORT void grid_add_widget(const void *lay, const void *w, int row, int col
     QGridLayout *qlay = qobject_cast<QGridLayout*>((QObject*)lay);
     QWidget *qw = qobject_cast<QWidget*>((QObject*)w);
     if(qlay && qw)
-	qlay->addWidget(qw, row, col, row_span, col_span);
+    qlay->addWidget(qw, row, col, row_span, col_span);
     else
-	msgTypeError("grid");
+    msgTypeError("grid");
 }
 
 // Connections ***********************************************************************************
@@ -1685,19 +1685,19 @@ CQT_EXPORT void connect_qt_(const void *from, const char *signal, const void *to
     strcpy(p, signal);
     const char *sig = getMethod(_signals_, "Signal", signal);
     if(!sig)
-	return;
+    return;
 
     p = p_strcpy((char*)_name_, (char*)((QObject*)to)->metaObject()->className());
     *p++ = ':';
     strcpy(p, slot);
     const char *slo = getMethod(_slots_, "Slot", slot);
     if(!slo)
-	return;
+    return;
     
     if(con)
-	QObject::connect((QObject*)from, sig, (QObject*)to, slo);
+    QObject::connect((QObject*)from, sig, (QObject*)to, slo);
     else
-	QObject::disconnect((QObject*)from, sig, (QObject*)to, slo);
+    QObject::disconnect((QObject*)from, sig, (QObject*)to, slo);
 }
 
 CQT_EXPORT void *connect_(const void *from, const char *signal)
@@ -1707,11 +1707,11 @@ CQT_EXPORT void *connect_(const void *from, const char *signal)
     strcpy(p, signal);
     const char *sig = getMethod(_signals_, "Signal", signal);
     if(!sig)
-	return 0;
+    return 0;
     
     const char *slo = getCallSlot(sig);
     if(!slo)
-	return 0;
+    return 0;
 
     CQt *caller = new CQt();
     QObject::connect((QObject*)from, sig, caller, slo);
@@ -1725,28 +1725,28 @@ CQT_EXPORT const char *argument_types_(const void *from, const char *signal)
     strcpy(p, signal);
     const char *sig = getMethod(_signals_, "Signal", signal);
     if(!sig)
-	return 0;
+    return 0;
     
     QString s(sig);
     int pos = s.indexOf('(');
     QStringList args = s.mid(pos + 1, s.length() - pos - 2).split(',');
     QList<QString>::iterator it;
     for(it = args.begin(); it != args.end(); ++it) {
-	QString a((*it).trimmed().remove("const "));
-	if(a.contains("::"))
-	    *it = "int";
-	else if(a.endsWith('&')) {
-	    *it = qtToLispStyle(a.left(a.length() - 2));
-	    *it = (*it)
-		.replace("date-time", "string")
-		.replace("date", "string")
-		.replace("time", "string");
-	}
-	else if(a.endsWith('*'))
-	    *it = "object";
-	else
-	    *it = a.replace("qreal", "float");
-	*it = (*it).toUpper();
+    QString a((*it).trimmed().remove("const "));
+    if(a.contains("::"))
+        *it = "int";
+    else if(a.endsWith('&')) {
+        *it = qtToLispStyle(a.left(a.length() - 2));
+        *it = (*it)
+        .replace("date-time", "string")
+        .replace("date", "string")
+        .replace("time", "string");
+    }
+    else if(a.endsWith('*'))
+        *it = "object";
+    else
+        *it = a.replace("qreal", "float");
+    *it = (*it).toUpper();
     }
     return listToString(args);
 }
@@ -1767,16 +1767,16 @@ CQT_EXPORT int call_type(const void *obj, const char *slot)
 {
     _object_ = CQt::qobject((void*)obj);
     if(_object_ != obj) {
-	GraphicsView *view = qobject_cast<GraphicsView*>(_object_);
-	if(view)
-	    view->currentItem = (QGraphicsItem*)obj;
+    GraphicsView *view = qobject_cast<GraphicsView*>(_object_);
+    if(view)
+        view->currentItem = (QGraphicsItem*)obj;
     }
     char *p = p_strcpy((char*)_name_, (char*)_object_->metaObject()->className());
     *p++ = ':';
     strcpy(p, slot);
     const char *type_and_method = getInvokeMethod("Slot", slot);
     if(!type_and_method)
-	return 0;
+    return 0;
     
     static char call_type[] = "000";
     static char invoke_type[] = "000";
@@ -1790,7 +1790,7 @@ CQT_EXPORT int call_type(const void *obj, const char *slot)
 CQT_EXPORT void call_void()
 {
     if(!QMetaObject::invokeMethod(_object_, _method_, Qt::DirectConnection))
-	msgCallError();
+    msgCallError();
 }
 
 CQT_EXPORT void call_bool(int a)
@@ -1970,32 +1970,32 @@ CQT_EXPORT void call_int_object_string_string(int a, const void *b, const char *
 /* Model - view stuff */
 CQT_EXPORT void set_model_(const void* object, const void* model)
 {
-	QAbstractItemModel* m = qobject_cast<QAbstractItemModel*>((QObject*)model);
-	if (!m)
-		msgTypeError("set_model - model");
-	QAbstractItemView* v = qobject_cast<QAbstractItemView*>((QObject*)object);
-	if (!v)
-		msgTypeError("set_model - view");
-	
-	v->setModel(m); 
+    QAbstractItemModel* m = qobject_cast<QAbstractItemModel*>((QObject*)model);
+    if (!m)
+        msgTypeError("set_model - model");
+    QAbstractItemView* v = qobject_cast<QAbstractItemView*>((QObject*)object);
+    if (!v)
+        msgTypeError("set_model - view");
+    
+    v->setModel(m); 
 }
 
 CQT_EXPORT void* set_rb_model_(const void* object, unsigned long rb_object)
 {
-	QAbstractItemView* v = qobject_cast<QAbstractItemView*>((QObject*)object);
-	if (!v)
-		msgTypeError("set_model - view");
-	
-	QAbstractItemModel* m = new ItemModel(v, rb_object);
-	v->setModel(m); 
-	return (void*)m;
+    QAbstractItemView* v = qobject_cast<QAbstractItemView*>((QObject*)object);
+    if (!v)
+        msgTypeError("set_model - view");
+    
+    QAbstractItemModel* m = new ItemModel(v, rb_object);
+    v->setModel(m); 
+    return (void*)m;
 }
 
 CQT_EXPORT void update_view_(const void* object, int row, int column)
 {
-	ItemModel* view =  qobject_cast<ItemModel*>((ItemModel*)object);
-	if (view)
-		view->update(row, column);
+    ItemModel* view =  qobject_cast<ItemModel*>((ItemModel*)object);
+    if (view)
+        view->update(row, column);
 }
 
 // Custom event filter ***************************************************************************
@@ -2022,16 +2022,16 @@ CQT_EXPORT int save_screenshot(void *obj, const char *file)
 {
     QWidget *w = qobject_cast<QWidget*>((QObject*)obj);
     if(!w) {
-	msgTypeError("save-screenshot");
-	return 0;
+    msgTypeError("save-screenshot");
+    return 0;
     }
     QPixmap pix = QPixmap::grabWidget(w);
     if(pix.isNull())
-	return 0;
+    return 0;
 
     QString name(file);
     if(!name.endsWith(".png", Qt::CaseInsensitive))
-	name += ".png";
+    name += ".png";
     return (int)pix.save(name, "PNG");
 }
 
@@ -2040,7 +2040,7 @@ CQT_EXPORT const char *dir(const char *path)
     QDir dir(path);
     QStringList entries = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
     for(QStringList::Iterator it = entries.begin(); it != entries.end(); ++it)
-	*it += "/";
+    *it += "/";
     entries += dir.entryList(QDir::Files);
     return listToString(entries);
 }
@@ -2065,7 +2065,7 @@ QObject *CQt::parentQObject(void *obj)
     QObject *qobject = 0;
     int type = NonQObjects.value(obj);
     if((type >= GraphicsLineItem) && (type <= GraphicsSimpleTextItem))
-	qobject = ((QGraphicsItem*)obj)->scene()->views().first();
+    qobject = ((QGraphicsItem*)obj)->scene()->views().first();
     return qobject;
 }
 
@@ -2157,110 +2157,110 @@ CustomEventFilter::CustomEventFilter(const char *_type, unsigned long callback, 
     : QObject(), eat(_eat), type(0), fn(callback)
 {
     if(_events_.contains(_type))
-	type = _events_.value(_type);
+    type = _events_.value(_type);
     else
-	showMessage(QString("Event not found: %1").arg(_type));
+    showMessage(QString("Event not found: %1").arg(_type));
 }
 
 bool CustomEventFilter::eventFilter(QObject *obj, QEvent *ev)
 {
     if(ev->type() == type) {
-	QStringList lst;
-	switch(type) {
-	    case QEvent::AccessibilityDescription:
-	    case QEvent::AccessibilityHelp:
-		lst << ":child" << QString::number(((QAccessibleEvent*)ev)->child())
-		    << ":value" << QString("\"%1\"").arg(((QAccessibleEvent*)ev)->value());
-		break;
+    QStringList lst;
+    switch(type) {
+        case QEvent::AccessibilityDescription:
+        case QEvent::AccessibilityHelp:
+        lst << ":child" << QString::number(((QAccessibleEvent*)ev)->child())
+            << ":value" << QString("\"%1\"").arg(((QAccessibleEvent*)ev)->value());
+        break;
 
-	    case QEvent::ContextMenu:
-		lst << ":reason"   << QString::number(((QContextMenuEvent*)ev)->reason())
-		    << ":x"        << QString::number(((QContextMenuEvent*)ev)->x())
-		    << ":y"        << QString::number(((QContextMenuEvent*)ev)->y())
-		    << ":global-x" << QString::number(((QContextMenuEvent*)ev)->globalX())
-		    << ":global-y" << QString::number(((QContextMenuEvent*)ev)->globalY());
-		break;
+        case QEvent::ContextMenu:
+        lst << ":reason"   << QString::number(((QContextMenuEvent*)ev)->reason())
+            << ":x"        << QString::number(((QContextMenuEvent*)ev)->x())
+            << ":y"        << QString::number(((QContextMenuEvent*)ev)->y())
+            << ":global-x" << QString::number(((QContextMenuEvent*)ev)->globalX())
+            << ":global-y" << QString::number(((QContextMenuEvent*)ev)->globalY());
+        break;
 
-	    case QEvent::FileOpen:
-		lst << ":file" << QString("\"%1\"").arg(((QFileOpenEvent*)ev)->file());
-		break;
+        case QEvent::FileOpen:
+        lst << ":file" << QString("\"%1\"").arg(((QFileOpenEvent*)ev)->file());
+        break;
 
-	    case QEvent::FocusIn:
-	    case QEvent::FocusOut:
-		lst << ":got-focus"  << QString::number(((QFocusEvent*)ev)->gotFocus())
-		    << ":lost-focus" << QString::number(((QFocusEvent*)ev)->lostFocus())
-		    << ":reason"     << QString::number(((QFocusEvent*)ev)->reason());
-		break;
-		
-	    case QEvent::ToolTip:
-	    case QEvent::WhatsThis:
-		lst << ":x"        << QString::number(((QHelpEvent*)ev)->x())
-		    << ":y"        << QString::number(((QHelpEvent*)ev)->y())
-		    << ":global-x" << QString::number(((QHelpEvent*)ev)->globalX())
-		    << ":global-y" << QString::number(((QHelpEvent*)ev)->globalY());
-		break;
+        case QEvent::FocusIn:
+        case QEvent::FocusOut:
+        lst << ":got-focus"  << QString::number(((QFocusEvent*)ev)->gotFocus())
+            << ":lost-focus" << QString::number(((QFocusEvent*)ev)->lostFocus())
+            << ":reason"     << QString::number(((QFocusEvent*)ev)->reason());
+        break;
+        
+        case QEvent::ToolTip:
+        case QEvent::WhatsThis:
+        lst << ":x"        << QString::number(((QHelpEvent*)ev)->x())
+            << ":y"        << QString::number(((QHelpEvent*)ev)->y())
+            << ":global-x" << QString::number(((QHelpEvent*)ev)->globalX())
+            << ":global-y" << QString::number(((QHelpEvent*)ev)->globalY());
+        break;
 
-	    case QEvent::HoverEnter:
-	    case QEvent::HoverLeave:
-	    case QEvent::HoverMove:
-		lst << ":pos"     << pointToQString(((QHoverEvent*)ev)->pos())
-		    << ":old-pos" << pointToQString(((QHoverEvent*)ev)->oldPos());
-		break;
+        case QEvent::HoverEnter:
+        case QEvent::HoverLeave:
+        case QEvent::HoverMove:
+        lst << ":pos"     << pointToQString(((QHoverEvent*)ev)->pos())
+            << ":old-pos" << pointToQString(((QHoverEvent*)ev)->oldPos());
+        break;
 
-	    case QEvent::KeyPress:
-	    case QEvent::KeyRelease:
-		lst << ":text"           << QString("\"%1\"").arg(((QKeyEvent*)ev)->text())
-		    << ":key"            << QString::number(((QKeyEvent*)ev)->key())
-		    << ":count"          << QString::number(((QKeyEvent*)ev)->count())
-		    << ":modifiers"      << modifiersToString(((QKeyEvent*)ev)->modifiers())
-		    << ":is-auto-repeat" << nilT(((QKeyEvent*)ev)->isAutoRepeat());
-		break;
-		
-	    case QEvent::MouseButtonDblClick:
-	    case QEvent::MouseButtonPress:
-	    case QEvent::MouseButtonRelease:
-	    case QEvent::MouseMove:
-		lst << ":button"   << buttonToQString(((QMouseEvent*)ev)->button())
-		    << ":buttons"  << buttonsToQString(((QMouseEvent*)ev)->buttons())
-		    << ":x"        << QString::number(((QMouseEvent*)ev)->x())
-		    << ":y"        << QString::number(((QMouseEvent*)ev)->y())
-		    << ":global-x" << QString::number(((QMouseEvent*)ev)->globalX())
-		    << ":global-y" << QString::number(((QMouseEvent*)ev)->globalY());
-		break;
+        case QEvent::KeyPress:
+        case QEvent::KeyRelease:
+        lst << ":text"           << QString("\"%1\"").arg(((QKeyEvent*)ev)->text())
+            << ":key"            << QString::number(((QKeyEvent*)ev)->key())
+            << ":count"          << QString::number(((QKeyEvent*)ev)->count())
+            << ":modifiers"      << modifiersToString(((QKeyEvent*)ev)->modifiers())
+            << ":is-auto-repeat" << nilT(((QKeyEvent*)ev)->isAutoRepeat());
+        break;
+        
+        case QEvent::MouseButtonDblClick:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseMove:
+        lst << ":button"   << buttonToQString(((QMouseEvent*)ev)->button())
+            << ":buttons"  << buttonsToQString(((QMouseEvent*)ev)->buttons())
+            << ":x"        << QString::number(((QMouseEvent*)ev)->x())
+            << ":y"        << QString::number(((QMouseEvent*)ev)->y())
+            << ":global-x" << QString::number(((QMouseEvent*)ev)->globalX())
+            << ":global-y" << QString::number(((QMouseEvent*)ev)->globalY());
+        break;
 
-	    case QEvent::Move:
-		lst << ":pos"     << pointToQString(((QMoveEvent*)ev)->pos())
-		    << ":old-pos" << pointToQString(((QMoveEvent*)ev)->oldPos());
-		break;
+        case QEvent::Move:
+        lst << ":pos"     << pointToQString(((QMoveEvent*)ev)->pos())
+            << ":old-pos" << pointToQString(((QMoveEvent*)ev)->oldPos());
+        break;
 
-	    case QEvent::Resize:
-		lst << ":size"     << sizeToQString(((QResizeEvent*)ev)->size())
-		    << ":old-size" << sizeToQString(((QResizeEvent*)ev)->oldSize());
-		break;
+        case QEvent::Resize:
+        lst << ":size"     << sizeToQString(((QResizeEvent*)ev)->size())
+            << ":old-size" << sizeToQString(((QResizeEvent*)ev)->oldSize());
+        break;
 
-	    case QEvent::StatusTip:
-		lst << ":tip" << QString("\"%1\"").arg(((QStatusTipEvent*)ev)->tip());
-		break;
+        case QEvent::StatusTip:
+        lst << ":tip" << QString("\"%1\"").arg(((QStatusTipEvent*)ev)->tip());
+        break;
 
-	    case QEvent::Timer:
-		lst << ":timer-id" << QString::number(((QTimerEvent*)ev)->timerId());
-		break;
+        case QEvent::Timer:
+        lst << ":timer-id" << QString::number(((QTimerEvent*)ev)->timerId());
+        break;
 
-	    case QEvent::Wheel:
-		lst << ":buttons"  << buttonsToQString(((QWheelEvent*)ev)->buttons())
-		    << ":delta   " << QString::number(((QWheelEvent*)ev)->delta())
-		    << ":x"        << QString::number(((QWheelEvent*)ev)->x())
-		    << ":y"        << QString::number(((QWheelEvent*)ev)->y())
-		    << ":global-x" << QString::number(((QWheelEvent*)ev)->globalX())
-		    << ":global-y" << QString::number(((QWheelEvent*)ev)->globalY());
-		break;
-		case QEvent::Close:
-			lst << "Close";
-		break;
-	}
-	//(fn)(QString("(" + lst.join(" ") + ")").toAscii().constData());
-	sfunc_s(fn, QString("(" + lst.join(" ") + ")").toAscii().constData());
-	return eat;
+        case QEvent::Wheel:
+        lst << ":buttons"  << buttonsToQString(((QWheelEvent*)ev)->buttons())
+            << ":delta   " << QString::number(((QWheelEvent*)ev)->delta())
+            << ":x"        << QString::number(((QWheelEvent*)ev)->x())
+            << ":y"        << QString::number(((QWheelEvent*)ev)->y())
+            << ":global-x" << QString::number(((QWheelEvent*)ev)->globalX())
+            << ":global-y" << QString::number(((QWheelEvent*)ev)->globalY());
+        break;
+        case QEvent::Close:
+            lst << "Close";
+        break;
+    }
+    //(fn)(QString("(" + lst.join(" ") + ")").toAscii().constData());
+    sfunc_s(fn, QString("(" + lst.join(" ") + ")").toAscii().constData());
+    return eat;
     }
     return QObject::eventFilter(obj, ev);
 }

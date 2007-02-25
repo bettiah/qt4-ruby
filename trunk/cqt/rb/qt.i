@@ -8,7 +8,7 @@
 %inline %{
 
 class QtProxy {
-friend void signal_sender();
+friend void signal_sender(QtProxy*);
 
 public:
 ~QtProxy() {
@@ -170,12 +170,7 @@ private:
 void* _real_obj;
 };
 
-void signal_sender() {
-    void *argp = 0 ;
-    VALUE module = rb_const_get(rb_cObject, rb_intern("Qt4"));
-    VALUE rb_dummy = rb_ivar_get(module, rb_intern("@@dummy"));
-    int res = SWIG_ConvertPtr(rb_dummy, &argp, SWIGTYPE_p_QtProxy, 0 |  0 );
-    QtProxy* dummy = reinterpret_cast< QtProxy * >(argp);
+void signal_sender(QtProxy* dummy) {
     dummy->_real_obj=sender();
 }
 %}

@@ -59,7 +59,6 @@ class Calculator < View::Builder
 
    def operate
       res = $value2.send($operation.to_sym, $value1)
-      p "result is #{res}"
       if res
          $value2 = res
          display_number $value2
@@ -69,7 +68,6 @@ class Calculator < View::Builder
    def operation_clicked
       $operation = sender.getp :text 
       $value2 ? operate : $value2 = $value1
-      p "#{$operation}"
       $reset = true
    end
 
