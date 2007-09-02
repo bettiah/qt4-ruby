@@ -136,8 +136,8 @@ void call_int_object_string_string(int a, const QtProxy *b, const char *c, const
     ::call_int_object_string_string(a, b ? b->_real_obj : NULL, c, d);
 }
 
-void set_model(const QtProxy *b) {
-    ::set_model_(_real_obj, b ? b->_real_obj : NULL);
+void set_qt_model(const QtProxy *b) {
+    ::set_qt_model_(_real_obj, b ? b->_real_obj : NULL);
 }
 
 QtProxy* set_rb_model(const VALUE object) {

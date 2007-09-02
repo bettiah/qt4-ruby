@@ -10,12 +10,16 @@ add_definitions(${QT_DEFINITIONS})
 
 find_package(Ruby REQUIRED) 
 
+FIND_PACKAGE(SWIG REQUIRED)
+INCLUDE(${SWIG_USE_FILE})
+SET(CMAKE_MY_SWIG_FLAGS "-ruby -c++")
+
 include_directories(${QT_INCLUDE_DIR} ${RUBY_INCLUDE_PATH} base extensions )
 
 set(qtnative_SRCS
 	   cqt.cpp 
        cqt_call.cpp 
-	   rb/qt_wrap.cxx 
+	   rb/qt_wrap.cxx
 	   base/action.cpp 
 	   base/button_group.cpp 
 	   base/calendar_widget.cpp 
@@ -134,6 +138,13 @@ set(qtnative_MOC_HDRS
 	   extensions/wiggly_widget.h
 )
 
+message (${SWIG_EXECUTABLE})
+
+ADD_CUSTOM_COMMAND(
+   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/rb/qt_wrap.cxx
+   COMMAND ${SWIG_EXECUTABLE} -ruby -c++ ${CMAKE_CURRENT_SOURCE_DIR}/rb/qt.i 
+   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/rb/qt.i
+   )
 
 #qt4_automoc(${qtnative_SRCS})
 QT4_WRAP_CPP(qtnative_MOC_SRCS ${qtnative_MOC_HDRS})
@@ -142,6 +153,8 @@ add_library(qtnative SHARED ${qtnative_SRCS} ${qtnative_MOC_SRCS})
 
 target_link_libraries(qtnative ${QT_LIBRARIES} ${RUBY_LIBRARY})
 
-set_target_properties(qtnative PROPERTIES OUTPUT_NAME native PREFIX "" SUFFIX .so)
+set (qtnative_TARGET
+    Native.so)
 
-install(TARGETS qtnative DESTINATION ${PROJECT_SOURCE_DIR}/..)
+set_target_properties(qtnative PROPERTIES OUTPUT_NAME Native PREFIX "" SUFFIX .so)
+

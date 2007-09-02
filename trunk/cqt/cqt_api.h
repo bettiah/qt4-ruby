@@ -115,7 +115,7 @@ void call_int_object_string(int a, const void *b, const char *c);
 void call_vector_int_int(const char *a, int b, int c);
 void call_object_string_string(const void *a, const char *b, const char *c);
 void call_int_object_string_string(int a, const void *b, const char *c, const char *d);
-void set_model_(const void* object, const void* model);
+void set_qt_model_(const void* object, const void* model);
 void* set_rb_model_(const void* object, unsigned long rb_object);
 void update_view_(const void* object, int row, int column);
 void event_filter_(const void *object, const char *type, unsigned long callback, int eat);

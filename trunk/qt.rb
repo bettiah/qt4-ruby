@@ -199,7 +199,7 @@ class QWidget < Native::QtProxy
 #Events
     def event_filter(signal, callback, eat=0)
         signal = signal.to_qt_name
-        Native.event_filter_ signal, callback, eat
+        event_filter_ signal, callback, eat
         add_callbacks_for(signal, callback)
     end
 
