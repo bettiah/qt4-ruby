@@ -153,7 +153,6 @@ bool ItemModel::insertRows(int row, int count, const QModelIndex &parent)
 bool ItemModel::insertColumns(int column, int count, const QModelIndex &parent)
 {
 		return false;
-
 }
 
 bool ItemModel::removeRows(int row, int count, const QModelIndex &parent)

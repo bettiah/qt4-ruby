@@ -2,7 +2,7 @@
        widget do
 		   l = ["Apples", "Oranges", "Bananas"]
            li = list_view
-           li.set_as_model l
+           li.set_model l
 		   li.model.set_observer Ob.new(l)
            h_box_layout {
 	        box li

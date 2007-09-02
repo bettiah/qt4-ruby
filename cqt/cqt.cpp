@@ -1968,14 +1968,15 @@ CQT_EXPORT void call_int_object_string_string(int a, const void *b, const char *
 }
 
 /* Model - view stuff */
-CQT_EXPORT void set_model_(const void* object, const void* model)
+CQT_EXPORT void set_qt_model_(const void* object, const void* model)
 {
-    QAbstractItemModel* m = qobject_cast<QAbstractItemModel*>((QObject*)model);
-    if (!m)
-        msgTypeError("set_model - model");
     QAbstractItemView* v = qobject_cast<QAbstractItemView*>((QObject*)object);
     if (!v)
         msgTypeError("set_model - view");
+    
+    QAbstractItemModel* m = qobject_cast<QAbstractItemModel*>((QObject*)model);
+    if (!m)
+        msgTypeError("set_model - model");
     
     v->setModel(m); 
 }

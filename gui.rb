@@ -223,7 +223,7 @@ module Gui
       module ViewMethods
           attr_reader :model
           @model = nil
-          def set_as_model(model)
+          def set_model(model)
               raise UnKnownModelError, "Attempting to overwrite existing model" if @model
               case model
               when Array

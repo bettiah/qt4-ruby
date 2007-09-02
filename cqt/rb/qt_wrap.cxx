@@ -1647,8 +1647,8 @@ void call_int_object_string_string(int a, const QtProxy *b, const char *c, const
     ::call_int_object_string_string(a, b ? b->_real_obj : NULL, c, d);
 }
 
-void set_model(const QtProxy *b) {
-    ::set_model_(_real_obj, b ? b->_real_obj : NULL);
+void set_qt_model(const QtProxy *b) {
+    ::set_qt_model_(_real_obj, b ? b->_real_obj : NULL);
 }
 
 QtProxy* set_rb_model(const VALUE object) {
@@ -3038,7 +3038,7 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_QtProxy_set_model(int argc, VALUE *argv, VALUE self) {
+_wrap_QtProxy_set_qt_model(int argc, VALUE *argv, VALUE self) {
   QtProxy *arg1 = (QtProxy *) 0 ;
   QtProxy *arg2 = (QtProxy *) 0 ;
   void *argp1 = 0 ;
@@ -3051,15 +3051,15 @@ _wrap_QtProxy_set_model(int argc, VALUE *argv, VALUE self) {
   }
   res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_QtProxy, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "set_model" "', argument " "1"" of type '" "QtProxy *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "set_qt_model" "', argument " "1"" of type '" "QtProxy *""'"); 
   }
   arg1 = reinterpret_cast<QtProxy * >(argp1);
   res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_QtProxy, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "set_model" "', argument " "2"" of type '" "QtProxy const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "set_qt_model" "', argument " "2"" of type '" "QtProxy const *""'"); 
   }
   arg2 = reinterpret_cast<QtProxy * >(argp2);
-  (arg1)->set_model((QtProxy const *)arg2);
+  (arg1)->set_qt_model((QtProxy const *)arg2);
   
   return Qnil;
 fail:
@@ -5718,7 +5718,7 @@ SWIGEXPORT void Init_Native(void) {
   rb_define_method(cQtProxy.klass, "call_int_object_string", VALUEFUNC(_wrap_QtProxy_call_int_object_string), -1);
   rb_define_method(cQtProxy.klass, "call_object_string_string", VALUEFUNC(_wrap_QtProxy_call_object_string_string), -1);
   rb_define_method(cQtProxy.klass, "call_int_object_string_string", VALUEFUNC(_wrap_QtProxy_call_int_object_string_string), -1);
-  rb_define_method(cQtProxy.klass, "set_model", VALUEFUNC(_wrap_QtProxy_set_model), -1);
+  rb_define_method(cQtProxy.klass, "set_qt_model", VALUEFUNC(_wrap_QtProxy_set_qt_model), -1);
   rb_define_method(cQtProxy.klass, "set_rb_model", VALUEFUNC(_wrap_QtProxy_set_rb_model), -1);
   rb_define_method(cQtProxy.klass, "update_view", VALUEFUNC(_wrap_QtProxy_update_view), -1);
   rb_define_method(cQtProxy.klass, "event_filter_", VALUEFUNC(_wrap_QtProxy_event_filter_), -1);
